@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Contacts should render component 1`] = `
+<div
+  className="contacts"
+>
+  <div>
+    <p
+      key="Cellulare"
+    >
+      <span>
+        Cellulare
+      </span>
+      <a
+        href="tel:+393935026350"
+      >
+        <span>
+          (+39) 393 5026 350
+        </span>
+      </a>
+    </p>
+    <p
+      key="Fisso"
+    >
+      <span>
+        Fisso
+      </span>
+      <a
+        href="tel:+39350632279"
+      >
+        <span>
+          (+39) 35 0632279
+        </span>
+      </a>
+    </p>
+  </div>
+  <div>
+    <a
+      href="https://www.facebook.com/SvetlaEsteticaDalmine"
+      key="fb"
+    >
+      <div
+        className="fb"
+      >
+        <p>
+          Svetla Estetica Dalmine
+        </p>
+      </div>
+    </a>
+    <a
+      href="https://www.instagram.com/svetlaesteticadalmine/"
+      key="ig"
+    >
+      <div
+        className="ig"
+      >
+        <p>
+          @svetlaesteticadalmine
+        </p>
+      </div>
+    </a>
+    <a
+      href="https://wa.me/+393935026350"
+      key="ws"
+    >
+      <div
+        className="ws"
+      >
+        <p>
+          (+39) 393 5026 350
+        </p>
+      </div>
+    </a>
+  </div>
+</div>
+`;

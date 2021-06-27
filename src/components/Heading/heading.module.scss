@@ -1,0 +1,25 @@
+@import "scss/variables.scss";
+@import "scss/mixins.scss";
+
+.heading {
+    width: 100%;
+    height: 8.8rem;
+    background-color: $white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    
+    @include sidePaddings;
+    @include slyBoxShadow;
+
+    > p {
+        font-size: 2.5rem;
+        color: $black;
+    }
+
+    .btnWrapper {
+        height: 3.2rem;
+        width: 15.6rem;
+    }
+}

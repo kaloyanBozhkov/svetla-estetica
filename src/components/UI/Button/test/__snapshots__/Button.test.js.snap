@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing BUtton should render atom 1`] = `
+<button
+  className="button"
+  data-modifier="hallow"
+  disabled={false}
+  onClick={[MockFunction]}
+>
+  Some Label
+</button>
+`;

@@ -1,0 +1,87 @@
+@import "scss/mixins.scss";
+@import "scss/variables.scss";
+
+.mailUs {
+    @include sidePaddings;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 5rem;
+        column-gap: 23rem;
+        row-gap: 5rem;
+        margin-bottom: 5rem;
+
+        .inputWrapper {
+            height: 4.5rem;
+        }
+    }
+
+    > .inputWrapper {
+        height: 18rem;
+        margin-bottom: 5rem;
+    }
+
+    > .btnWrapper {
+        height: 5rem;
+        width: 20rem;
+
+        button {
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        &[data-is-disabled="false"] {
+            button {
+                color: $green;
+                border-color: $green;
+                &:hover {
+                    background-color: $green;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .inputWrapper[data-is-valid="true"][data-is-toggled="false"] {
+        input,
+        textarea {
+            border-color: $green;
+
+            ~ label {
+                color: $green;
+            }
+        }
+    }
+
+    .inputWrapper[data-is-valid="false"][data-is-toggled="true"] {
+        @keyframes shake {
+            0% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(2deg);
+            }
+            75% {
+                transform: rotate(-2deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        @include animate(shake, 330ms);
+        animation-iteration-count: infinite;
+
+        input,
+        textarea {
+            @keyframes borderColor {
+                50% {
+                    border-color: red;
+                }
+            }
+            @include animate(borderColor, 1s);
+        }
+    }
+}

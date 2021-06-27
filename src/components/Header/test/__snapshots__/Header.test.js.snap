@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Header should render component 1`] = `
+<div
+  className="header"
+>
+  <div
+    className="logo"
+  >
+    <p>
+      Svetla Estetica
+    </p>
+    <a
+      href="#google"
+    >
+      Dalmine (BG) - Viale Natale Betelli, 51
+    </a>
+  </div>
+  <div
+    className="info"
+  >
+    <a
+      href="tel:+393935026350"
+    >
+      (+39) 393 5026 350
+    </a>
+    <p>
+      <span>
+        Luv - Ven:
+      </span>
+      <span>
+        9.00 - 20.00
+      </span>
+    </p>
+    <p>
+      <span>
+        Sabato:
+      </span>
+      <span>
+        9.00 - 18.00
+      </span>
+    </p>
+  </div>
+</div>
+`;

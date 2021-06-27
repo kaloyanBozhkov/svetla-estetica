@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing SeactionHeading should render component 1`] = `
+<div
+  className="heading"
+>
+  <p>
+    Some Section Label
+  </p>
+</div>
+`;

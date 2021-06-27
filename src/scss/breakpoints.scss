@@ -1,0 +1,70 @@
+/*
+$breakpoint argument choices:
+- mobile: 0-600px
+- tablet-portrait: 600-900px
+- tablet-landscape: 900-1200px
+- not used: 1200-1800px normal styles
+- big-desktop: 1800px+ 
+*/
+
+// all screen sizes up till the selected one
+@mixin breakpoint($breakpoint) {
+    // Desktop design down
+    @if $breakpoint == mobile {
+        @media (max-width: 600px) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == tablet-portrait {
+        @media (max-width: 900px) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == tablet-landscape {
+        @media (max-width: 1200px) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == big-desktop {
+        @media (min-width: 1800px) {
+            @content;
+        }
+    }
+}
+
+// same as breakpoint but only within size ranges of given devices
+@mixin mediaQuery($device) {
+    // Desktop design down
+    @if $device == mobile {
+        @media (max-width: 600px) {
+            @content;
+        }
+    }
+
+    @if $device == tablet-portrait {
+        @media (min-width: 601px) and (max-width: 900px) {
+            @content;
+        }
+    }
+
+    @if $device == tablet-landscape {
+        @media (min-width: 901px) and (max-width: 1200px) {
+            @content;
+        }
+    }
+
+    @if $device == desktop {
+        @media (min-width: 1201px) and (max-width: 1800px) {
+            @content;
+        }
+    }
+
+    @if $device == big-desktop {
+        @media (min-width: 1801px) {
+            @content;
+        }
+    }
+}

@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing MailUs should render component 1`] = `
+<div
+  className="mailUs"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="inputWrapper"
+      data-is-toggled={false}
+      data-is-valid={false}
+      key="0"
+    >
+      <Input
+        label="Nome"
+        onChange={[Function]}
+        value=""
+      />
+    </div>
+    <div
+      className="inputWrapper"
+      data-is-toggled={false}
+      data-is-valid={false}
+      key="1"
+    >
+      <Input
+        label="Cognome"
+        onChange={[Function]}
+        value=""
+      />
+    </div>
+    <div
+      className="inputWrapper"
+      data-is-toggled={false}
+      data-is-valid={false}
+      key="2"
+    >
+      <Input
+        label="Email"
+        onChange={[Function]}
+        value=""
+      />
+    </div>
+    <div
+      className="inputWrapper"
+      data-is-toggled={false}
+      data-is-valid={false}
+      key="3"
+    >
+      <Input
+        label="Telefono"
+        onChange={[Function]}
+        value=""
+      />
+    </div>
+  </div>
+  <div
+    className="inputWrapper"
+    data-is-toggled={false}
+    data-is-valid={false}
+  >
+    <Input
+      label="Messaggio"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+  </div>
+  <div
+    className="btnWrapper"
+    data-is-disabled={true}
+  >
+    <Button
+      label="Invia"
+      modifier="solid"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;

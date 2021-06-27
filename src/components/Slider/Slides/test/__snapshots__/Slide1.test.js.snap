@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Slider slides should render Slide1 1`] = `
+<div
+  className="slide1"
+>
+  <div
+    className="infoArea"
+  >
+    <div
+      className="message"
+    >
+      <p>
+        Svetla Estetica
+      </p>
+      <p>
+        <span>
+          il tuo centro estetico
+        </span>
+        <br />
+        <span>
+          a Dalmine
+        </span>
+      </p>
+    </div>
+    <div
+      className="btnWrapper"
+    >
+      <Button
+        label="Listino Prezzi"
+        modifier="hallow"
+        onClick={[Function]}
+      />
+    </div>
+  </div>
+  <img
+    alt="lady"
+    src="/assets/images/sliders/lady.png"
+  />
+</div>
+`;

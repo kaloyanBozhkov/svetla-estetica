@@ -1,0 +1,30 @@
+@import 'scss/variables.scss';
+
+.button {
+    width: 100%;
+    height: 100%;
+
+    &[data-modifier="hallow"] {
+        border: 1px solid $white;
+        border-radius: 3px;
+        color: $white;
+        transition: all 300ms;
+        &:hover {
+            background: $white;
+        }
+    }
+    &[data-modifier="solid"] {
+        border: 1px solid $lighterGrey;
+        border-radius: 3px;
+        color: $black;
+        background-color: white;
+        transition: all 300ms;
+        &:hover {
+            background: $lighterGrey;
+        }
+    }
+
+    &[disabled] {
+        cursor: not-allowed;
+    }
+}

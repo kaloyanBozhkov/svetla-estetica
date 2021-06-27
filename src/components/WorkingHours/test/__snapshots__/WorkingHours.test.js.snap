@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing WorkingHours should render component 1`] = `
+<div
+  className="workingHours"
+>
+  <p
+    key="Lunedì"
+  >
+    <span>
+      Lunedì
+    </span>
+    <span>
+      09.00 - 20.00
+    </span>
+  </p>
+  <p
+    key="Martedì"
+  >
+    <span>
+      Martedì
+    </span>
+    <span>
+      09.00 - 20.00
+    </span>
+  </p>
+  <p
+    key="Mercoledì"
+  >
+    <span>
+      Mercoledì
+    </span>
+    <span>
+      09.00 - 20.00
+    </span>
+  </p>
+  <p
+    key="Giovedì"
+  >
+    <span>
+      Giovedì
+    </span>
+    <span>
+      09.00 - 20.00
+    </span>
+  </p>
+  <p
+    key="Venerdì"
+  >
+    <span>
+      Venerdì
+    </span>
+    <span>
+      09.00 - 20.00
+    </span>
+  </p>
+  <p
+    key="Sabato"
+  >
+    <span>
+      Sabato
+    </span>
+    <span>
+      09.00 - 18.00
+    </span>
+  </p>
+</div>
+`;

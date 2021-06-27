@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Slider should render component 1`] = `
+<div
+  className="slider"
+>
+  <Slide1
+    key="0"
+  />
+</div>
+`;

@@ -1,0 +1,50 @@
+@import "scss/mixins.scss";
+@import "scss/variables.scss";
+
+.workingHours {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 25.4rem;
+    column-gap: 24rem;
+
+    @include sidePaddings;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+
+    > p {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 2rem;
+        line-height: 2.2rem;
+        font-weight: lighter;
+    }
+
+    position: relative;
+    &::before {
+        content: '';
+        width: 1px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: $lighterGrey;
+        top: 20%;
+        bottom: 20%;
+    }
+
+    @include breakpoint(tablet-portrait) {
+        grid-template-columns: 1fr;
+        height: 55rem;
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    
+        > p {
+            font-size: 3rem;
+        }
+
+        &::before {
+            display: none;
+        }
+    }
+}

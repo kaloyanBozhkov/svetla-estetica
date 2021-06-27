@@ -1,0 +1,65 @@
+@import "scss/variables.scss";
+@import "scss/mixins.scss";
+@import "scss/breakpoints.scss";
+
+.header {
+    height: 100%;
+    width: 100%;
+    background-color: $white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    
+    @include sidePaddings();
+    @include slyBoxShadow();
+
+    .logo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        p {
+            font-size: 3rem;
+            color: $black;
+            margin-bottom: 8px;
+        }
+
+        a {
+            font-size: 2rem;
+            color: $grey;
+        }
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 20rem;
+
+        a,
+        p {
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+
+        a {
+            color: $black;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 8px;
+            align-self: flex-end;
+        }
+
+        p {
+            font-weight: lighter;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @include breakpoint(tablet-portrait) {
+            display: none;
+        }
+    }
+}

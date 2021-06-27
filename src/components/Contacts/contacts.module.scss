@@ -1,0 +1,114 @@
+@import "scss/mixins.scss";
+@import "scss/variables.scss";
+
+.contacts {
+    width: 100%;
+    display: flex;
+    gap: 24rem;
+
+    @include sidePaddings;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+
+    position: relative;
+    &::before {
+        content: "";
+        width: 1px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: $lighterGrey;
+        top: 20%;
+        bottom: 20%;
+    }
+
+    > div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
+
+        > p {
+            font-weight: lighter;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &:first-child {
+            > p {
+                &:not(:first-child) {
+                    &:not(:last-child) {
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
+        }
+
+        &:last-child {
+            .fb,
+            .ig,
+            .ws {
+                display: flex;
+                align-items: center;
+                gap: 3rem;
+
+                p {
+                    font-size: 1.6rem;
+                    @include breakpoint(tablet-portrait) {
+                        font-size: 3rem;
+                    }
+                }
+
+                &::before {
+                    content: "";
+                    width: 2.8rem;
+                    height: 2.8rem;
+                    background-size: cover;
+                }
+            }
+
+            .fb {
+                p {
+                    color: #17a8fd;
+                }
+
+                &::before {
+                    background-image: url("/assets/icons/fb.svg");
+                }
+            }
+
+            .ig {
+                p {
+                    color: #c03b96;
+                }
+
+                &::before {
+                    background-image: url("/assets/icons/ig.svg");
+                }
+            }
+
+            .ws {
+                p {
+                    color: #3fc350;
+                }
+
+                &::before {
+                    background-image: url("/assets/icons/ws.svg");
+                }
+            }
+        }
+    }
+
+    @include breakpoint(tablet-portrait) {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+        flex-direction: column;
+        gap: 8rem;
+
+        &::before {
+            display: none;
+        }
+    }
+}
