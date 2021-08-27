@@ -4,7 +4,7 @@ import React, { useReducer } from 'react'
 import { MailForm } from '~/common/types'
 
 // import helpers
-import sendMail from '~/helpers/sendMail'
+import sendMail from '~/services/sendMail'
 import { validatePhoneNumber, validateEmail } from '~/helpers/validators'
 import useTimerToggle from '~/hooks/useTimerToggle'
 

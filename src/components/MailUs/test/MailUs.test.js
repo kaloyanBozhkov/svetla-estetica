@@ -9,7 +9,7 @@ import sendMail from 'helpers/sendMail'
 import MailUs from '../MailUs'
 
 // mock the helper
-jest.mock('helpers/sendMail')
+jest.mock('services/sendMail')
 
 describe('testing MailUs', () => {
     it('should render component', () => {
