@@ -4,7 +4,7 @@ import { MailForm } from '~/common/types'
 
 const smtpMailTo = (mailFormInputs: MailForm): Promise<Error | SentMessageInfo> => {
     const transporter = nodemailer.createTransport({
-            host: 'www.svetlaestetica.com',
+            host: 'svetlaestetica.com',
             port: 465,
             secure: true,
             auth: {
@@ -14,9 +14,11 @@ const smtpMailTo = (mailFormInputs: MailForm): Promise<Error | SentMessageInfo> 
         }),
         mailOptions = {
             from: process.env.REACT_APP_MAIL_EMAIL,
-            to: `${mailFormInputs.name} ${mailFormInputs.surname}`,
+            to: mailFormInputs.email,
             subject: `Nuovo Messaggio dal Sito: ${mailFormInputs.phone}`,
-            text: mailFormInputs.message,
+            text: `${mailFormInputs.name} ${mailFormInputs.surname}
+            \n
+            ${mailFormInputs.message}`,
         }
 
     return new Promise((res, rej) =>
