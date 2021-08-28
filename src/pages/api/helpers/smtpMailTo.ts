@@ -4,7 +4,7 @@ import { MailForm } from '~/common/types'
 
 const smtpMailTo = (mailFormInputs: MailForm): Promise<Error | SentMessageInfo> => {
     const transporter = nodemailer.createTransport({
-            host: 'localhost',
+            host: 'www.svetlaestetica.com',
             port: 465,
             secure: true,
             auth: {
