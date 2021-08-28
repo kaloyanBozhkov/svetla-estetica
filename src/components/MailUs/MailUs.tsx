@@ -7,7 +7,7 @@ import { MailForm } from '~/common/types'
 import { validatePhoneNumber, validateEmail } from '~/helpers/validators'
 import useTimerToggle from '~/hooks/useTimerToggle'
 
-// import ervices
+// import services
 import sendMail from 'services/sendMail'
 
 // import atoms
