@@ -14,7 +14,7 @@ const smtpMailTo = (mailFormInputs: MailForm): Promise<Error | SentMessageInfo> 
         }),
         mailOptions = {
             from: process.env.REACT_APP_MAIL_EMAIL,
-            to: mailFormInputs.email,
+            to: process.env.REACT_APP_MAIL_EMAIL,
             subject: `Nuovo Messaggio da: ${mailFormInputs.email}`,
             text: `Identità: ${mailFormInputs.name} ${mailFormInputs.surname}\n\n
             Telefono: ${mailFormInputs.phone}\n\n
