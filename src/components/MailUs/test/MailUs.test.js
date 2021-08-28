@@ -2,9 +2,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 
-// import helper
-import sendMail from 'helpers/sendMail'
-
 // import components
 import MailUs from '../MailUs'
 
