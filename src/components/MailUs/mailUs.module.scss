@@ -1,40 +1,50 @@
 @import "scss/mixins.scss";
 @import "scss/variables.scss";
 
-.mailUs {
+.formWrapper {
     @include sidePaddings;
+
     padding-top: 5rem;
     padding-bottom: 5rem;
 
-    .container {
+    form[form-id="mailUsForm"] {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 5rem;
+        grid-template-areas:
+            "name surname"
+            "email phone"
+            "message message"
+            "btn btn";
         column-gap: 23rem;
-        row-gap: 5rem;
-        margin-bottom: 5rem;
+        row-gap: 3rem;
 
-        .inputWrapper {
-            height: 4.5rem;
+        > div {
+            &:nth-child(1) {
+                grid-area: name;
+            }
+            &:nth-child(2) {
+                grid-area: surname;
+            }
+            &:nth-child(3) {
+                grid-area: email;
+            }
+            &:nth-child(4) {
+                grid-area: phone;
+            }
+            &:nth-child(5) {
+                grid-area: message;
+            }
         }
-    }
 
-    > .inputWrapper {
-        height: 18rem;
-        margin-bottom: 5rem;
-    }
-
-    > .btnWrapper {
-        height: 5rem;
-        width: 20rem;
-
-        button {
+        > button {
+            grid-area: btn;
+            height: 5rem;
+            width: 20rem;
             font-weight: bold;
             font-size: 1.8rem;
-        }
+            margin: unset;
 
-        &[data-is-disabled="false"] {
-            button {
+            &[disabled="false"] {
                 color: $green;
                 border-color: $green;
                 &:hover {
@@ -43,45 +53,72 @@
                 }
             }
         }
-    }
 
-    .inputWrapper[data-is-valid="true"][data-is-toggled="false"] {
-        input,
-        textarea {
-            border-color: $green;
-
-            ~ label {
-                color: $green;
-            }
+        [form-field] {
+            height: 4.5rem;
         }
-    }
 
-    .inputWrapper[data-is-valid="false"][data-is-toggled="true"] {
-        @keyframes shake {
-            0% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(2deg);
-            }
-            75% {
-                transform: rotate(-2deg);
-            }
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-        @include animate(shake, 330ms);
-        animation-iteration-count: infinite;
+        @include breakpoint(tablet-portrait) {
+            grid-template-areas:
+                "name"
+                "surname"
+                "email"
+                "phone"
+                "message"
+                "btn";
 
-        input,
-        textarea {
-            @keyframes borderColor {
-                50% {
-                    border-color: red;
+            [form-field] {
+                height: 6.5rem;
+                label,
+                input {
+                    font-size: 2.2rem;
                 }
             }
-            @include animate(borderColor, 1s);
+        }
+
+        > [form-type="textarea"] {
+            height: 18rem;
+        }
+
+        [form-field][data-is-valid="true"][data-is-toggled="false"] {
+            input,
+            textarea {
+                border-color: $green;
+
+                ~ label {
+                    color: $green;
+                }
+            }
+        }
+
+        [form-field][data-is-valid="false"][data-is-toggled="true"] {
+            @keyframes shake {
+                0% {
+                    transform: rotate(0deg);
+                }
+                25% {
+                    transform: rotate(2deg);
+                }
+                75% {
+                    transform: rotate(-2deg);
+                }
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+            @include animate(shake, 330ms);
+
+            animation-iteration-count: infinite;
+
+            input,
+            textarea {
+                @keyframes borderColor {
+                    50% {
+                        border-color: red;
+                    }
+                }
+                @include animate(borderColor, 1s);
+            }
         }
     }
 }

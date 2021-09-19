@@ -15,12 +15,12 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
-        "baseUrl": "./src",
+        "baseUrl": "./src/",
         "paths": {
             "~/*": ["./*"],
             "@assets/*": ["../public/assets/*"]
         }
     },
     "exclude": ["node_modules", ".next", "setupTests.js"],
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+    "include": ["next-env.d.ts", "src"]
 }

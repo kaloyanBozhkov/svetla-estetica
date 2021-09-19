@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing FormField should render component 1`] = `
+<div
+  className="formField"
+  data-has-errored={false}
+  form-field="fieldName"
+  form-type="textarea"
+>
+  <Input
+    label="title"
+    name="fieldName"
+    onBlur={[MockFunction]}
+    onChange={[MockFunction]}
+    onFocus={[MockFunction]}
+    required={true}
+    type="textarea"
+    value=""
+  />
+</div>
+`;

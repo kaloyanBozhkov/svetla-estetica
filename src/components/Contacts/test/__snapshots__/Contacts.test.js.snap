@@ -15,7 +15,10 @@ exports[`testing Contacts should render component 1`] = `
         href="tel:+393935026350"
       >
         <span>
-          (+39) 393 5026 350
+          (+39)
+        </span>
+        <span>
+          393 5026 350
         </span>
       </a>
     </p>
@@ -29,7 +32,10 @@ exports[`testing Contacts should render component 1`] = `
         href="tel:+39350632279"
       >
         <span>
-          (+39) 35 0632279
+          (+39)
+        </span>
+        <span>
+          35 0632279
         </span>
       </a>
     </p>

@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import styles from './workingHours.module.scss'
 
 const hours = [
@@ -8,13 +9,17 @@ const hours = [
         ['Venerdì', '09.00 - 20.00'],
         ['Sabato', '09.00 - 18.00'],
     ],
-    WorkingHours = (): JSX.Element => (
+    WorkingHours = (): ReactElement => (
         <div className={styles.workingHours}>
             {hours.map(([day, hour]) => (
-                <p key={day}>
-                    <span>{day}</span>
-                    <span>{hour}</span>
-                </p>
+                <div key={day}>
+                    <p>{day}</p>
+                    <p>
+                        {hour.split(' ').map((item) => (
+                            <span key={`${day}-${item}`}>{item}</span>
+                        ))}
+                    </p>
+                </div>
             ))}
         </div>
     )

@@ -1,0 +1,93 @@
+@import "scss/variables.scss";
+@import "scss/mixins.scss";
+
+.formField {
+    > .desc {
+        margin-top: 1.6rem;
+        color: $black;
+        font-size: 1.4rem;
+        font-weight: 300;
+    }
+
+    > .errorMsg {
+        margin-top: 0.5rem;
+        color: $pink;
+        font-size: 1.4rem;
+        font-weight: 300;
+    }
+
+    label {
+        animation-timing-function: ease-in-out;
+        transform-origin: 0 0;
+        animation-direction: alternate;
+        color: $pink;
+    }
+
+    input {
+        box-sizing: border-box;
+        border-color: $pink;
+    }
+
+    &[data-has-errored="true"] {
+        [data-is-active="false"] {
+            label {
+                @keyframes shake1 {
+                    10%,
+                    90% {
+                        transform: translateY(-50%) translate3d(-1px, 0, 0);
+                    }
+
+                    20%,
+                    80% {
+                        transform: translateY(-50%) translate3d(2px, 0, 0);
+                    }
+
+                    30%,
+                    50%,
+                    70% {
+                        transform: translateY(-50%) translate3d(-4px, 0, 0);
+                    }
+
+                    40%,
+                    60% {
+                        transform: translateY(-50%) translate3d(4px, 0, 0);
+                    }
+                }
+                @include animate(shake1, 1s);
+            }
+        }
+
+        [data-is-active="true"] {
+            label {
+                color: $pink;
+            }
+            input {
+                @keyframes shake2 {
+                    10%,
+                    90% {
+                        padding-left: 1rem;
+                    }
+
+                    20%,
+                    80% {
+                        padding-left: 1.4rem;
+                    }
+
+                    30%,
+                    50%,
+                    70% {
+                        padding-left: 1rem;
+                    }
+
+                    40%,
+                    60% {
+                        padding-left: 1.8rem;
+                    }
+                }
+                @include animate(shake2, 1s);
+
+                color: $pink;
+            }
+        }
+    }
+}

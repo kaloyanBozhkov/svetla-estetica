@@ -1,9 +1,41 @@
 @import "scss/variables.scss";
+@mixin activeLabel {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    opacity: 1;
+    padding: 0 0.5rem;
+}
 
 .input {
     width: 100%;
     height: 100%;
     position: relative;
+
+    label {
+        align-items: center;
+        transition: 200ms;
+        cursor: text;
+        font-size: 1.6rem;
+        left: 1rem;
+        position: absolute;
+        background-color: white;
+        padding: 0;
+        line-height: 1.6rem;
+        z-index: $zIndexMax;
+    }
+
+    &[data-is-active="false"] {
+        label {
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+    }
+
+    &[data-is-active="true"] label {
+        @include activeLabel();
+    }
 
     input,
     textarea {
@@ -16,65 +48,30 @@
         flex: 1;
         border-radius: 4px;
         resize: none;
+        z-index: $zIndexTop;
 
         &:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0px 1000px white inset;
+            -webkit-box-shadow: 0 0 0 1000px white inset;
         }
 
         &:focus {
             border-color: $pink;
             ~ label {
                 color: $pink;
+
+                @include activeLabel();
             }
-        }
-    }
-
-    label {
-        align-items: center;
-        transition: 200ms;
-        cursor: text;
-        font-size: 1.6rem;
-        left: 1rem;
-        position: absolute;
-        background-color: white;
-        padding: 0;
-        line-height: 1.6rem;
-    }
-
-    &[data-is-active="true"],
-    input:focus ~ {
-        label {
-            top: 0;
-            transform: translateY(-50%);
-            font-size: 1.3rem;
-            opacity: 1;
-            padding: 0 0.5rem;
-        }
-    }
-
-    &[data-is-active="false"] {
-        label {
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.5;
         }
     }
 
     &[data-is-textarea="true"] {
-        &[data-is-active="true"],
-        textarea:focus ~ {
-            label {
-                padding: 0 0.5rem;
-                font-size: 1.3rem;
-                opacity: 1;
-                top: 0;
-                transform: translateY(-50%);
-            }
-        }
-
         &[data-is-active="false"] label {
             top: 2.1rem;
             opacity: 0.5;
+        }
+
+        &[data-is-active="true"] label {
+            @include activeLabel();
         }
     }
 }

@@ -6,6 +6,7 @@ exports[`testing BUtton should render atom 1`] = `
   data-modifier="hallow"
   disabled={false}
   onClick={[MockFunction]}
+  type="button"
 >
   Some Label
 </button>

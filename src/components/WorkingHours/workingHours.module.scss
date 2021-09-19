@@ -9,10 +9,11 @@
     column-gap: 24rem;
 
     @include sidePaddings;
+
     padding-top: 4rem;
     padding-bottom: 4rem;
 
-    > p {
+    > div {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -23,7 +24,7 @@
 
     position: relative;
     &::before {
-        content: '';
+        content: "";
         width: 1px;
         position: absolute;
         left: 50%;
@@ -38,13 +39,28 @@
         height: 55rem;
         padding-top: 5rem;
         padding-bottom: 5rem;
-    
-        > p {
-            font-size: 3rem;
+
+        > div {
+            > p {
+                font-size: 3rem;
+                flex: 2;
+
+                &:last-child {
+                    flex: 1;
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
         }
 
         &::before {
             display: none;
+        }
+    }
+
+    @include breakpoint(mobile) {
+        > div > p {
+            flex: 1;
         }
     }
 }

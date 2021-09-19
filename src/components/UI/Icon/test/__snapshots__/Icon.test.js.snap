@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Icon atom should render Icon with no icon found 1`] = `
+<i>
+  Icon not found
+</i>
+`;

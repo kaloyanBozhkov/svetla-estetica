@@ -4,65 +4,149 @@ exports[`testing WorkingHours should render component 1`] = `
 <div
   className="workingHours"
 >
-  <p
+  <div
     key="Lunedì"
   >
-    <span>
+    <p>
       Lunedì
-    </span>
-    <span>
-      09.00 - 20.00
-    </span>
-  </p>
-  <p
+    </p>
+    <p>
+      <span
+        key="Lunedì-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Lunedì--"
+      >
+        -
+      </span>
+      <span
+        key="Lunedì-20.00"
+      >
+        20.00
+      </span>
+    </p>
+  </div>
+  <div
     key="Martedì"
   >
-    <span>
+    <p>
       Martedì
-    </span>
-    <span>
-      09.00 - 20.00
-    </span>
-  </p>
-  <p
+    </p>
+    <p>
+      <span
+        key="Martedì-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Martedì--"
+      >
+        -
+      </span>
+      <span
+        key="Martedì-20.00"
+      >
+        20.00
+      </span>
+    </p>
+  </div>
+  <div
     key="Mercoledì"
   >
-    <span>
+    <p>
       Mercoledì
-    </span>
-    <span>
-      09.00 - 20.00
-    </span>
-  </p>
-  <p
+    </p>
+    <p>
+      <span
+        key="Mercoledì-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Mercoledì--"
+      >
+        -
+      </span>
+      <span
+        key="Mercoledì-20.00"
+      >
+        20.00
+      </span>
+    </p>
+  </div>
+  <div
     key="Giovedì"
   >
-    <span>
+    <p>
       Giovedì
-    </span>
-    <span>
-      09.00 - 20.00
-    </span>
-  </p>
-  <p
+    </p>
+    <p>
+      <span
+        key="Giovedì-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Giovedì--"
+      >
+        -
+      </span>
+      <span
+        key="Giovedì-20.00"
+      >
+        20.00
+      </span>
+    </p>
+  </div>
+  <div
     key="Venerdì"
   >
-    <span>
+    <p>
       Venerdì
-    </span>
-    <span>
-      09.00 - 20.00
-    </span>
-  </p>
-  <p
+    </p>
+    <p>
+      <span
+        key="Venerdì-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Venerdì--"
+      >
+        -
+      </span>
+      <span
+        key="Venerdì-20.00"
+      >
+        20.00
+      </span>
+    </p>
+  </div>
+  <div
     key="Sabato"
   >
-    <span>
+    <p>
       Sabato
-    </span>
-    <span>
-      09.00 - 18.00
-    </span>
-  </p>
+    </p>
+    <p>
+      <span
+        key="Sabato-09.00"
+      >
+        09.00
+      </span>
+      <span
+        key="Sabato--"
+      >
+        -
+      </span>
+      <span
+        key="Sabato-18.00"
+      >
+        18.00
+      </span>
+    </p>
+  </div>
 </div>
 `;

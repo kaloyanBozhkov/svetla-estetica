@@ -17,7 +17,9 @@ module.exports = {
         '^components(.*)$': ['<rootDir>/src/components/$1'],
         '^helpers(.*)$': ['<rootDir>/src/helpers/$1'],
         '^hooks(.*)$': ['<rootDir>/src/hooks/$1'],
+        '^services(.*)$': ['<rootDir>/src/services/$1'],
     },
     rootDir: '.',
     roots: ['<rootDir>', '<rootDir>/src'],
+    watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
 }

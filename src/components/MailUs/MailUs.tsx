@@ -1,120 +1,44 @@
-import React, { useReducer } from 'react'
-
 // import common types
-import { MailForm } from '~/common/types'
+import type { ReactElement } from 'react'
+import type { FormErrorType, FormFieldDefinition, FormState } from 'common/types'
 
 // import helpers
-import { validatePhoneNumber, validateEmail } from '~/helpers/validators'
-import useTimerToggle from '~/hooks/useTimerToggle'
-
-// import services
-import sendMail from 'services/sendMail'
+import Form from '../Form/Form'
 
 // import atoms
-import Button from '../UI/Button/Button'
-import Input from '../UI/Input/Input'
+import FormError from '../UI/FormError/FormError'
 
 // import styles
 import styles from './mailUs.module.scss'
 
-type action = {
-    fieldName: string
-    fieldValue: string
+export type MailUsProps = {
+    mailUsError: FormErrorType
+    formFieldDefinitions: FormFieldDefinition[]
+    isMailUsPending: boolean
+    onMailUs: (formState: FormState) => void
+    onFormFieldFocused?: (fieldName?: string) => void
 }
 
-const valueUpdater = (fieldName: string, setInputs: (action: action) => void) => ({
-        target: { value: fieldValue },
-    }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-        setInputs({ fieldName, fieldValue }),
-    fields: Array<{ label: string; property: keyof MailForm; isValid?: (s: string) => boolean }> = [
-        {
-            label: 'Nome',
-            property: 'name',
-        },
-        {
-            label: 'Cognome',
-            property: 'surname',
-        },
-        {
-            label: 'Email',
-            property: 'email',
-            isValid: validateEmail,
-        },
-        {
-            label: 'Telefono',
-            property: 'phone',
-            isValid: validatePhoneNumber,
-        },
-    ]
-
-const MailUs = (): JSX.Element => {
-    const [inputs, setInputs] = useReducer(
-            (acc: MailForm, action: action) => ({
-                ...acc,
-                [action.fieldName]: action.fieldValue,
-            }),
-            {
-                name: '',
-                surname: '',
-                email: '',
-                phone: '',
-                message: '',
-            }
-        ),
-        [toggle, setToggled] = useTimerToggle({ untoggleAfter: 1 }),
-        cantSubmit = !!Object.values(inputs).filter((i) => !i).length
-
-    return (
-        <div className={styles.mailUs}>
-            <div className={styles.container}>
-                {fields.map(({ label, property, isValid }, index) => {
-                    const isValidField =
-                        !!inputs[property] && (isValid ? isValid(inputs[property]) : true)
-
-                    return (
-                        <div
-                            key={index}
-                            className={styles.inputWrapper}
-                            data-is-valid={isValidField}
-                            data-is-toggled={toggle}
-                        >
-                            <Input
-                                label={label}
-                                value={inputs[property]}
-                                onChange={valueUpdater(property, setInputs)}
-                            />
-                        </div>
-                    )
-                })}
-            </div>
-            <div
-                className={styles.inputWrapper}
-                data-is-valid={!!inputs.message}
-                data-is-toggled={toggle}
-            >
-                <Input
-                    label="Messaggio"
-                    type="text"
-                    value={inputs.message}
-                    onChange={valueUpdater('message', setInputs)}
-                />
-            </div>
-            <div className={styles.btnWrapper} data-is-disabled={cantSubmit}>
-                <Button
-                    modifier="solid"
-                    label="Invia"
-                    onClick={() => {
-                        if (cantSubmit) {
-                            // enable showing toggled
-                            return !toggle && setToggled()
-                        }
-
-                        sendMail(inputs)
-                    }}
-                />
-            </div>
-        </div>
-    )
-}
+const MailUs = ({
+    mailUsError,
+    formFieldDefinitions,
+    isMailUsPending,
+    onMailUs,
+    onFormFieldFocused,
+}: MailUsProps): ReactElement => (
+    <div className={styles.formWrapper}>
+        {/* If error is a simple stirng it is a top level error */}
+        <FormError error={mailUsError} />
+        <Form
+            formId="mailUsForm"
+            submitLabel="Invia"
+            definitions={formFieldDefinitions}
+            fieldErrors={mailUsError && typeof mailUsError !== 'string' ? mailUsError : undefined}
+            onSubmit={onMailUs}
+            isSubmitPending={isMailUsPending}
+            onFormFieldFocused={onFormFieldFocused}
+        />
+    </div>
+)
 
 export default MailUs

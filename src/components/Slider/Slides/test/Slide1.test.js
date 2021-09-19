@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { shallow } from 'enzyme'
 import React from 'react'
 import Slide1 from '../Slide1'

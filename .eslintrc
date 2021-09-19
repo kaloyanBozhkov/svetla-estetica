@@ -1,0 +1,97 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:jest/recommended",
+        "airbnb-base",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint", "react", "jsx-a11y", "jest", "prettier"],
+    "rules": {
+        // no react import since it's a next project
+        "react/react-in-jsx-scope": ["off"],
+        "prettier/prettier": ["error"],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        // allow for prop spreading
+        "react/jsx-props-no-spreading": [0],
+        // default props can implicitly be undefined -> falsy
+        "react/require-default-props": [0],
+        // not using prop types
+        "react/prop-types": [0],
+        "class-methods-use-this": ["off"],
+        // allow functions to conditionally return different things (or nothing) Why? useEffect accepts an optional return with cleanup fn, we'd need to return undefined outside the boolean gate each time we conditionally return the cleanup fn
+        "consistent-return": ["off"],
+        // declarations of multiple vars in a row to be done jsut once
+        "one-var": ["error", { "var": "never", "let": "consecutive", "const": "consecutive" }],
+        // parseInt can have unspecified radix
+        "radix": ["error", "as-needed"],
+        "no-bitwise": ["off"],
+        "no-plusplus": ["off"],
+        "no-shadow": ["off"],
+        "no-debugger": ["warn"],
+        // gate expressions are useful e.g. truthy && truthy2 && doSomething()
+        "no-unused-expressions": ["off"],
+        // ternary expressions are elegant and parenthesis and new lines can make them readable af
+        "no-nested-ternary": ["off"],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        // disable conflicting rule with typescript
+        "no-use-before-define": ["off"],
+        "@typescript-eslint/no-use-before-define": ["off"],
+        // disable conflicting rule with typescript
+        "no-unused-vars": ["off"],
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    // test files import dev deps such as enzyme -> no need to lint that
+                    "**/*.test.js",
+                    // customize-cra is a dev dependency, used only in the below file -> no need to lint that
+                    "config-overrides.js"
+                ]
+            }
+        ],
+        "import/extensions": [
+            "error",
+            "always",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        // allow single non-default exports for a module
+        "import/prefer-default-export": ["off"],
+        // not providing subs yet
+        "jsx-a11y/media-has-caption": ["off"]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"],
+                "moduleDirectory": ["node_modules", "src"]
+            }
+        }
+    },
+    "ignorePatterns": ["node_modules/**"]
+}

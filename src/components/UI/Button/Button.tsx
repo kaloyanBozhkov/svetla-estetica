@@ -1,19 +1,26 @@
-import React from 'react'
+import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react'
 import styles from './button.module.scss'
 
-type ButtonProps = {
-    label: string
-    onClick: () => void
-    modifier: 'hallow' | 'solid'
+interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
+    label: ReactNode
+    modifier?: 'hallow' | 'solid' | 'denied'
     disabled?: boolean
 }
 
-const Button = ({ label, onClick, modifier, disabled = false }: ButtonProps): JSX.Element => (
+const Button = ({
+    label,
+    onClick,
+    modifier = 'solid',
+    disabled = false,
+    type = 'button',
+}: ButtonProps): ReactElement => (
     <button
         className={styles.button}
         onClick={onClick}
         data-modifier={modifier}
         disabled={disabled}
+        // eslint-disable-next-line
+        type={type}
     >
         {label}
     </button>

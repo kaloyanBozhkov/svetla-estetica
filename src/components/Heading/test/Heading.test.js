@@ -9,7 +9,9 @@ describe('testing SeactionHeading', () => {
 
     it('should render heading with an action btn', () => {
         const mockClick = jest.fn(),
-            wrapper = shallow(<Heading buttonProps={{ label: 'Some label', onClick: mockClick }} />),
+            wrapper = shallow(
+                <Heading buttonProps={{ label: 'Some label', onClick: mockClick }} />
+            ),
             btn = wrapper.find('Button')
 
         expect(btn.length).toBe(1)

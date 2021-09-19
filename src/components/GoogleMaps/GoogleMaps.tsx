@@ -1,6 +1,7 @@
+import type { ReactElement } from 'react'
 import styles from './googleMaps.module.scss'
 
-const GoogleMaps = (): JSX.Element => (
+const GoogleMaps = (): ReactElement => (
     <iframe
         className={styles.googleMapsWrapper}
         title="Google Maps - Svetla Estetica Dalmine"

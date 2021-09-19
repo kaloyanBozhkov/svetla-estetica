@@ -25,21 +25,17 @@
 }
 
 .slide1 {
-    height: 100%;
-    width: 100%;
-    @include sidePaddings;
-}
-
-.slide1 {
     display: flex;
     justify-content: space-between;
     overflow: hidden;
+    height: 100%;
+    width: 100%;
+    @include sidePaddings;
 
     > img {
         height: 90%;
         width: auto;
         align-self: flex-end;
-
         transform: scale(1.2) translateY(3rem);
 
         @include breakpoint(tablet-landscape) {
@@ -59,33 +55,33 @@
             height: 16.4rem;
             color: $white;
 
-            > p:first-of-type {
-                font-size: 7rem;
-                font-weight: bold;
-                text-shadow: 0px 2px 3px #777777;
-                @include animate(slideIn, 1s);
-            }
-
-            > p:last-of-type {
-                padding: 1rem 0;
-                font-size: 3.5rem;
-                text-align: left;
-
-                > span {
-                    display: inline-block;
-                    animation-timing-function: cubic-bezier();
-                    width: 100%;
-                    &:first-child {
-                        @include animate(slideIn, 1.2s);
-                    }
-                    &:last-child {
-                        @include animate(slideIn, 1.3s);
-                    }
-                }
-            }
-
             > p {
                 animation-timing-function: cubic-bezier();
+
+                &:first-of-type {
+                    font-size: 7rem;
+                    font-weight: bold;
+                    text-shadow: 0 2px 3px #777;
+                    @include animate(slideIn, 1s);
+                }
+
+                &:last-of-type {
+                    padding: 1rem 0;
+                    font-size: 3.5rem;
+                    text-align: left;
+
+                    > span {
+                        display: inline-block;
+                        animation-timing-function: cubic-bezier();
+                        width: 100%;
+                        &:first-child {
+                            @include animate(slideIn, 1.2s);
+                        }
+                        &:last-child {
+                            @include animate(slideIn, 1.3s);
+                        }
+                    }
+                }
             }
         }
 
@@ -94,6 +90,7 @@
             height: 3.2rem;
             align-self: flex-start;
             @include animate(popIn, 2s);
+
             animation-timing-function: cubic-bezier();
 
             > button {

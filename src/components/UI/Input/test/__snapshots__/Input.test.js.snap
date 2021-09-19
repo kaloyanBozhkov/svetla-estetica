@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Input atom should render atom 1`] = `
+<div
+  className="input"
+  data-is-active={false}
+  data-is-textarea={false}
+>
+  <input
+    id="name"
+    onChange={[MockFunction]}
+    value=""
+  />
+  <label
+    htmlFor="name"
+  >
+    name
+  </label>
+</div>
+`;

@@ -5,7 +5,7 @@ exports[`testing Slider should render component 1`] = `
   className="slider"
 >
   <Slide1
-    key="0"
+    key="Slide1"
   />
 </div>
 `;

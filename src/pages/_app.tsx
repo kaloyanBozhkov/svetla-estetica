@@ -1,4 +1,5 @@
-import type { AppProps /*, AppContext */ } from 'next/app'
+import type { ReactElement } from 'react'
+import type { AppProps /* , AppContext */ } from 'next/app'
 
 import 'scss/general.scss'
 
@@ -8,13 +9,11 @@ import BaseLayout from 'templates/BaseLayout/BaseLayout'
 // import components
 import Header from 'components/Header/Header'
 
-const App = ({ Component, pageProps }: AppProps): JSX.Element => {
-    return (
-        <BaseLayout header={<Header />}>
-            <Component {...pageProps} />
-        </BaseLayout>
-    )
-}
+const App = ({ Component, pageProps }: AppProps): ReactElement => (
+    <BaseLayout header={<Header />}>
+        <Component {...pageProps} />
+    </BaseLayout>
+)
 
 // Only uncomment this method if you have blocking data requirements for
 // every single page in your application. This disables the ability to

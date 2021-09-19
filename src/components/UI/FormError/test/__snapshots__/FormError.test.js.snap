@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing top level FormError should render component if valid error str provided 1`] = `
+<p
+  className="errorMsg"
+>
+  some error
+</p>
+`;

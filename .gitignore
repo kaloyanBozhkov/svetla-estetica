@@ -35,3 +35,9 @@ yarn-error.log*
 
 # custom config
 .vscode
+
+# envirables
+.env
+
+#husky
+/.husky

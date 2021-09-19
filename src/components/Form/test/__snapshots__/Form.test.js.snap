@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Form should render component 1`] = `
+<form
+  className="form"
+  form-id="someId"
+>
+  <FormField
+    hasErrored={false}
+    key="email"
+    label="label"
+    modifier="base"
+    name="email"
+    onChange={[Function]}
+    onFocus={[Function]}
+    required={true}
+    type="text"
+  />
+  <FormField
+    hasErrored={false}
+    key="password"
+    label="label2"
+    modifier="base"
+    name="password"
+    onChange={[Function]}
+    onFocus={[Function]}
+    required={true}
+    type="password"
+  />
+  <Button
+    label="Submit"
+    onClick={[Function]}
+    type="submit"
+  />
+</form>
+`;

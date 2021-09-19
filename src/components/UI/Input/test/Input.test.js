@@ -3,7 +3,7 @@ import Input from '../Input'
 
 describe('testing Input atom', () => {
     it('should render atom', () => {
-        expect(shallow(<Input value="" label="name" onChange={jest.fn()} />))
+        expect(shallow(<Input value="" label="name" onChange={jest.fn()} />)).toMatchSnapshot()
     })
     it('should run onChange fn', () => {
         const mockOnChange = jest.fn(),
@@ -17,8 +17,10 @@ describe('testing Input atom', () => {
         expect(wrapper.prop('data-is-active')).toBe(true)
     })
 
-    it('should render with text', () => {
-        const wrapper = shallow(<Input type="text" value="" label="text" onChange={jest.fn()} />)
+    it('should render with textarea', () => {
+        const wrapper = shallow(
+            <Input type="textarea" value="" label="text" onChange={jest.fn()} />
+        )
         expect(wrapper.find('textarea').length).toBe(1)
     })
 })

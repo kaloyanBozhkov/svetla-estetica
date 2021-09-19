@@ -1,8 +1,9 @@
+import type { ReactElement } from 'react'
 import styles from './contacts.module.scss'
 
 const phones = [
-        ['Cellulare', '(+39) 393 5026 350'],
-        ['Fisso', '(+39) 35 0632279'],
+        ['Cellulare', '(+39)', '393 5026 350'],
+        ['Fisso', '(+39)', '35 0632279'],
     ],
     social = [
         {
@@ -21,14 +22,15 @@ const phones = [
             link: 'https://wa.me/+393935026350',
         },
     ],
-    Contacts = (): JSX.Element => (
+    Contacts = (): ReactElement => (
         <div className={styles.contacts}>
             <div>
                 {/* <p>Telefono</p> */}
-                {phones.map(([type, number]) => (
+                {phones.map(([type, ext, number]) => (
                     <p key={type}>
                         <span>{type}</span>
-                        <a href={`tel:${number.replace(/[(,), ]/g, '')}`}>
+                        <a href={`tel:${`${ext} ${number}`.replace(/[(,), ]/g, '')}`}>
+                            <span>{ext}</span>
                             <span>{number}</span>
                         </a>
                     </p>

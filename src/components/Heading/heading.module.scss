@@ -9,13 +9,18 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    
+    border-top: 1px solid lighten($lighterGrey, 5%);
+
     @include sidePaddings;
     @include slyBoxShadow;
 
     > p {
         font-size: 2.5rem;
         color: $black;
+
+        @include breakpoint(tablet-portrait) {
+            font-size: 3rem;
+        }
     }
 
     .btnWrapper {

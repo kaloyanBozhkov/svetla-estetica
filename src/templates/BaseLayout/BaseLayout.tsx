@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 
 // import styles
 import styles from './baseLayout.module.scss'
@@ -9,13 +9,11 @@ const BaseLayout = ({
 }: {
     header: ReactNode
     children: ReactNode
-}): JSX.Element => {
-    return (
-        <div className={styles.baseLayout}>
-            <header>{header}</header>
-            <section>{children}</section>
-        </div>
-    )
-}
+}): ReactElement => (
+    <div className={styles.baseLayout}>
+        <header>{header}</header>
+        <section>{children}</section>
+    </div>
+)
 
 export default BaseLayout
