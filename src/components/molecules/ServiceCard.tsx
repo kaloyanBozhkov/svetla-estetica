@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { Card, CardContent, CardFooter, Button, Badge } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
 interface ServiceCardProps {
+  uuid: string;
   name: string;
   description?: string;
   price: number;
@@ -16,6 +18,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({
+  uuid,
   name,
   description,
   price,
@@ -26,31 +29,23 @@ export function ServiceCard({
   onBook,
 }: ServiceCardProps) {
   return (
-    <Card hover className="flex flex-col h-full overflow-hidden p-0">
-      <div className="relative aspect-[4/3] bg-gray-100">
+    <Card hover className="group flex flex-col h-full overflow-hidden p-0">
+      <Link href={`/trattamenti/${uuid}`} className="relative aspect-[4/3] bg-gradient-to-br from-primary-100 to-primary-50 block">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-400">
-            <svg
-              className="h-16 w-16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+          <div className="flex h-full items-center justify-center">
+            <div className="h-16 w-16 rounded-full bg-primary-200 flex items-center justify-center">
+              <svg className="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" />
+              </svg>
+            </div>
           </div>
         )}
         <Badge
@@ -59,12 +54,14 @@ export function ServiceCard({
         >
           {category}
         </Badge>
-      </div>
+      </Link>
 
       <CardContent className="flex-1 p-4">
-        <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2">
-          {name}
-        </h3>
+        <Link href={`/trattamenti/${uuid}`}>
+          <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
+            {name}
+          </h3>
+        </Link>
         {description && (
           <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
         )}
@@ -99,4 +96,3 @@ export function ServiceCard({
     </Card>
   );
 }
-

@@ -3,4 +3,5 @@ export { Input } from "./Input";
 export { Badge } from "./Badge";
 export { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./Card";
 export { Spinner } from "./Spinner";
+export * from "./icons";
 

@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { Card, CardContent, CardFooter, Button, Badge } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
 interface ProductCardProps {
+  uuid: string;
   name: string;
   description?: string;
   price: number;
@@ -16,6 +18,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({
+  uuid,
   name,
   description,
   price,
@@ -28,31 +31,23 @@ export function ProductCard({
   const isOutOfStock = stock <= 0;
 
   return (
-    <Card hover className="flex flex-col h-full overflow-hidden p-0">
-      <div className="relative aspect-square bg-gray-100">
+    <Card hover className="group flex flex-col h-full overflow-hidden p-0">
+      <Link href={`/prodotti/${uuid}`} className="relative aspect-square bg-gray-100 block">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-400">
-            <svg
-              className="h-16 w-16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+            <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
+              <span className="text-3xl font-display font-bold text-gray-400">
+                {name.charAt(0)}
+              </span>
+            </div>
           </div>
         )}
         <Badge
@@ -68,12 +63,14 @@ export function ProductCard({
             </Badge>
           </div>
         )}
-      </div>
+      </Link>
 
       <CardContent className="flex-1 p-4">
-        <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2">
-          {name}
-        </h3>
+        <Link href={`/prodotti/${uuid}`}>
+          <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
+            {name}
+          </h3>
+        </Link>
         {description && (
           <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
         )}
@@ -97,4 +94,3 @@ export function ProductCard({
     </Card>
   );
 }
-

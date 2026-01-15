@@ -8,12 +8,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**",
       },
-    ],
-    domains: [
-      "svetlaestetica.com",
+      {
+        protocol: "https",
+        hostname: "svetlaestetica.com",
+      },
     ],
   },
 };
 
 export default nextConfig;
-

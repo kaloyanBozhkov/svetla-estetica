@@ -75,10 +75,10 @@ enum service_category {
 // ==================== MODELS ====================
 
 model user {
-  id         Int       @id @default(autoincrement())
-  uuid       String    @unique @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   email          String    @unique
   email_verified Boolean   @default(false)
@@ -86,9 +86,9 @@ model user {
   phone          String?
   role           user_role @default(customer)
 
-  bookings      booking[]
-  orders        order[]
-  magic_links   magic_link[]
+  bookings    booking[]
+  orders      order[]
+  magic_links magic_link[]
 
   @@index([email])
 }
@@ -98,14 +98,27 @@ model magic_link {
   created_at DateTime @default(now())
   expires_at DateTime
 
-  token    String  @unique
-  used     Boolean @default(false)
+  token String  @unique
+  used  Boolean @default(false)
 
   user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
 
   @@index([token])
   @@index([user_id])
+}
+
+model brand {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  name String @unique
+
+  to_products product[]
+
+  @@index([name])
 }
 
 model product {
@@ -123,6 +136,8 @@ model product {
   stock       Int              @default(0)
 
   order_items order_item[]
+  brand       brand        @relation(fields: [brand_id], references: [id])
+  brand_id    Int
 
   @@index([category])
   @@index([active])
@@ -191,13 +206,13 @@ model booking {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  date           DateTime
-  duration_min   Int
+  date                              DateTime
+  duration_min                      Int
   external_stripe_payment_intent_id String?        @unique
-  notes          String?
-  payment_status payment_status @default(pending)
-  price          Int
-  status         booking_status @default(pending)
+  notes                             String?
+  payment_status                    payment_status @default(pending)
+  price                             Int
+  status                            booking_status @default(pending)
 
   service    service @relation(fields: [service_id], references: [id])
   service_id Int
@@ -209,4 +224,3 @@ model booking {
   @@index([date])
   @@index([status])
 }
-

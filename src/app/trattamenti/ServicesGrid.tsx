@@ -73,6 +73,7 @@ export function ServicesGrid({
           {filteredServices.map((service) => (
             <ServiceCard
               key={service.id}
+              uuid={service.uuid}
               name={service.name}
               description={service.description ?? undefined}
               price={service.price}
@@ -88,4 +89,3 @@ export function ServicesGrid({
     </>
   );
 }
-

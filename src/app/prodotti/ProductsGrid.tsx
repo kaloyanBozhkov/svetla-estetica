@@ -79,6 +79,7 @@ export function ProductsGrid({
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
+              uuid={product.uuid}
               name={product.name}
               description={product.description ?? undefined}
               price={product.price}
@@ -94,4 +95,3 @@ export function ProductsGrid({
     </>
   );
 }
-
