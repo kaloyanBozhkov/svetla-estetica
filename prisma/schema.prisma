@@ -211,6 +211,7 @@ model booking {
   external_stripe_payment_intent_id String?        @unique
   notes                             String?
   payment_status                    payment_status @default(pending)
+  phone                             String
   price                             Int
   status                            booking_status @default(pending)
 

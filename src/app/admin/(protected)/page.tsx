@@ -1,6 +1,15 @@
 import { db } from "@/lib/db";
 import { Card, CardTitle, CardContent } from "@/components/atoms";
+import {
+  CartIcon,
+  CalendarIcon,
+  ClockIcon,
+  CurrencyIcon,
+  PackageIcon,
+  SparkleIcon,
+} from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
+import { type ComponentType } from "react";
 
 export default async function AdminDashboardPage() {
   const today = new Date();
@@ -36,22 +45,22 @@ export default async function AdminDashboardPage() {
     db.service.count({ where: { active: true } }),
   ]);
 
-  const stats = [
-    { label: "Ordini Oggi", value: ordersToday, icon: "🛒" },
-    { label: "Prenotazioni Oggi", value: bookingsToday, icon: "📅" },
-    { label: "Prenotazioni in Attesa", value: pendingBookings, icon: "⏳" },
+  const stats: { label: string; value: string | number; Icon: ComponentType<{ className?: string }> }[] = [
+    { label: "Ordini Oggi", value: ordersToday, Icon: CartIcon },
+    { label: "Prenotazioni Oggi", value: bookingsToday, Icon: CalendarIcon },
+    { label: "Prenotazioni in Attesa", value: pendingBookings, Icon: ClockIcon },
     {
       label: "Ricavo Mensile",
       value: formatPrice(monthlyRevenue._sum.total ?? 0),
-      icon: "💰",
+      Icon: CurrencyIcon,
     },
-    { label: "Prodotti Attivi", value: totalProducts, icon: "📦" },
-    { label: "Servizi Attivi", value: totalServices, icon: "✨" },
+    { label: "Prodotti Attivi", value: totalProducts, Icon: PackageIcon },
+    { label: "Servizi Attivi", value: totalServices, Icon: SparkleIcon },
   ];
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
+      <h1 className="font-display text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
         Dashboard
       </h1>
 
@@ -59,7 +68,9 @@ export default async function AdminDashboardPage() {
         {stats.map((stat) => (
           <Card key={stat.label}>
             <div className="flex items-center gap-4">
-              <span className="text-3xl">{stat.icon}</span>
+              <div className="p-3 bg-primary-50 rounded-lg text-primary-600">
+                <stat.Icon className="w-6 h-6" />
+              </div>
               <div>
                 <CardContent className="text-sm text-gray-500">
                   {stat.label}

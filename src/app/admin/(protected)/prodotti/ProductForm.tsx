@@ -1,0 +1,250 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button, Input, Select, Textarea, Card, Modal } from "@/components/atoms";
+import { type product_category } from "@prisma/client";
+
+const categoryOptions: { value: product_category; label: string }[] = [
+  { value: "viso", label: "Viso" },
+  { value: "corpo", label: "Corpo" },
+  { value: "solari", label: "Solari" },
+  { value: "tisane", label: "Tisane" },
+  { value: "make_up", label: "Make Up" },
+  { value: "profumi", label: "Profumi" },
+  { value: "mani_e_piedi", label: "Mani e Piedi" },
+];
+
+interface Brand {
+  id: number;
+  uuid: string;
+  name: string;
+}
+
+interface ProductFormData {
+  uuid?: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: product_category;
+  brandId: number;
+  imageUrl: string;
+  active: boolean;
+}
+
+interface ProductFormProps {
+  initialData?: ProductFormData;
+  brands: Brand[];
+  isEdit?: boolean;
+}
+
+export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [error, setError] = useState("");
+
+  const [form, setForm] = useState<ProductFormData>(
+    initialData || {
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      category: "viso",
+      brandId: brands[0]?.id || 0,
+      imageUrl: "",
+      active: true,
+    }
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const url = isEdit
+        ? `/api/admin/products/${initialData?.uuid}`
+        : "/api/admin/products";
+      const method = isEdit ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          description: form.description || null,
+          price: Math.round(form.price * 100),
+          stock: form.stock,
+          category: form.category,
+          brand_id: form.brandId,
+          image_url: form.imageUrl || null,
+          active: form.active,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore");
+      }
+
+      router.push("/admin/prodotti");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/products/${initialData?.uuid}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore");
+      }
+
+      router.push("/admin/prodotti");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore");
+      setDeleteModal(false);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const brandOptions = brands.map((b) => ({ value: String(b.id), label: b.name }));
+
+  return (
+    <>
+      <Card className="max-w-2xl">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Nome"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
+
+          <Textarea
+            label="Descrizione"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            rows={4}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Prezzo (€)"
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.price}
+              onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
+              required
+            />
+
+            <Input
+              label="Stock"
+              type="number"
+              min="0"
+              value={form.stock}
+              onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Select
+              label="Categoria"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value as product_category })}
+              options={categoryOptions}
+            />
+
+            <Select
+              label="Brand"
+              value={String(form.brandId)}
+              onChange={(e) => setForm({ ...form, brandId: parseInt(e.target.value) })}
+              options={brandOptions}
+            />
+          </div>
+
+          <Input
+            label="URL Immagine"
+            type="url"
+            value={form.imageUrl}
+            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+            placeholder="https://..."
+          />
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.active}
+              onChange={(e) => setForm({ ...form, active: e.target.checked })}
+              className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <span className="text-sm font-medium text-gray-700">Attivo</span>
+          </label>
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
+
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
+            <div>
+              {isEdit && (
+                <Button
+                  type="button"
+                  variant="danger"
+                  onClick={() => setDeleteModal(true)}
+                  className="w-full sm:w-auto"
+                >
+                  Elimina
+                </Button>
+              )}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => router.back()}
+                className="w-full sm:w-auto"
+              >
+                Annulla
+              </Button>
+              <Button type="submit" loading={loading} className="w-full sm:w-auto">
+                {isEdit ? "Salva" : "Crea"}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </Card>
+
+      <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
+          Conferma eliminazione
+        </h3>
+        <p className="text-gray-600 mb-6">
+          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione non può essere annullata.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button variant="ghost" onClick={() => setDeleteModal(false)}>
+            Annulla
+          </Button>
+          <Button variant="danger" onClick={handleDelete} loading={deleting}>
+            Elimina
+          </Button>
+        </div>
+      </Modal>
+    </>
+  );
+}
+

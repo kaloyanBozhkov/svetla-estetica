@@ -3,15 +3,47 @@
 import Link from "next/link";
 import { useCartStore, useAuthStore } from "@/stores";
 import { CartItem } from "@/components/molecules";
-import { Button, Card } from "@/components/atoms";
+import { ActionButton, Button, Card } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function CartPage() {
   const router = useRouter();
   const { items, updateQuantity, removeItem, getTotal, clearCart } = useCartStore();
   const { isAuthenticated, isLoading } = useAuthStore();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleCheckout = async () => {
+    setError("");
+    setCheckoutLoading(true);
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Errore checkout");
+      }
+
+      clearCart();
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore checkout");
+      setCheckoutLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated()) {
@@ -63,6 +95,7 @@ export default function CartPage() {
                   price={item.price}
                   quantity={item.quantity}
                   imageUrl={item.imageUrl}
+                  productUuid={item.productUuid}
                   onIncrease={() => updateQuantity(item.productId, item.quantity + 1)}
                   onDecrease={() => updateQuantity(item.productId, item.quantity - 1)}
                   onRemove={() => removeItem(item.productId)}
@@ -100,9 +133,18 @@ export default function CartPage() {
                 <span>{formatPrice(getTotal())}</span>
               </div>
 
-              <Button className="w-full" size="lg">
+              {error && (
+                <p className="mb-3 text-sm text-red-600 text-center">{error}</p>
+              )}
+
+              <ActionButton
+                className="w-full"
+                size="lg"
+                onClick={handleCheckout}
+                isLoading={checkoutLoading}
+              >
                 Procedi al Checkout
-              </Button>
+              </ActionButton>
 
               <p className="mt-4 text-xs text-center text-gray-500">
                 Pagamento sicuro con Stripe

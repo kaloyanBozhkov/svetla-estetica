@@ -19,6 +19,7 @@ interface BookingFormProps {
 const bookingSchema = z.object({
   date: z.string().min(1, "Data richiesta"),
   time: z.string().min(1, "Ora richiesta"),
+  phone: z.string().min(6, "Numero di telefono richiesto"),
   notes: z.string().optional(),
 });
 
@@ -26,6 +27,7 @@ export function BookingForm({ service }: BookingFormProps) {
   const router = useRouter();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +39,7 @@ export function BookingForm({ service }: BookingFormProps) {
     setLoading(true);
 
     try {
-      bookingSchema.parse({ date, time, notes });
+      bookingSchema.parse({ date, time, phone, notes });
 
       const res = await fetch("/api/bookings", {
         method: "POST",
@@ -46,6 +48,7 @@ export function BookingForm({ service }: BookingFormProps) {
           serviceUuid: service.uuid,
           date,
           time,
+          phone,
           notes,
         }),
       });
@@ -119,6 +122,15 @@ export function BookingForm({ service }: BookingFormProps) {
           onChange={(e) => setTime(e.target.value)}
           min="09:00"
           max="20:00"
+          required
+        />
+
+        <Input
+          type="tel"
+          label="Numero di telefono"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="+39 333 1234567"
           required
         />
 

@@ -3,12 +3,14 @@
 import { Button } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CartItemProps {
   name: string;
   price: number;
   quantity: number;
   imageUrl?: string;
+  productUuid: string;
   onIncrease: () => void;
   onDecrease: () => void;
   onRemove: () => void;
@@ -19,15 +21,19 @@ export function CartItem({
   price,
   quantity,
   imageUrl,
+  productUuid,
   onIncrease,
   onDecrease,
   onRemove,
 }: CartItemProps) {
   return (
     <div className="flex gap-4 py-4 border-b border-gray-100 last:border-0">
-      <div className="relative h-20 w-20 flex-shrink-0 rounded-lg bg-gray-100 overflow-hidden">
+      <Link
+        href={`/prodotti/${productUuid}`}
+        className="relative h-20 w-20 flex-shrink-0 rounded-lg bg-gray-100 overflow-hidden hover:opacity-80 transition-opacity"
+      >
         {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill className="object-cover" />
+          <Image src={imageUrl} alt={name} fill className="object-contain p-1" />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-400">
             <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +46,7 @@ export function CartItem({
             </svg>
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="flex-1 min-w-0">
         <h4 className="font-medium text-gray-900 truncate">{name}</h4>

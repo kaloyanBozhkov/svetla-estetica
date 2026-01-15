@@ -7,6 +7,7 @@ const createBookingSchema = z.object({
   serviceUuid: z.string().uuid(),
   date: z.string(),
   time: z.string(),
+  phone: z.string().min(6),
   notes: z.string().optional(),
 });
 
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuth();
     const body = await request.json();
-    const { serviceUuid, date, time, notes } = createBookingSchema.parse(body);
+    const { serviceUuid, date, time, phone, notes } = createBookingSchema.parse(body);
 
     const service = await db.service.findUnique({
       where: { uuid: serviceUuid, active: true },
@@ -29,6 +30,14 @@ export async function POST(request: Request) {
 
     const bookingDate = new Date(`${date}T${time}`);
 
+    // Update user phone if provided
+    if (phone) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { phone },
+      });
+    }
+
     const booking = await db.booking.create({
       data: {
         user_id: user.id,
@@ -36,6 +45,7 @@ export async function POST(request: Request) {
         date: bookingDate,
         duration_min: service.duration_min,
         price: service.price,
+        phone,
         notes,
       },
     });

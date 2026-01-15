@@ -32,12 +32,12 @@ export default async function AdminProductsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display text-3xl font-bold text-gray-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-gray-900">
           Gestione Prodotti
         </h1>
-        <Link href="/admin/prodotti/nuovo">
-          <Button>Aggiungi Prodotto</Button>
+        <Link href="/admin/prodotti/nuovo" className="shrink-0">
+          <Button className="w-full sm:w-auto">Aggiungi Prodotto</Button>
         </Link>
       </div>
 

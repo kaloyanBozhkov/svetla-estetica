@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@koko420/react-components':
-        specifier: '*'
-        version: 0.0.9(@types/react@19.2.8)(jiti@1.21.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(tsx@4.21.0))
+        specifier: ^0.0.10
+        version: 0.0.10(@types/react@19.2.8)(jiti@1.21.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(tsx@4.21.0))
       '@koko420/shared':
         specifier: '*'
         version: 1.0.3
@@ -814,12 +814,16 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@koko420/react-components@0.0.9':
-    resolution: {integrity: sha512-le48TLiqtz1MlTTW0T+I+e7sGPLV7RGe/ckVFZoAmOiFuXpaRnz87JFPaQFEmCqcY8X4sc2nr392DvPvwWjeaQ==}
+  '@koko420/react-components@0.0.10':
+    resolution: {integrity: sha512-xPsIJCWmrsbMvNQu8Muxa0JALBamNYGVG1y9afOEY5KCb5hV94Rh/0gCdnEBmiplLmvHui8UfjNIUkL+TCiL9w==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
+      react-native: '*'
       tailwindcss: '>=3'
+    peerDependenciesMeta:
+      react-native:
+        optional: true
 
   '@koko420/shared@1.0.3':
     resolution: {integrity: sha512-bel/es6S26QagwM9ic+pYrHT030eDosaPE1FnhkKGsM2auEkkNoK0HDhlWD0KeFcWAx6YBUm6o5YpDDXQ9qpoA==}
@@ -3685,7 +3689,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@koko420/react-components@0.0.9(@types/react@19.2.8)(jiti@1.21.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(tsx@4.21.0))':
+  '@koko420/react-components@0.0.10(@types/react@19.2.8)(jiti@1.21.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(tsx@4.21.0))':
     dependencies:
       class-variance-authority: 0.7.1
       eslint: 9.39.2(jiti@1.21.7)
