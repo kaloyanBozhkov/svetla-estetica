@@ -1,0 +1,18 @@
+{
+  "title": "I Nostri Prodotti",
+  "subtitle": "Scopri la nostra selezione di prodotti per la cura della pelle e del corpo",
+  "categories": {
+    "viso": "Viso",
+    "corpo": "Corpo",
+    "solari": "Solari",
+    "tisane": "Tisane",
+    "make_up": "Make Up",
+    "profumi": "Profumi",
+    "mani_e_piedi": "Mani e Piedi"
+  },
+  "price_hidden": "Accedi per vedere i prezzi",
+  "out_of_stock": "Esaurito",
+  "in_stock": "Disponibile",
+  "stock_count": "{{count}} disponibili"
+}
+

@@ -1,0 +1,68 @@
+{
+  "site": {
+    "name": "Svetla Estetica",
+    "tagline": "Centro Estetico a Dalmine",
+    "description": "Trattamenti estetici professionali a Dalmine, Bergamo"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Prodotti",
+    "services": "Trattamenti",
+    "about": "Chi Siamo",
+    "contact": "Contatti",
+    "cart": "Carrello",
+    "account": "Account",
+    "admin": "Admin",
+    "login": "Accedi",
+    "logout": "Esci"
+  },
+  "contact": {
+    "title": "Contatti",
+    "phone": "Cellulare",
+    "landline": "Fisso",
+    "address": "Indirizzo",
+    "email": "Email",
+    "social": "Social"
+  },
+  "hours": {
+    "title": "Orario Lavorativo",
+    "monday": "Lunedì",
+    "tuesday": "Martedì",
+    "wednesday": "Mercoledì",
+    "thursday": "Giovedì",
+    "friday": "Venerdì",
+    "saturday": "Sabato",
+    "sunday": "Domenica",
+    "closed": "Chiuso"
+  },
+  "actions": {
+    "add_to_cart": "Aggiungi al Carrello",
+    "book_now": "Prenota Ora",
+    "view_details": "Dettagli",
+    "checkout": "Checkout",
+    "continue_shopping": "Continua lo Shopping",
+    "submit": "Invia",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "back": "Indietro",
+    "next": "Avanti"
+  },
+  "status": {
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "empty": "Nessun elemento trovato"
+  },
+  "currency": {
+    "symbol": "€",
+    "format": "{{amount}} €"
+  },
+  "footer": {
+    "rights": "Tutti i diritti riservati",
+    "privacy": "Privacy Policy",
+    "terms": "Termini e Condizioni"
+  }
+}
+

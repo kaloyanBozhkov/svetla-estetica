@@ -1,0 +1,212 @@
+// Prisma Schema Rules:
+// - model name always singular
+// - array property name always plural (1 to many)
+// - models and field snake_case, because postgres does not like uppercase
+// - model and field mapping (aliasing), to be avoided
+// - foreign keys, must be "(name of target model)_id" e.g. "user_id"
+// - field groups: core fields at top (id, uuid, etc) then actual fields A-Z, then relations/foreign keys, then indexes
+// - Prefer prisma (DB) enums where the type is known a priori
+// - all external ids must be prefixed by "external_"
+// - counts and booleans should have a default value
+// - many to many: call relation "to_(name of target model in plural)"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+enum user_role {
+  customer
+  admin
+}
+
+enum order_status {
+  pending
+  confirmed
+  shipped
+  delivered
+  cancelled
+}
+
+enum booking_status {
+  pending
+  approved
+  rejected
+  completed
+  cancelled
+}
+
+enum payment_status {
+  pending
+  paid
+  failed
+  refunded
+}
+
+enum product_category {
+  viso
+  corpo
+  solari
+  tisane
+  make_up
+  profumi
+  mani_e_piedi
+}
+
+enum service_category {
+  viso
+  corpo
+  make_up
+  ceretta
+  solarium
+  pedicure
+  manicure
+  luce_pulsata
+  appuntamento
+  grotta_di_sale
+}
+
+// ==================== MODELS ====================
+
+model user {
+  id         Int       @id @default(autoincrement())
+  uuid       String    @unique @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  email          String    @unique
+  email_verified Boolean   @default(false)
+  name           String?
+  phone          String?
+  role           user_role @default(customer)
+
+  bookings      booking[]
+  orders        order[]
+  magic_links   magic_link[]
+
+  @@index([email])
+}
+
+model magic_link {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  expires_at DateTime
+
+  token    String  @unique
+  used     Boolean @default(false)
+
+  user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int
+
+  @@index([token])
+  @@index([user_id])
+}
+
+model product {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  active      Boolean          @default(true)
+  category    product_category
+  description String?
+  image_url   String?
+  name        String
+  price       Int
+  stock       Int              @default(0)
+
+  order_items order_item[]
+
+  @@index([category])
+  @@index([active])
+}
+
+model service {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  active       Boolean          @default(true)
+  category     service_category
+  description  String?
+  duration_min Int
+  image_url    String?
+  name         String
+  price        Int
+
+  bookings booking[]
+
+  @@index([category])
+  @@index([active])
+}
+
+model order {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  external_stripe_payment_intent_id String?        @unique
+  notes                             String?
+  payment_status                    payment_status @default(pending)
+  shipping_address                  String?
+  status                            order_status   @default(pending)
+  total                             Int
+
+  user    user @relation(fields: [user_id], references: [id])
+  user_id Int
+
+  items order_item[]
+
+  @@index([user_id])
+  @@index([status])
+}
+
+model order_item {
+  id Int @id @default(autoincrement())
+
+  price    Int
+  quantity Int
+
+  order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order_id   Int
+  product    product @relation(fields: [product_id], references: [id])
+  product_id Int
+
+  @@index([order_id])
+  @@index([product_id])
+}
+
+model booking {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  date           DateTime
+  duration_min   Int
+  external_stripe_payment_intent_id String?        @unique
+  notes          String?
+  payment_status payment_status @default(pending)
+  price          Int
+  status         booking_status @default(pending)
+
+  service    service @relation(fields: [service_id], references: [id])
+  service_id Int
+  user       user    @relation(fields: [user_id], references: [id])
+  user_id    Int
+
+  @@index([user_id])
+  @@index([service_id])
+  @@index([date])
+  @@index([status])
+}
+

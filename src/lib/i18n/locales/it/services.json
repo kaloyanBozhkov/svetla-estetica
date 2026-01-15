@@ -1,0 +1,27 @@
+{
+  "title": "I Nostri Trattamenti",
+  "subtitle": "Scopri i nostri trattamenti estetici professionali",
+  "categories": {
+    "viso": "Viso",
+    "corpo": "Corpo",
+    "make_up": "Make Up",
+    "ceretta": "Ceretta",
+    "solarium": "Solarium",
+    "pedicure": "Pedicure",
+    "manicure": "Manicure",
+    "luce_pulsata": "Luce Pulsata",
+    "appuntamento": "Appuntamento",
+    "grotta_di_sale": "Grotta di Sale"
+  },
+  "duration": "Durata: {{minutes}} min",
+  "price_hidden": "Accedi per vedere i prezzi",
+  "book": {
+    "title": "Prenota Appuntamento",
+    "select_date": "Seleziona Data",
+    "select_time": "Seleziona Orario",
+    "confirm": "Conferma Prenotazione",
+    "success": "Prenotazione inviata! Ti contatteremo per confermare.",
+    "pending": "In attesa di conferma"
+  }
+}
+

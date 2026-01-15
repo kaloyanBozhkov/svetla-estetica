@@ -1,0 +1,152 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardTitle, Button, Input } from "@/components/atoms";
+import { formatPrice } from "@/lib/utils";
+import { z } from "zod";
+
+interface BookingFormProps {
+  service: {
+    id: number;
+    uuid: string;
+    name: string;
+    price: number;
+    durationMin: number;
+  };
+}
+
+const bookingSchema = z.object({
+  date: z.string().min(1, "Data richiesta"),
+  time: z.string().min(1, "Ora richiesta"),
+  notes: z.string().optional(),
+});
+
+export function BookingForm({ service }: BookingFormProps) {
+  const router = useRouter();
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      bookingSchema.parse({ date, time, notes });
+
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceUuid: service.uuid,
+          date,
+          time,
+          notes,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore");
+      }
+
+      setSuccess(true);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <Card className="text-center">
+        <div className="text-5xl mb-4">✅</div>
+        <CardTitle>Prenotazione Inviata!</CardTitle>
+        <p className="mt-4 text-gray-600">
+          La tua richiesta di prenotazione per <strong>{service.name}</strong> è
+          stata inviata. Ti contatteremo per confermare l&apos;appuntamento.
+        </p>
+        <Button className="mt-6" onClick={() => router.push("/account")}>
+          Vai al tuo Account
+        </Button>
+      </Card>
+    );
+  }
+
+  const today = new Date().toISOString().split("T")[0];
+
+  return (
+    <Card>
+      <CardTitle className="mb-6">Prenota: {service.name}</CardTitle>
+
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        <div className="flex justify-between">
+          <span className="text-gray-600">Durata</span>
+          <span className="font-medium">{service.durationMin} min</span>
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="text-gray-600">Prezzo</span>
+          <span className="font-medium text-primary-600">
+            {formatPrice(service.price)}
+          </span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Input
+          type="date"
+          label="Data"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          min={today}
+          required
+        />
+
+        <Input
+          type="time"
+          label="Ora preferita"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          min="09:00"
+          max="20:00"
+          required
+        />
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Note (opzionale)
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={3}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+            placeholder="Eventuali richieste o informazioni..."
+          />
+        </div>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        <Button type="submit" className="w-full" loading={loading}>
+          Invia Richiesta di Prenotazione
+        </Button>
+
+        <p className="text-xs text-center text-gray-500">
+          La prenotazione è soggetta a conferma. Ti contatteremo per confermare
+          l&apos;appuntamento.
+        </p>
+      </form>
+    </Card>
+  );
+}
+

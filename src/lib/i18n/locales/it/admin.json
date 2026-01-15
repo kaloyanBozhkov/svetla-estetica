@@ -1,0 +1,73 @@
+{
+  "title": "Pannello Admin",
+  "nav": {
+    "dashboard": "Dashboard",
+    "products": "Prodotti",
+    "services": "Servizi",
+    "orders": "Ordini",
+    "bookings": "Prenotazioni",
+    "users": "Utenti"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "orders_today": "Ordini Oggi",
+    "bookings_today": "Prenotazioni Oggi",
+    "revenue_month": "Ricavo Mensile",
+    "pending_bookings": "Prenotazioni in Attesa"
+  },
+  "products": {
+    "title": "Gestione Prodotti",
+    "add": "Aggiungi Prodotto",
+    "edit": "Modifica Prodotto",
+    "name": "Nome",
+    "description": "Descrizione",
+    "price": "Prezzo (centesimi)",
+    "stock": "Quantità",
+    "category": "Categoria",
+    "image": "URL Immagine",
+    "active": "Attivo"
+  },
+  "services": {
+    "title": "Gestione Servizi",
+    "add": "Aggiungi Servizio",
+    "edit": "Modifica Servizio",
+    "name": "Nome",
+    "description": "Descrizione",
+    "price": "Prezzo (centesimi)",
+    "duration": "Durata (minuti)",
+    "category": "Categoria",
+    "image": "URL Immagine",
+    "active": "Attivo"
+  },
+  "orders": {
+    "title": "Gestione Ordini",
+    "id": "ID",
+    "customer": "Cliente",
+    "total": "Totale",
+    "status": "Stato",
+    "payment": "Pagamento",
+    "date": "Data",
+    "status_pending": "In Attesa",
+    "status_confirmed": "Confermato",
+    "status_shipped": "Spedito",
+    "status_delivered": "Consegnato",
+    "status_cancelled": "Annullato"
+  },
+  "bookings": {
+    "title": "Gestione Prenotazioni",
+    "id": "ID",
+    "customer": "Cliente",
+    "service": "Servizio",
+    "date": "Data",
+    "time": "Ora",
+    "status": "Stato",
+    "approve": "Approva",
+    "reject": "Rifiuta",
+    "status_pending": "In Attesa",
+    "status_approved": "Approvato",
+    "status_rejected": "Rifiutato",
+    "status_completed": "Completato",
+    "status_cancelled": "Annullato"
+  }
+}
+
