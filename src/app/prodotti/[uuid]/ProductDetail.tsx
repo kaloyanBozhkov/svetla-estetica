@@ -73,12 +73,12 @@ export function ProductDetail({ product }: Props) {
 
       <div className="grid gap-12 lg:grid-cols-2">
         {/* Image */}
-        <div className="relative aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-xl ring-1 ring-gray-200">
+        <div className="group relative aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-xl ring-1 ring-gray-200">
           {product.image_url ? (
             <img
               src={product.image_url}
               alt={product.name}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
             <div className="flex h-full items-center justify-center">

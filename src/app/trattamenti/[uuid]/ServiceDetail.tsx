@@ -63,12 +63,12 @@ export function ServiceDetail({ service }: Props) {
 
       <div className="grid gap-12 lg:grid-cols-2">
         {/* Image */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-primary-100 to-primary-50 shadow-xl ring-1 ring-primary-200">
+        <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-primary-50 to-gray-50 shadow-xl ring-1 ring-primary-100">
           {service.image_url ? (
             <img
               src={service.image_url}
               alt={service.name}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
             <div className="flex h-full items-center justify-center">

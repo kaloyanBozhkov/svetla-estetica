@@ -30,13 +30,13 @@ export function ServiceCard({
 }: ServiceCardProps) {
   return (
     <Card hover className="group flex flex-col h-full overflow-hidden p-0">
-      <Link href={`/trattamenti/${uuid}`} className="relative aspect-[4/3] bg-gradient-to-br from-primary-100 to-primary-50 block">
+      <Link href={`/trattamenti/${uuid}`} className="relative aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 block overflow-hidden">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
