@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore, useCartStore } from "@/stores";
 import { Button } from "@/components/atoms";
 import { useState } from "react";
@@ -23,7 +24,14 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-display text-2xl font-bold text-primary-600">
+            <Image
+              src="/logo-cropped.webp"
+              alt="Svetla Estetica"
+              width={60}
+              height={60}
+              className="size-11"
+            />
+            <span className="font-display text-xl sm:text-2xl font-bold text-primary-600">
               Svetla Estetica
             </span>
           </Link>
