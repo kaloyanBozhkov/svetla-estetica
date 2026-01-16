@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
+import { sendCelebration } from "@/lib/alerts";
 import BookingApprovedEmail from "@/app/_components/emails/BookingApprovedEmail";
 import BookingRejectedEmail from "@/app/_components/emails/BookingRejectedEmail";
 
@@ -80,6 +81,14 @@ export async function PATCH(
               bookingTime,
               duration: existingBooking.duration_min,
             }),
+          });
+
+          // Celebrate confirmed appointment
+          await sendCelebration({
+            event: "Appuntamento Confermato",
+            servizio: serviceName,
+            data: `${bookingDate} ${bookingTime}`,
+            cliente: existingBooking.user.email,
           });
         } else if (status === "rejected") {
           await resend.emails.send({

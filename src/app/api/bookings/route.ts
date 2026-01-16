@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { resend } from "@/lib/email";
+import { sendCelebration, sendErrorLog } from "@/lib/alerts";
+
+const ADMIN_EMAIL = "rosacosmetica@gmail.com";
 
 const createBookingSchema = z.object({
   serviceUuid: z.string().uuid(),
@@ -50,6 +54,36 @@ export async function POST(request: Request) {
       },
     });
 
+    // Celebrate new booking
+    await sendCelebration({
+      event: "Nuovo Appuntamento",
+      servizio: service.title,
+      data: `${date} ${time}`,
+      cliente: user.email,
+    });
+
+    // Send email notification to admin
+    try {
+      const customerName = user.name || "Cliente";
+      
+      await resend.emails.send({
+        from: "Svetla Estetica <noreply@svetlaestetica.com>",
+        to: ADMIN_EMAIL,
+        subject: "Appuntamento | SvetlaEstetica",
+        html: `
+          <h2>Nuova Richiesta di Appuntamento!</h2>
+          <p><strong>Servizio:</strong> ${service.name}</p>
+          <p><strong>Data:</strong> ${date} alle ${time}</p>
+          <p><strong>Cliente:</strong> ${customerName} (${user.email})</p>
+          <p><strong>Telefono:</strong> ${phone}</p>
+          ${notes ? `<p><strong>Note:</strong> ${notes}</p>` : ""}
+          <p><a href="https://svetlaestetica.com/admin/prenotazioni">Gestisci prenotazioni nel pannello admin</a></p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Failed to send admin booking notification:", emailError);
+    }
+
     return NextResponse.json({ booking });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -65,6 +99,10 @@ export async function POST(request: Request) {
       );
     }
     console.error("Create booking error:", error);
+    await sendErrorLog({
+      event: "Booking Creation Failed",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { error: "Errore durante la creazione" },
       { status: 500 }

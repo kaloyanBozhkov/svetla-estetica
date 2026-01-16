@@ -13,6 +13,7 @@ export const env = createEnv({
     BASE_URL: z.string().url().default("http://localhost:3000"),
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
+    TG_BOT_KEY: z.string().min(1).optional(),
   },
   clientPrefix: "NEXT_PUBLIC_",
   client: {
@@ -31,6 +32,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    TG_BOT_KEY: process.env.TG_BOT_KEY,
   },
   emptyStringAsUndefined: true,
 });

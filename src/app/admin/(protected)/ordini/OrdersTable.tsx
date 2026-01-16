@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Card, Badge, Button } from "@/components/atoms";
 import { formatPrice, formatDateTime } from "@/lib/utils";
 import { type order_status, type payment_status } from "@prisma/client";
+import { EyeIcon } from "@/components/atoms/icons";
 
 interface Order {
   id: number;
@@ -25,23 +25,6 @@ interface OrdersTableProps {
 }
 
 export function OrdersTable({ orders }: OrdersTableProps) {
-  const router = useRouter();
-  const [loading, setLoading] = useState<string | null>(null);
-
-  const handleStatusChange = async (uuid: string, newStatus: order_status) => {
-    setLoading(uuid);
-    try {
-      await fetch(`/api/admin/orders/${uuid}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      router.refresh();
-    } finally {
-      setLoading(null);
-    }
-  };
-
   const getStatusVariant = (status: order_status) => {
     switch (status) {
       case "pending":
@@ -99,10 +82,10 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                 Prodotti
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Stato
+                Pagamento
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Pagamento
+                Stato
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                 Data
@@ -119,49 +102,35 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                   #{order.id}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  <div>{order.userName}</div>
+                  <div className="font-medium">{order.userName}</div>
                   <div className="text-xs text-gray-400">{order.userEmail}</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">
                   {formatPrice(order.total)}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {order.itemCount}
-                </td>
-                <td className="px-6 py-4">
-                  <Badge variant={getStatusVariant(order.status)}>
-                    {order.statusLabel}
-                  </Badge>
+                  {order.itemCount} {order.itemCount === 1 ? "prodotto" : "prodotti"}
                 </td>
                 <td className="px-6 py-4">
                   <Badge variant={getPaymentVariant(order.paymentStatus)}>
                     {order.paymentLabel}
                   </Badge>
                 </td>
+                <td className="px-6 py-4">
+                  <Badge variant={getStatusVariant(order.status)}>
+                    {order.statusLabel}
+                  </Badge>
+                </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
                   {formatDateTime(new Date(order.createdAt))}
                 </td>
-                <td className="px-6 py-4 text-right space-x-2">
-                  {order.status === "confirmed" && (
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      loading={loading === order.uuid}
-                      onClick={() => handleStatusChange(order.uuid, "shipped")}
-                    >
-                      Spedisci
+                <td className="px-6 py-4 text-right">
+                  <Link href={`/admin/ordini/${order.uuid}`}>
+                    <Button variant="secondary" size="sm">
+                      <EyeIcon className="w-4 h-4 mr-1" />
+                      Visualizza
                     </Button>
-                  )}
-                  {order.status === "shipped" && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      loading={loading === order.uuid}
-                      onClick={() => handleStatusChange(order.uuid, "delivered")}
-                    >
-                      Consegnato
-                    </Button>
-                  )}
+                  </Link>
                 </td>
               </tr>
             ))}
@@ -171,4 +140,3 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     </Card>
   );
 }
-
