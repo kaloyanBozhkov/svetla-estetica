@@ -86,7 +86,7 @@ async function seed() {
           image_url: generateImageUrl(product.name),
           name: product.name,
           description: product.description,
-          price: product.price,
+          price: product.price * 100,
           stock: product.stock,
           category: product.category,
           brand_id: productBrand?.id ?? fallbackBrand!.id,

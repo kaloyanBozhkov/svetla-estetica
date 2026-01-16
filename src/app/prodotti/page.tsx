@@ -2,6 +2,20 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { ProductsGrid } from "./ProductsGrid";
 import { type product_category } from "@prisma/client";
+import type { Metadata } from "next";
+import { generateProductListSchema } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Prodotti di Bellezza",
+  description: "Scopri la nostra selezione di prodotti professionali per la cura della pelle e del corpo. Creme viso, prodotti corpo, solari, tisane, profumi e molto altro.",
+  openGraph: {
+    title: "Prodotti di Bellezza | Svetla Estetica",
+    description: "Prodotti professionali per la cura della pelle e del corpo. Qualità garantita.",
+  },
+  alternates: {
+    canonical: "/prodotti",
+  },
+};
 
 const categoryLabels: Record<product_category, string> = {
   viso: "Viso",
@@ -32,8 +46,22 @@ export default async function ProductsPage() {
     categoryLabel: categoryLabels[p.category],
   }));
 
+  const jsonLd = generateProductListSchema(
+    products.map((p) => ({
+      uuid: p.uuid,
+      name: p.name,
+      price: p.price,
+      image_url: p.image_url,
+    }))
+  );
+
   return (
-    <div className="relative py-12 min-h-screen overflow-hidden">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="relative py-12 min-h-screen overflow-hidden">
       {/* Decorative Blobs */}
       <div className="absolute top-0 right-[10%] w-80 h-80 bg-gradient-to-br from-primary-200 to-violet-200 rounded-full blur-3xl opacity-40 pointer-events-none" />
       <div className="absolute top-[30%] left-[-5%] w-72 h-72 bg-gradient-to-br from-fuchsia-200 to-pink-200 rounded-full blur-3xl opacity-30 pointer-events-none" />
@@ -59,6 +87,7 @@ export default async function ProductsPage() {
         />
       </div>
     </div>
+    </>
   );
 }
 

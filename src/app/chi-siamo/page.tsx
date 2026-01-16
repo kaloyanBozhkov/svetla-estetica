@@ -1,5 +1,19 @@
 import Link from "next/link";
 import { Button } from "@/components/atoms";
+import type { Metadata } from "next";
+import { generateLocalBusinessSchema } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Chi Siamo",
+  description: "Svetla Estetica: oltre 15 anni di esperienza nel settore estetico a Dalmine, Bergamo. Scopri la nostra storia, i nostri valori e i trattamenti che offriamo.",
+  openGraph: {
+    title: "Chi Siamo | Svetla Estetica",
+    description: "La tua destinazione di bellezza e benessere a Dalmine. Scopri chi siamo e la nostra passione per l'estetica.",
+  },
+  alternates: {
+    canonical: "/chi-siamo",
+  },
+};
 
 const values = [
   {
@@ -83,8 +97,14 @@ const stats = [
 ];
 
 export default function AboutPage() {
+  const jsonLd = generateLocalBusinessSchema();
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-accent-400/30 via-transparent to-transparent" />

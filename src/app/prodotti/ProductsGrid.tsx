@@ -335,9 +335,9 @@ function ProductListItem({
               {formatPrice(product.price)}
             </span>
           ) : (
-            <span className="text-sm text-gray-500 italic">
+            <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
               Accedi per i prezzi
-            </span>
+            </Link>
           )}
 
           {isAuthenticated && !isOutOfStock && (

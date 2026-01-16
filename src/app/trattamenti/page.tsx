@@ -2,6 +2,20 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { ServicesGrid } from "./ServicesGrid";
 import { type service_category } from "@prisma/client";
+import type { Metadata } from "next";
+import { generateServiceListSchema } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Trattamenti Estetici",
+  description: "Scopri i nostri trattamenti estetici professionali: viso, corpo, manicure, pedicure, ceretta, luce pulsata, solarium e grotta di sale a Dalmine.",
+  openGraph: {
+    title: "Trattamenti Estetici | Svetla Estetica",
+    description: "Trattamenti estetici professionali a Dalmine. Prenota il tuo appuntamento!",
+  },
+  alternates: {
+    canonical: "/trattamenti",
+  },
+};
 
 const categoryLabels: Record<service_category, string> = {
   viso: "Viso",
@@ -35,8 +49,22 @@ export default async function ServicesPage() {
     categoryLabel: categoryLabels[s.category],
   }));
 
+  const jsonLd = generateServiceListSchema(
+    services.map((s) => ({
+      uuid: s.uuid,
+      name: s.name,
+      price: s.price,
+      image_url: s.image_url,
+    }))
+  );
+
   return (
-    <div className="relative py-12 min-h-screen overflow-hidden">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="relative py-12 min-h-screen overflow-hidden">
       {/* Decorative Blobs */}
       <div className="absolute top-0 left-[5%] w-80 h-80 bg-gradient-to-br from-violet-200 to-primary-200 rounded-full blur-3xl opacity-40 pointer-events-none" />
       <div className="absolute top-[40%] right-[-5%] w-72 h-72 bg-gradient-to-br from-pink-200 to-fuchsia-200 rounded-full blur-3xl opacity-30 pointer-events-none" />
@@ -62,6 +90,7 @@ export default async function ServicesPage() {
         />
       </div>
     </div>
+    </>
   );
 }
 
