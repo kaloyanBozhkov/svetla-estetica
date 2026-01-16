@@ -31,7 +31,7 @@ export default async function ProductsPage() {
   const user = await getSession();
   const products = await db.product.findMany({
     where: { active: true },
-    orderBy: { name: "asc" },
+    orderBy: [{ priority: "desc" }, { name: "asc" }],
   });
 
   const productsWithLabels = products.map((p) => ({

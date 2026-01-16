@@ -115,7 +115,7 @@ export function ProductCard({
             onClick={handleAddToCart}
             className={cn(
               "min-w-[100px] transition-all duration-300",
-              isAdded && "bg-green-600 hover:bg-green-600"
+              isAdded && "!bg-green-600 hover:!bg-green-700"
             )}
           >
             {isAdded ? (

@@ -34,7 +34,7 @@ export default async function ServicesPage() {
   const user = await getSession();
   const services = await db.service.findMany({
     where: { active: true },
-    orderBy: { name: "asc" },
+    orderBy: [{ priority: "desc" }, { name: "asc" }],
   });
 
   const servicesWithLabels = services.map((s) => ({

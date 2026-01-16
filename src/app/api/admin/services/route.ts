@@ -8,6 +8,7 @@ const serviceSchema = z.object({
   description: z.string().nullable(),
   price: z.number().int().min(0),
   duration_min: z.number().int().min(5),
+  priority: z.number().int().min(0).default(0),
   category: z.enum([
     "viso",
     "corpo",
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
         description: data.description,
         price: data.price,
         duration_min: data.duration_min,
+        priority: data.priority,
         category: data.category,
         image_url: data.image_url,
         active: data.active,

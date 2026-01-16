@@ -25,6 +25,7 @@ export default async function EditProductPage({ params }: Props) {
     description: product.description || "",
     price: product.price / 100,
     stock: product.stock,
+    priority: product.priority,
     category: product.category,
     brandId: product.brand_id,
     imageUrl: product.image_url || "",

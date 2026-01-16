@@ -25,6 +25,7 @@ interface ServiceFormData {
   description: string;
   price: number;
   durationMin: number;
+  priority: number;
   category: service_category;
   imageUrl: string;
   active: boolean;
@@ -48,6 +49,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
       description: "",
       price: 0,
       durationMin: 30,
+      priority: 0,
       category: "viso",
       imageUrl: "",
       active: true,
@@ -73,6 +75,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
           description: form.description || null,
           price: Math.round(form.price * 100),
           duration_min: form.durationMin,
+          priority: form.priority,
           category: form.category,
           image_url: form.imageUrl || null,
           active: form.active,
@@ -133,7 +136,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
             rows={4}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
               label="Prezzo (€)"
               type="number"
@@ -152,6 +155,14 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
               value={form.durationMin}
               onChange={(e) => setForm({ ...form, durationMin: parseInt(e.target.value) || 30 })}
               required
+            />
+
+            <Input
+              label="Priorità"
+              type="number"
+              min="0"
+              value={form.priority}
+              onChange={(e) => setForm({ ...form, priority: parseInt(e.target.value) || 0 })}
             />
           </div>
 

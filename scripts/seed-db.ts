@@ -12,6 +12,33 @@ import path from "path";
 
 const db = new PrismaClient();
 
+const HIGHLIGHTED_SERVICES = [
+  {
+    name: "Pulizia della pelle",
+    priority: 10,
+  },
+];
+
+const HIGHLIGHTED_PRODUCTS = [
+  { name: "Tisana Cellulit Off", priority: 10 },
+  {
+    name: "Perlage Crema Viso Anti-Age",
+    priority: 9,
+  },
+  {
+    name: "Gold Filler 24 Kt",
+    priority: 8,
+  },
+  {
+    name: "No Age Siero Collagene Extreme",
+    priority: 7,
+  },
+  {
+    name: "Crema Mani al Veleno Delle Api",
+    priority: 6,
+  },
+];
+
 // Generate image URL from service name (first letter of each word)
 function generateImageUrl(name: string): string {
   const found = images.find(
@@ -145,6 +172,32 @@ async function seed() {
       path.join(__dirname, "scripts", "withoutImageProducts.json"),
       JSON.stringify(withoutImageProducts, null, 2)
     );
+  }
+
+  for (const service of HIGHLIGHTED_SERVICES) {
+    await db.service.updateMany({
+      where: {
+        name: {
+          contains: service.name,
+        },
+      },
+      data: {
+        priority: service.priority,
+      },
+    });
+  }
+
+  for (const product of HIGHLIGHTED_PRODUCTS) {
+    await db.product.updateMany({
+      where: {
+        name: {
+          contains: product.name,
+        },
+      },
+      data: {
+        priority: product.priority,
+      },
+    });
   }
 }
 

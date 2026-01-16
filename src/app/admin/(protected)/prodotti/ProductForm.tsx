@@ -28,6 +28,7 @@ interface ProductFormData {
   description: string;
   price: number;
   stock: number;
+  priority: number;
   category: product_category;
   brandId: number;
   imageUrl: string;
@@ -53,6 +54,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
       description: "",
       price: 0,
       stock: 0,
+      priority: 0,
       category: "viso",
       brandId: brands[0]?.id || 0,
       imageUrl: "",
@@ -79,6 +81,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
           description: form.description || null,
           price: Math.round(form.price * 100),
           stock: form.stock,
+          priority: form.priority,
           category: form.category,
           brand_id: form.brandId,
           image_url: form.imageUrl || null,
@@ -142,7 +145,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             rows={4}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
               label="Prezzo (€)"
               type="number"
@@ -160,6 +163,14 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               value={form.stock}
               onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
               required
+            />
+
+            <Input
+              label="Priorità"
+              type="number"
+              min="0"
+              value={form.priority}
+              onChange={(e) => setForm({ ...form, priority: parseInt(e.target.value) || 0 })}
             />
           </div>
 

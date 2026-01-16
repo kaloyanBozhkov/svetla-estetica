@@ -133,6 +133,7 @@ model product {
   image_url   String?
   name        String
   price       Int
+  priority    Int              @default(0)
   stock       Int              @default(0)
 
   order_items order_item[]
@@ -141,6 +142,7 @@ model product {
 
   @@index([category])
   @@index([active])
+  @@index([priority])
 }
 
 model service {
@@ -156,11 +158,13 @@ model service {
   image_url    String?
   name         String
   price        Int
+  priority     Int              @default(0)
 
   bookings booking[]
 
   @@index([category])
   @@index([active])
+  @@index([priority])
 }
 
 model order {

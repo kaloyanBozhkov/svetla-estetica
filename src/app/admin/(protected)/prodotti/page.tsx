@@ -16,7 +16,7 @@ const categoryLabels: Record<product_category, string> = {
 
 export default async function AdminProductsPage() {
   const products = await db.product.findMany({
-    orderBy: { name: "asc" },
+    orderBy: [{ priority: "desc" }, { name: "asc" }],
     include: { brand: true },
   });
 

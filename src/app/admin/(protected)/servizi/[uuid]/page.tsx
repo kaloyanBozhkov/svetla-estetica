@@ -22,6 +22,7 @@ export default async function EditServicePage({ params }: Props) {
     description: service.description || "",
     price: service.price / 100,
     durationMin: service.duration_min,
+    priority: service.priority,
     category: service.category,
     imageUrl: service.image_url || "",
     active: service.active,

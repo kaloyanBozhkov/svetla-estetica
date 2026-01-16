@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/stores";
 
 interface ProvidersProps {
@@ -10,6 +11,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   const setUser = useAuthStore((s) => s.setUser);
   const setLoading = useAuthStore((s) => s.setLoading);
+  const pathname = usePathname();
 
   useEffect(() => {
     async function fetchSession() {
@@ -28,7 +30,7 @@ export function Providers({ children }: ProvidersProps) {
       }
     }
     fetchSession();
-  }, [setUser, setLoading]);
+  }, [setUser, setLoading, pathname]);
 
   return <>{children}</>;
 }

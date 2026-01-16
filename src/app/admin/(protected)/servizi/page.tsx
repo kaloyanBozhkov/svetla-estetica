@@ -19,7 +19,7 @@ const categoryLabels: Record<service_category, string> = {
 
 export default async function AdminServicesPage() {
   const services = await db.service.findMany({
-    orderBy: { name: "asc" },
+    orderBy: [{ priority: "desc" }, { name: "asc" }],
   });
 
   const servicesWithLabels = services.map((s) => ({
