@@ -13,6 +13,7 @@ import {
   CalendarIcon,
   UsersIcon,
   LogOutIcon,
+  ShoppingBagIcon,
 } from "@/components/atoms/icons";
 
 const adminNav = [
@@ -20,6 +21,7 @@ const adminNav = [
   { href: "/admin/prodotti", label: "Prodotti", Icon: PackageIcon },
   { href: "/admin/servizi", label: "Servizi", Icon: SparkleIcon },
   { href: "/admin/ordini", label: "Ordini", Icon: CartIcon },
+  { href: "/admin/carrelli", label: "Carrelli", Icon: ShoppingBagIcon },
   { href: "/admin/prenotazioni", label: "Prenotazioni", Icon: CalendarIcon },
   { href: "/admin/utenti", label: "Utenti", Icon: UsersIcon },
 ];

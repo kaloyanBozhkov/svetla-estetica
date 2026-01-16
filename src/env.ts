@@ -10,14 +10,16 @@ export const env = createEnv({
     ADMIN_EMAIL: z.string().email(),
     ADMIN_PASSWORD: z.string().min(1),
     AUTH_SECRET: z.string().min(32),
-    BASE_URL: z.string().url().default("http://localhost:3000"),
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
     TG_BOT_KEY: z.string().min(1).optional(),
+    IS_PROD: z.boolean().default(process.env.NODE_ENV === "production"),
+    IS_DEV: z.boolean().default(process.env.NODE_ENV === "development"),
   },
   clientPrefix: "NEXT_PUBLIC_",
   client: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -27,7 +29,7 @@ export const env = createEnv({
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    BASE_URL: process.env.BASE_URL,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,

@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 import { BASE_URL } from "@/lib/constants";
 

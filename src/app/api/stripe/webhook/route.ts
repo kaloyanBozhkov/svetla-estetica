@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { env } from "@/env";
 import { resend } from "@/lib/email";
 import { sendCelebration, sendErrorLog } from "@/lib/alerts";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 
 const ADMIN_EMAIL = "rosacosmetica@gmail.com";
 
@@ -136,6 +136,12 @@ export async function POST(request: Request) {
             });
           }
         }
+
+        // Clear cart reminder timestamp on order completion
+        await db.user.update({
+          where: { id: parseInt(userId) },
+          data: { last_cart_reminder_at: null },
+        });
       }
 
       break;

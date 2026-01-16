@@ -96,8 +96,8 @@ export async function POST(req: Request) {
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
-      success_url: `${env.BASE_URL}/ordini/${order.uuid}?success=true`,
-      cancel_url: `${env.BASE_URL}/carrello?cancelled=true`,
+      success_url: `${env.NEXT_PUBLIC_BASE_URL}/ordini/${order.uuid}?success=true`,
+      cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/carrello?cancelled=true`,
       metadata: {
         order_uuid: order.uuid,
         user_id: session.id.toString(),

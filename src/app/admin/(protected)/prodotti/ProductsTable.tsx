@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, Badge, Button, Input } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
@@ -20,6 +21,7 @@ interface Product {
 
 interface ProductsTableProps {
   products: Product[];
+  initialSearch?: string;
 }
 
 type SortKey = "name" | "brand" | "category" | "price" | "stock" | "active";
@@ -33,10 +35,30 @@ function SortIcon({ active, order }: { active: boolean; order: SortOrder }) {
   );
 }
 
-export function ProductsTable({ products }: ProductsTableProps) {
-  const [search, setSearch] = useState("");
+export function ProductsTable({ products, initialSearch = "" }: ProductsTableProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(initialSearch);
   const [sortBy, setSortBy] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+
+  // Debounced search - update URL after typing stops
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search !== initialSearch) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (search) {
+          params.set("q", search);
+          params.delete("page"); // Reset to page 1 on new search
+        } else {
+          params.delete("q");
+        }
+        router.push(`/admin/prodotti?${params.toString()}`);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search, initialSearch, router, searchParams]);
 
   const handleSort = (key: SortKey) => {
     if (sortBy === key) {
@@ -47,20 +69,8 @@ export function ProductsTable({ products }: ProductsTableProps) {
     }
   };
 
-  const filteredAndSorted = useMemo(() => {
-    let result = products;
-
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.categoryLabel.toLowerCase().includes(q) ||
-          p.brandName.toLowerCase().includes(q)
-      );
-    }
-
-    result = [...result].sort((a, b) => {
+  const sorted = useMemo(() => {
+    return [...products].sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
         case "name":
@@ -84,9 +94,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
       }
       return sortOrder === "asc" ? comparison : -comparison;
     });
-
-    return result;
-  }, [products, search, sortBy, sortOrder]);
+  }, [products, sortBy, sortOrder]);
 
   const thClass =
     "px-6 py-3 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors select-none group";
@@ -100,7 +108,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
         className="max-w-sm"
       />
 
-      {filteredAndSorted.length === 0 ? (
+      {sorted.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500">Nessun prodotto trovato</p>
         </Card>
@@ -140,7 +148,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredAndSorted.map((product) => (
+                {sorted.map((product) => (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {product.name}

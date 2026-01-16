@@ -80,11 +80,12 @@ model user {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  email          String    @unique
-  email_verified Boolean   @default(false)
-  name           String?
-  phone          String?
-  role           user_role @default(customer)
+  email                 String    @unique
+  email_verified        Boolean   @default(false)
+  name                  String?
+  phone                 String?
+  role                  user_role @default(customer)
+  last_cart_reminder_at DateTime?
 
   bookings    booking[]
   cart_items  cart_item[]

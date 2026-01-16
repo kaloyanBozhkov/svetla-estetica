@@ -1,4 +1,6 @@
-export const BASE_URL = "https://svetlaestetica.com";
+import { env } from "@/env";
+
+export const BASE_URL = env.NEXT_PUBLIC_BASE_URL;
 
 // Shipping cost in cents
 export const SHIPPING_COST = 1500; // 15.00 EUR

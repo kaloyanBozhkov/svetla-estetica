@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, Badge, Button, Input } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
@@ -19,6 +20,7 @@ interface Service {
 
 interface ServicesTableProps {
   services: Service[];
+  initialSearch?: string;
 }
 
 type SortKey = "name" | "category" | "price" | "duration" | "active";
@@ -32,10 +34,30 @@ function SortIcon({ active, order }: { active: boolean; order: SortOrder }) {
   );
 }
 
-export function ServicesTable({ services }: ServicesTableProps) {
-  const [search, setSearch] = useState("");
+export function ServicesTable({ services, initialSearch = "" }: ServicesTableProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(initialSearch);
   const [sortBy, setSortBy] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+
+  // Debounced search - update URL after typing stops
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search !== initialSearch) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (search) {
+          params.set("q", search);
+          params.delete("page"); // Reset to page 1 on new search
+        } else {
+          params.delete("q");
+        }
+        router.push(`/admin/servizi?${params.toString()}`);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search, initialSearch, router, searchParams]);
 
   const handleSort = (key: SortKey) => {
     if (sortBy === key) {
@@ -46,19 +68,8 @@ export function ServicesTable({ services }: ServicesTableProps) {
     }
   };
 
-  const filteredAndSorted = useMemo(() => {
-    let result = services;
-
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      result = result.filter(
-        (s) =>
-          s.name.toLowerCase().includes(q) ||
-          s.categoryLabel.toLowerCase().includes(q)
-      );
-    }
-
-    result = [...result].sort((a, b) => {
+  const sorted = useMemo(() => {
+    return [...services].sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
         case "name":
@@ -79,9 +90,7 @@ export function ServicesTable({ services }: ServicesTableProps) {
       }
       return sortOrder === "asc" ? comparison : -comparison;
     });
-
-    return result;
-  }, [services, search, sortBy, sortOrder]);
+  }, [services, sortBy, sortOrder]);
 
   const thClass =
     "px-6 py-3 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors select-none group";
@@ -95,7 +104,7 @@ export function ServicesTable({ services }: ServicesTableProps) {
         className="max-w-sm"
       />
 
-      {filteredAndSorted.length === 0 ? (
+      {sorted.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500">Nessun servizio trovato</p>
         </Card>
@@ -131,7 +140,7 @@ export function ServicesTable({ services }: ServicesTableProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredAndSorted.map((service) => (
+                {sorted.map((service) => (
                   <tr key={service.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {service.name}
