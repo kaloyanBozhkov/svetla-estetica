@@ -4,8 +4,8 @@ import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
 import { sendCelebration } from "@/lib/alerts";
-import BookingApprovedEmail from "@/app/_components/emails/BookingApprovedEmail";
-import BookingRejectedEmail from "@/app/_components/emails/BookingRejectedEmail";
+import BookingApprovedEmail from "@/components/emails/BookingApprovedEmail";
+import BookingRejectedEmail from "@/components/emails/BookingRejectedEmail";
 
 const updateBookingSchema = z.object({
   status: z.enum(["pending", "approved", "rejected", "completed", "cancelled"]),
@@ -113,16 +113,10 @@ export async function PATCH(
     return NextResponse.json({ booking });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Dati non validi" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Dati non validi" }, { status: 400 });
     }
     if (error instanceof Error && error.message === "Forbidden") {
-      return NextResponse.json(
-        { error: "Non autorizzato" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Non autorizzato" }, { status: 403 });
     }
     console.error("Update booking error:", error);
     return NextResponse.json(

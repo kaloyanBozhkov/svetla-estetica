@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
-import OrderStatusEmail from "@/app/_components/emails/OrderStatusEmail";
+import OrderStatusEmail from "@/components/emails/OrderStatusEmail";
 
 const updateOrderSchema = z.object({
   status: z.enum(["pending", "confirmed", "shipped", "delivered", "cancelled"]),

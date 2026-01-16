@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
 import { env } from "@/env";
-import MagicLinkEmail from "@/app/_components/emails/MagicLinkEmail";
+import MagicLinkEmail from "@/components/emails/MagicLinkEmail";
 
 const MAGIC_LINK_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 

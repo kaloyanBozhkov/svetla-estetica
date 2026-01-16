@@ -10,7 +10,7 @@
     "db:seed": "pnpm tsx scripts/seed-db.ts",
     "db:studio": "prisma studio",
     "dev": "next dev",
-    "email:dev": "email dev --dir ./src/app/_components/emails",
+    "email:dev": "email dev --dir ./src/components/emails",
     "llms:update": "pnpm tsx scripts/update-llms-txt.ts",
     "postinstall": "prisma generate",
     "lint": "next lint",

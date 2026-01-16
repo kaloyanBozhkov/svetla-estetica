@@ -36,7 +36,7 @@ export default function BookingRejectedEmail({
         <Container style={container}>
           <Section style={logoSection}>
             <Img
-              src={`${BASE_URL}/logo-cropped.webp`}
+              src={`${BASE_URL}/logo-cropped-bg.webp`}
               width="80"
               height="80"
               alt="Svetla Estetica"
@@ -142,11 +142,11 @@ const container = {
   borderRadius: "12px",
   marginTop: "40px",
   marginBottom: "40px",
-  boxShadow: "0 4px 6px rgba(95, 40, 103, 0.1)",
+  boxShadow: "0 4px 6px rgba(125, 85, 128, 0.1)",
 };
 
 const logoSection = {
-  backgroundColor: "#5f2867",
+  backgroundColor: "#7d5580",
   padding: "32px 48px",
   textAlign: "center" as const,
   borderRadius: "12px 12px 0 0",
@@ -214,7 +214,7 @@ const detailsBox = {
 };
 
 const detailsHeading = {
-  color: "#5f2867",
+  color: "#7d5580",
   fontSize: "16px",
   fontWeight: "bold",
   margin: "0 0 12px 0",
@@ -244,7 +244,7 @@ const detailsValue = {
 };
 
 const button = {
-  backgroundColor: "#5f2867",
+  backgroundColor: "#7d5580",
   borderRadius: "10px",
   color: "#fff",
   fontSize: "16px",
@@ -257,7 +257,7 @@ const button = {
 };
 
 const link = {
-  color: "#5f2867",
+  color: "#7d5580",
   fontWeight: "600" as const,
 };
 

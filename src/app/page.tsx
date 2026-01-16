@@ -43,7 +43,7 @@ const services = [
 async function getFeaturedProducts() {
   return db.product.findMany({
     where: { active: true },
-    orderBy: { created_at: "desc" },
+    orderBy: { created_at: "asc" },
     take: 4,
   });
 }
