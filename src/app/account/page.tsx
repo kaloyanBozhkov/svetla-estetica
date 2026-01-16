@@ -15,7 +15,10 @@ export default async function AccountPage() {
 
   const [orders, bookings] = await Promise.all([
     db.order.findMany({
-      where: { user_id: user.id },
+      where: { 
+        user_id: user.id,
+        payment_status: "paid",
+      },
       orderBy: { created_at: "desc" },
       take: 5,
     }),
@@ -45,11 +48,28 @@ export default async function AccountPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <Card>
             <CardTitle className="mb-4">Informazioni</CardTitle>
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="font-medium">{user.email}</p>
+            <div className="space-y-3 mb-6">
+              {user.name && (
+                <div>
+                  <p className="text-sm text-gray-500">Nome</p>
+                  <p className="font-medium">{user.name}</p>
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-gray-500">Email</p>
+                <p className="font-medium">{user.email}</p>
               </div>
-            <ProfileForm initialPhone={user.phone} initialName={user.name} />
+              {user.phone && (
+                <div>
+                  <p className="text-sm text-gray-500">Telefono</p>
+                  <p className="font-medium">{user.phone}</p>
+                </div>
+              )}
+            </div>
+            <div className="border-t border-gray-100 pt-4">
+              <p className="text-sm text-gray-500 mb-3">Modifica informazioni</p>
+              <ProfileForm initialPhone={user.phone} initialName={user.name} />
+            </div>
           </Card>
 
           <Card>

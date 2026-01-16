@@ -74,7 +74,7 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
           {message.text}
         </p>
       )}
-      <ActionButton type="submit" isLoading={isLoading} size="sm">
+      <ActionButton type="submit" loading={isLoading} size="sm">
         Salva
       </ActionButton>
     </form>

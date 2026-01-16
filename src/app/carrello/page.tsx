@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useCartStore, useAuthStore } from "@/stores";
 import { CartItem } from "@/components/molecules";
 import { ActionButton, Button, Card } from "@/components/atoms";
+import { CartIcon } from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function CartPage() {
@@ -14,9 +15,22 @@ export default function CartPage() {
   const { isAuthenticated, isLoading } = useAuthStore();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState("");
+  const [cancelMessage, setCancelMessage] = useState("");
+
+  const searchParams = useSearchParams();
+
+  // Show message if user cancelled checkout
+  useEffect(() => {
+    if (searchParams.get("cancelled") === "true") {
+      setCancelMessage("Checkout annullato. Il tuo carrello è ancora qui.");
+      // Clear the URL param
+      window.history.replaceState({}, "", "/carrello");
+    }
+  }, [searchParams]);
 
   const handleCheckout = async () => {
     setError("");
+    setCancelMessage("");
     setCheckoutLoading(true);
 
     try {
@@ -37,7 +51,7 @@ export default function CartPage() {
         throw new Error(data.error || "Errore checkout");
       }
 
-      clearCart();
+      // Cart will be cleared on the success page after order is completed
       window.location.href = data.url;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Errore checkout");
@@ -63,7 +77,9 @@ export default function CartPage() {
     return (
       <div className="py-12">
         <div className="mx-auto max-w-2xl px-4 text-center">
-          <div className="text-6xl mb-6">🛒</div>
+          <div className="mb-6 flex justify-center">
+            <CartIcon className="h-20 w-20 text-gray-300" />
+          </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">
             Il tuo carrello è vuoto
           </h1>
@@ -79,15 +95,15 @@ export default function CartPage() {
   }
 
   return (
-    <div className="py-12">
+    <div className="py-12 overflow-x-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
           Carrello
         </h1>
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <Card>
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2 min-w-0">
+            <Card className="overflow-hidden">
               {items.map((item) => (
                 <CartItem
                   key={item.productId}
@@ -133,6 +149,10 @@ export default function CartPage() {
                 <span>Totale</span>
                 <span>{formatPrice(getTotal())}</span>
               </div>
+
+              {cancelMessage && (
+                <p className="mb-3 text-sm text-amber-600 text-center">{cancelMessage}</p>
+              )}
 
               {error && (
                 <p className="mb-3 text-sm text-red-600 text-center">{error}</p>
