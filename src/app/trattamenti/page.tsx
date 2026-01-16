@@ -36,7 +36,7 @@ export default async function ServicesPage() {
   }));
 
   return (
-    <div className="py-12">
+    <div className="py-12 min-h-screen bg-gradient-to-b from-primary-50/60 via-primary-50/20 to-transparent">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="font-display text-4xl font-bold text-gray-900">
