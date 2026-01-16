@@ -53,7 +53,12 @@ export function CartItem({
         </Link>
 
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-gray-900 text-sm sm:text-base line-clamp-2">{name}</h4>
+          <Link
+            href={`/prodotti/${productUuid}`}
+            className="font-medium text-gray-900 text-sm sm:text-base line-clamp-2 hover:text-primary-600 transition-colors"
+          >
+            {name}
+          </Link>
           <p className="mt-1 text-sm text-primary-600 font-semibold">
             {formatPrice(price)}
           </p>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ServiceCard } from "@/components/molecules";
 import { Button, Badge, Card } from "@/components/atoms";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, stripHtml } from "@/lib/utils";
 import { type service_category } from "@prisma/client";
 
 const ITEMS_PER_PAGE = 30;
@@ -320,7 +320,7 @@ function ServiceListItem({
           </Link>
           {service.description && (
             <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-              {service.description}
+              {stripHtml(service.description)}
             </p>
           )}
         </div>

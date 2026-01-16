@@ -14,7 +14,7 @@ import {
   TagIcon,
 } from "@/components/atoms/icons";
 import { db } from "@/lib/db";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, stripHtml } from "@/lib/utils";
 import Image from "next/image";
 
 const categoryLabels: Record<string, string> = {
@@ -445,7 +445,7 @@ export default async function HomePage() {
                       {product.name}
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                      {product.description || "Prodotto di alta qualità"}
+                      {product.description ? stripHtml(product.description) : "Prodotto di alta qualità"}
                     </p>
                     <div className="mt-4 flex items-center justify-between">
                       <span className="font-display text-lg font-bold text-primary-600">

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ProductCard } from "@/components/molecules";
 import { Button, Badge, Card } from "@/components/atoms";
 import { useCartStore } from "@/stores";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, stripHtml } from "@/lib/utils";
 import { type product_category } from "@prisma/client";
 
 const ITEMS_PER_PAGE = 30;
@@ -324,7 +324,7 @@ function ProductListItem({
           </Link>
           {product.description && (
             <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-              {product.description}
+              {stripHtml(product.description)}
             </p>
           )}
         </div>

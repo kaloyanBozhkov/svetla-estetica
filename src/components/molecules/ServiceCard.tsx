@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, stripHtml } from "@/lib/utils";
 import Image from "next/image";
 
 interface ServiceCardProps {
@@ -76,7 +76,7 @@ export function ServiceCard({
           {name}
         </h3>
         {description && (
-          <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
+          <p className="mt-2 text-sm text-gray-600 line-clamp-2">{stripHtml(description)}</p>
         )}
         <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

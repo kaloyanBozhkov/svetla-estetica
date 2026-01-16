@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Card, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice, cn } from "@/lib/utils";
+import { formatPrice, cn, stripHtml } from "@/lib/utils";
 import Image from "next/image";
 import { CheckIcon } from "@/components/atoms/icons";
 
@@ -90,7 +90,7 @@ export function ProductCard({
           {name}
         </h3>
         {description && (
-          <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
+          <p className="mt-2 text-sm text-gray-600 line-clamp-2">{stripHtml(description)}</p>
         )}
       </div>
 
