@@ -146,8 +146,8 @@ export function ImageUpload({
               src={value}
               alt="Preview"
               fill
+              unoptimized
               className="object-contain"
-              sizes="400px"
             />
           </div>
           <div className="mt-2 flex gap-2">

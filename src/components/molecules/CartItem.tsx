@@ -36,7 +36,7 @@ export function CartItem({
         className="relative h-20 w-20 flex-shrink-0 rounded-lg bg-gray-100 overflow-hidden hover:opacity-80 transition-opacity"
       >
         {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill className="object-contain p-1" />
+          <Image src={imageUrl} alt={name} fill unoptimized className="object-contain p-1" />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-400">
             <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -37,7 +37,8 @@ export function ProductsGrid({
   isAuthenticated,
   categories,
 }: ProductsGridProps) {
-  const [selectedCategory, setSelectedCategory] = useState<product_category | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<product_category | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +58,9 @@ export function ProductsGrid({
     return result;
   }, [products, selectedCategory, sortBy]);
 
-  const totalPages = Math.ceil(filteredAndSortedProducts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(
+    filteredAndSortedProducts.length / ITEMS_PER_PAGE
+  );
   const paginatedProducts = filteredAndSortedProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -127,20 +130,48 @@ export function ProductsGrid({
           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${viewMode === "grid" ? "bg-primary-600 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}`}
+              className={`p-2 ${
+                viewMode === "grid"
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
               aria-label="Grid view"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
               </svg>
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${viewMode === "list" ? "bg-primary-600 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}`}
+              className={`p-2 ${
+                viewMode === "list"
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
               aria-label="List view"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
@@ -258,6 +289,7 @@ function ProductListItem({
       >
         {product.imageUrl ? (
           <Image
+            unoptimized
             src={product.imageUrl}
             alt={product.name}
             fill
@@ -303,7 +335,9 @@ function ProductListItem({
               {formatPrice(product.price)}
             </span>
           ) : (
-            <span className="text-sm text-gray-500 italic">Accedi per i prezzi</span>
+            <span className="text-sm text-gray-500 italic">
+              Accedi per i prezzi
+            </span>
           )}
 
           {isAuthenticated && !isOutOfStock && (
