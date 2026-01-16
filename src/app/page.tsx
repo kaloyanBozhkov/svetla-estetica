@@ -27,16 +27,16 @@ const categoryLabels: Record<string, string> = {
 };
 
 const services = [
-  { name: "Viso", slug: "viso", Icon: FaceIcon, color: "from-rose-400 to-pink-500" },
-  { name: "Corpo", slug: "corpo", Icon: BodyIcon, color: "from-amber-400 to-orange-500" },
-  { name: "Make Up", slug: "make_up", Icon: MakeupIcon, color: "from-fuchsia-400 to-purple-500" },
-  { name: "Manicure", slug: "manicure", Icon: ManicureIcon, color: "from-red-400 to-rose-500" },
-  { name: "Pedicure", slug: "pedicure", Icon: PedicureIcon, color: "from-teal-400 to-cyan-500" },
-  { name: "Ceretta", slug: "ceretta", Icon: WaxIcon, color: "from-yellow-400 to-amber-500" },
-  { name: "Solarium", slug: "solarium", Icon: SolariumIcon, color: "from-orange-400 to-yellow-500" },
-  { name: "Luce Pulsata", slug: "luce_pulsata", Icon: LaserIcon, color: "from-violet-400 to-purple-500" },
-  { name: "Appuntamento", slug: "appuntamento", Icon: AppointmentIcon, color: "from-sky-400 to-blue-500" },
-  { name: "Grotta di Sale", slug: "grotta_di_sale", Icon: SaltCaveIcon, color: "from-emerald-400 to-teal-500" },
+  { name: "Viso", slug: "viso", Icon: FaceIcon, color: "from-purple-400 to-fuchsia-500" },
+  { name: "Corpo", slug: "corpo", Icon: BodyIcon, color: "from-violet-400 to-purple-500" },
+  { name: "Make Up", slug: "make_up", Icon: MakeupIcon, color: "from-fuchsia-400 to-pink-500" },
+  { name: "Manicure", slug: "manicure", Icon: ManicureIcon, color: "from-pink-400 to-rose-500" },
+  { name: "Pedicure", slug: "pedicure", Icon: PedicureIcon, color: "from-indigo-400 to-violet-500" },
+  { name: "Ceretta", slug: "ceretta", Icon: WaxIcon, color: "from-amber-400 to-orange-400" },
+  { name: "Solarium", slug: "solarium", Icon: SolariumIcon, color: "from-yellow-400 to-amber-400" },
+  { name: "Luce Pulsata", slug: "luce_pulsata", Icon: LaserIcon, color: "from-violet-500 to-purple-600" },
+  { name: "Appuntamento", slug: "appuntamento", Icon: AppointmentIcon, color: "from-purple-500 to-indigo-500" },
+  { name: "Grotta di Sale", slug: "grotta_di_sale", Icon: SaltCaveIcon, color: "from-slate-400 to-slate-500" },
 ];
 
 async function getFeaturedProducts() {
@@ -68,8 +68,8 @@ export default async function HomePage() {
 
         {/* Decorative Blobs */}
         <div className="absolute top-20 right-[10%] w-72 h-72 bg-gradient-to-br from-primary-200 to-primary-300 rounded-full blur-3xl opacity-40" />
-        <div className="absolute bottom-20 left-[5%] w-96 h-96 bg-gradient-to-br from-accent-200 to-rose-200 rounded-full blur-3xl opacity-30" />
-        <div className="absolute top-1/2 right-[30%] w-48 h-48 bg-gradient-to-br from-amber-200 to-orange-200 rounded-full blur-2xl opacity-40" />
+        <div className="absolute bottom-20 left-[5%] w-96 h-96 bg-gradient-to-br from-fuchsia-200 to-pink-200 rounded-full blur-3xl opacity-30" />
+        <div className="absolute top-1/2 right-[30%] w-48 h-48 bg-gradient-to-br from-violet-200 to-purple-200 rounded-full blur-2xl opacity-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -85,7 +85,7 @@ export default async function HomePage() {
               
               <h1 className="font-display text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Il Tuo Momento di
-                <span className="block mt-2 bg-gradient-to-r from-primary-600 via-rose-500 to-accent-500 bg-clip-text text-transparent">
+                <span className="block mt-2 bg-gradient-to-r from-primary-600 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
                   Bellezza e Relax
                 </span>
               </h1>
@@ -376,7 +376,7 @@ export default async function HomePage() {
       {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="rounded-3xl bg-gradient-to-br from-accent-50 via-amber-50 to-orange-50 p-12 ring-1 ring-accent-100 shadow-xl">
+          <div className="rounded-3xl bg-gradient-to-br from-primary-50 via-fuchsia-50 to-violet-50 p-12 ring-1 ring-primary-100 shadow-xl">
             <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
               Pronta a Prenderti Cura di Te?
             </h2>

@@ -80,7 +80,7 @@ export default function CartPage() {
 
   return (
     <div className="py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
           Carrello
         </h1>
@@ -138,7 +138,7 @@ export default function CartPage() {
               )}
 
               <ActionButton
-                className="w-full"
+                className="w-full whitespace-nowrap"
                 size="lg"
                 onClick={handleCheckout}
                 isLoading={checkoutLoading}

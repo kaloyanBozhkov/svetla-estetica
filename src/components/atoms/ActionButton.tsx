@@ -57,11 +57,10 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading ? <DotsLoader size={size === "sm" ? 4 : size === "lg" ? 8 : 6} /> : children}
+        {isLoading ? <DotsLoader size={size} modifier="primary" /> : children}
       </button>
     );
   }
 );
 
 ActionButton.displayName = "ActionButton";
-

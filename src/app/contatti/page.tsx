@@ -178,9 +178,9 @@ export default function ContactPage() {
               </div>
 
               {/* Address Card */}
-              <div className="rounded-2xl bg-gradient-to-br from-accent-50 to-amber-50 p-8 shadow-lg ring-1 ring-accent-100">
+              <div className="rounded-2xl bg-gradient-to-br from-primary-50 to-fuchsia-50 p-8 shadow-lg ring-1 ring-primary-100">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500 text-white shadow-lg shadow-accent-200">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 text-white shadow-lg shadow-primary-200">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
