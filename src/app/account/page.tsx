@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { Card, CardTitle, Badge } from "@/components/atoms";
 import { formatPrice, formatDateTime } from "@/lib/utils";
 import { LogoutButton } from "./LogoutButton";
+import { ProfileForm } from "./ProfileForm";
 
 export default async function AccountPage() {
   const user = await getSession();
@@ -39,24 +40,11 @@ export default async function AccountPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <Card>
             <CardTitle className="mb-4">Informazioni</CardTitle>
-            <dl className="space-y-3">
-              <div>
-                <dt className="text-sm text-gray-500">Email</dt>
-                <dd className="font-medium">{user.email}</dd>
-              </div>
-              {user.name && (
-                <div>
-                  <dt className="text-sm text-gray-500">Nome</dt>
-                  <dd className="font-medium">{user.name}</dd>
-                </div>
-              )}
-              {user.phone && (
-                <div>
-                  <dt className="text-sm text-gray-500">Telefono</dt>
-                  <dd className="font-medium">{user.phone}</dd>
-                </div>
-              )}
-            </dl>
+            <div className="mb-4">
+              <p className="text-sm text-gray-500">Email</p>
+              <p className="font-medium">{user.email}</p>
+            </div>
+            <ProfileForm initialPhone={user.phone} initialName={user.name} />
           </Card>
 
           <Card>

@@ -30,8 +30,8 @@ export async function POST(request: Request) {
 
     const bookingDate = new Date(`${date}T${time}`);
 
-    // Update user phone if provided
-    if (phone) {
+    // Update user phone only if not already set
+    if (phone && !user.phone) {
       await db.user.update({
         where: { id: user.id },
         data: { phone },

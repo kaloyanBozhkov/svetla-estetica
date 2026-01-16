@@ -10,6 +10,7 @@ import {
   SparkleIcon,
   CartIcon,
   CalendarIcon,
+  UsersIcon,
   LogOutIcon,
 } from "@/components/atoms/icons";
 
@@ -19,6 +20,7 @@ const adminNav = [
   { href: "/admin/servizi", label: "Servizi", Icon: SparkleIcon },
   { href: "/admin/ordini", label: "Ordini", Icon: CartIcon },
   { href: "/admin/prenotazioni", label: "Prenotazioni", Icon: CalendarIcon },
+  { href: "/admin/utenti", label: "Utenti", Icon: UsersIcon },
 ];
 
 export function AdminSidebar() {

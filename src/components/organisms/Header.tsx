@@ -23,15 +23,15 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="group flex items-center gap-2">
             <Image
               src="/logo-cropped.webp"
               alt="Svetla Estetica"
               width={60}
               height={60}
-              className="size-11"
+              className="size-11 transition-transform duration-300 group-hover:scale-[0.98]"
             />
-            <span className="font-display text-xl sm:text-2xl font-bold text-primary-600">
+            <span className="font-display text-xl sm:text-2xl font-bold text-primary-600 transition-colors group-hover:text-primary-700">
               Svetla Estetica
             </span>
           </Link>
