@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input, Select, Card, Modal, RichTextEditor } from "@/components/atoms";
+import { Button, Input, Select, Card, Modal, RichTextEditor, ActionButton } from "@/components/atoms";
 import { ImageUpload } from "@/components/molecules";
+import { SparkleIcon } from "@/components/atoms/icons";
 import { type product_category } from "@prisma/client";
 
 const categoryOptions: { value: product_category; label: string }[] = [
@@ -47,6 +48,8 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
   const [deleting, setDeleting] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [error, setError] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiAmount, setAiAmount] = useState("");
 
   const [form, setForm] = useState<ProductFormData>(
     initialData || {
@@ -125,6 +128,51 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
     }
   };
 
+  const handleAiReword = async () => {
+    if (!form.name) {
+      setError("Inserisci almeno il nome del prodotto");
+      return;
+    }
+
+    const currentBrand = brands.find((b) => b.id === form.brandId);
+    if (!currentBrand) {
+      setError("Seleziona un brand");
+      return;
+    }
+
+    setAiLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/products/reword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: form.name,
+          brand: currentBrand.name,
+          description: form.description || "",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore AI");
+      }
+
+      const data = await res.json();
+      setForm({
+        ...form,
+        name: data.title,
+        description: data.description,
+      });
+      setAiAmount(data.amount);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore AI");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const brandOptions = brands.map((b) => ({ value: String(b.id), label: b.name }));
 
   return (
@@ -138,11 +186,31 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             required
           />
 
-          <RichTextEditor
-            label="Descrizione"
-            value={form.description}
-            onChange={(value) => setForm({ ...form, description: value })}
-          />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium text-gray-700">Descrizione</label>
+              <ActionButton
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={handleAiReword}
+                loading={aiLoading}
+                disabled={!form.name}
+              >
+                <SparkleIcon className="w-4 h-4 mr-1" />
+                Riformula con AI
+              </ActionButton>
+            </div>
+            <RichTextEditor
+              value={form.description}
+              onChange={(value) => setForm({ ...form, description: value })}
+            />
+            {aiAmount && aiAmount !== "-" && (
+              <p className="text-sm text-primary-600">
+                <strong>Quantità rilevata:</strong> {aiAmount}
+              </p>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input

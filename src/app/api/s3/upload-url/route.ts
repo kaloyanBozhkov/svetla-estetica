@@ -45,7 +45,7 @@ export async function GET(request: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Parametri non validi", details: error.errors },
+        { error: "Parametri non validi", details: z.prettifyError(error) },
         { status: 400 }
       );
     }

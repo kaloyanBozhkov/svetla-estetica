@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       router.refresh();
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
+        setError(z.prettifyError(err));
       } else if (err instanceof Error) {
         setError(err.message);
       }

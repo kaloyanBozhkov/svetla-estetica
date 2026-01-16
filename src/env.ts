@@ -15,6 +15,7 @@ export const env = createEnv({
     TG_BOT_KEY: z.string().min(1).optional(),
     IS_PROD: z.boolean().default(process.env.NODE_ENV === "production"),
     IS_DEV: z.boolean().default(process.env.NODE_ENV === "development"),
+    OPEN_AI_API_KEY: z.string().min(1),
   },
   clientPrefix: "NEXT_PUBLIC_",
   client: {
@@ -35,6 +36,7 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     TG_BOT_KEY: process.env.TG_BOT_KEY,
+    OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
   },
   emptyStringAsUndefined: true,
 });

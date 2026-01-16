@@ -58,7 +58,7 @@ export async function PUT(req: Request, { params }: Params) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: z.prettifyError(error) },
         { status: 400 }
       );
     }

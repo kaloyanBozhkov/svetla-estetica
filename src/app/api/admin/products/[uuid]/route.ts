@@ -57,7 +57,7 @@ export async function PUT(req: Request, { params }: Params) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: z.prettifyError(error) },
         { status: 400 }
       );
     }
@@ -83,4 +83,3 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Errore interno" }, { status: 500 });
   }
 }
-
