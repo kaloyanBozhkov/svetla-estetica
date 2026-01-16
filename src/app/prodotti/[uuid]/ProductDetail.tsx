@@ -43,6 +43,7 @@ export function ProductDetail({ product }: Props) {
         productUuid: product.uuid,
         name: product.name,
         price: product.price,
+        stock: product.stock,
         imageUrl: product.image_url || undefined,
       });
     }

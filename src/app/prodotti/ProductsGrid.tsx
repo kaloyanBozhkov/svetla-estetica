@@ -74,6 +74,7 @@ export function ProductsGrid({
       productUuid: product.uuid,
       name: product.name,
       price: product.price,
+      stock: product.stock,
       imageUrl: product.imageUrl ?? undefined,
     });
   };

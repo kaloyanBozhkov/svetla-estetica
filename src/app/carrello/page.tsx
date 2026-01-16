@@ -94,6 +94,7 @@ export default function CartPage() {
                   name={item.name}
                   price={item.price}
                   quantity={item.quantity}
+                  stock={item.stock ?? 999}
                   imageUrl={item.imageUrl}
                   productUuid={item.productUuid}
                   onIncrease={() => updateQuantity(item.productId, item.quantity + 1)}

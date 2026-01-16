@@ -17,6 +17,7 @@ const categoryLabels: Record<product_category, string> = {
 export default async function AdminProductsPage() {
   const products = await db.product.findMany({
     orderBy: { name: "asc" },
+    include: { brand: true },
   });
 
   const productsWithLabels = products.map((p) => ({
@@ -27,6 +28,7 @@ export default async function AdminProductsPage() {
     stock: p.stock,
     category: p.category,
     categoryLabel: categoryLabels[p.category],
+    brandName: p.brand.name,
     active: p.active,
   }));
 

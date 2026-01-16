@@ -9,6 +9,7 @@ interface CartItemProps {
   name: string;
   price: number;
   quantity: number;
+  stock: number;
   imageUrl?: string;
   productUuid: string;
   onIncrease: () => void;
@@ -20,12 +21,14 @@ export function CartItem({
   name,
   price,
   quantity,
+  stock,
   imageUrl,
   productUuid,
   onIncrease,
   onDecrease,
   onRemove,
 }: CartItemProps) {
+  const isAtMax = stock > 0 && quantity >= stock;
   return (
     <div className="flex gap-4 py-4 border-b border-gray-100 last:border-0">
       <Link
@@ -71,10 +74,14 @@ export function CartItem({
             size="sm"
             onClick={onIncrease}
             className="h-8 w-8 p-0"
+            disabled={isAtMax}
           >
             +
           </Button>
         </div>
+        {isAtMax && (
+          <span className="text-xs text-amber-600">Max disponibile</span>
+        )}
         <button
           onClick={onRemove}
           className="text-sm text-gray-400 hover:text-red-500 transition-colors"
