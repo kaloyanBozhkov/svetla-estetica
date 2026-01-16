@@ -11,6 +11,8 @@ export const env = createEnv({
     ADMIN_PASSWORD: z.string().min(1),
     AUTH_SECRET: z.string().min(32),
     BASE_URL: z.string().url().default("http://localhost:3000"),
+    AWS_ACCESS_KEY_ID: z.string().min(1),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
   },
   clientPrefix: "NEXT_PUBLIC_",
   client: {
@@ -27,7 +29,8 @@ export const env = createEnv({
     BASE_URL: process.env.BASE_URL,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   },
   emptyStringAsUndefined: true,
 });
-

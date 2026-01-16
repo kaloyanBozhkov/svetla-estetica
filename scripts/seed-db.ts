@@ -11,12 +11,12 @@ import { oldProducts } from "./old-parsed/PRODUCTS";
 const db = new PrismaClient();
 
 // Generate image URL from service name (first letter of each word)
-function generateImageUrl(name: string): string {
+function generateImageUrl(name: string, imageType: "trattamenti" | "prodotti"): string {
   const initials = name
     .split(/\s+/)
     .map((word) => word.charAt(0).toLowerCase())
     .join("");
-  return `https://svetlaestetica.com/img/trattamenti/${initials}.jpg`;
+  return `https://svetla-estetica.s3.eu-west-1.amazonaws.com/images/${imageType}/${initials}.jpg`;
 }
 
 async function seed() {
@@ -38,7 +38,7 @@ async function seed() {
           price: service.price,
           duration_min: 0,
           category: service.category,
-          image_url: generateImageUrl(service.name),
+          image_url: generateImageUrl(service.name, "trattamenti"),
           active: true,
         },
       });
@@ -77,7 +77,7 @@ async function seed() {
       }
       await db.product.create({
         data: {
-          image_url: product.img,
+          image_url: generateImageUrl(product.name, "prodotti"),
           name: product.name,
           description: product.description,
           price: product.price,

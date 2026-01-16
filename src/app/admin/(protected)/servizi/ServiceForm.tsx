@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Select, Textarea, Card, Modal } from "@/components/atoms";
+import { ImageUpload } from "@/components/molecules";
 import { type service_category } from "@prisma/client";
 
 const categoryOptions: { value: service_category; label: string }[] = [
@@ -161,12 +162,11 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
             options={categoryOptions}
           />
 
-          <Input
-            label="URL Immagine"
-            type="url"
-            value={form.imageUrl}
-            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-            placeholder="https://..."
+          <ImageUpload
+            label="Immagine Trattamento"
+            value={form.imageUrl || undefined}
+            onChange={(url) => setForm({ ...form, imageUrl: url || "" })}
+            imageType="trattamenti"
           />
 
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">

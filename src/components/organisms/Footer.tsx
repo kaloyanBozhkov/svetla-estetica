@@ -43,8 +43,40 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="relative bg-gray-900 text-gray-300 overflow-hidden">
+      {/* Decorative roses */}
+      {/* Mobile: bottom right */}
+      <div
+        className="lg:hidden absolute right-0 bottom-[94px] size-[50vw] opacity-[0.05] pointer-events-none"
+        style={{
+          backgroundImage: "url(/rose.svg)",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      />
+      {/* Desktop: left and right */}
+      <div
+        className="hidden lg:block absolute bottom-[-10px] left-[80px] -translate-x-1/4 w-64 h-64 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: "url(/rose.svg)",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      />
+      <div
+        className="hidden lg:block absolute bottom-[-10px] right-[80px] -translate-x-1/4 w-64 h-64 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: "url(/rose.svg)",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          transform: "translateX(25%) scaleX(-1)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <h3 className="font-display text-xl font-bold text-white mb-4">
