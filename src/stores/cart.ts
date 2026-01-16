@@ -15,6 +15,7 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  lastAddedAt: number;
   addItem: (item: Omit<CartItem, "quantity">) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
@@ -27,6 +28,7 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      lastAddedAt: 0,
 
       addItem: (item) => {
         set((state) => {
@@ -34,6 +36,7 @@ export const useCartStore = create<CartState>()(
           if (existing) {
             const newQuantity = Math.min(existing.quantity + 1, item.stock);
             return {
+              lastAddedAt: Date.now(),
               items: state.items.map((i) =>
                 i.productId === item.productId
                   ? { ...i, quantity: newQuantity, stock: item.stock }
@@ -41,7 +44,7 @@ export const useCartStore = create<CartState>()(
               ),
             };
           }
-          return { items: [...state.items, { ...item, quantity: 1 }] };
+          return { lastAddedAt: Date.now(), items: [...state.items, { ...item, quantity: 1 }] };
         });
       },
 

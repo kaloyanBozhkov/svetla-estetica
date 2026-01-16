@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuthStore, useCartStore } from "@/stores";
 import { Button } from "@/components/atoms";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -17,9 +17,20 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartBounce, setCartBounce] = useState(false);
   const { user, isAuthenticated, isAdmin } = useAuthStore();
   const itemCount = useCartStore((s) => s.getItemCount());
+  const lastAddedAt = useCartStore((s) => s.lastAddedAt);
   const pathname = usePathname();
+
+  // Animate cart icon when item is added
+  useEffect(() => {
+    if (lastAddedAt > 0) {
+      setCartBounce(true);
+      const timer = setTimeout(() => setCartBounce(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [lastAddedAt]);
 
   // Hide header on admin pages (they have their own header)
   if (pathname.startsWith("/admin")) {
@@ -57,9 +68,18 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             {isAuthenticated() && (
-              <Link href="/carrello" className="relative p-2">
+              <Link
+                href="/carrello"
+                className={cn(
+                  "relative p-2 transition-transform",
+                  cartBounce && "animate-bounce"
+                )}
+              >
                 <svg
-                  className="h-6 w-6 text-gray-600"
+                  className={cn(
+                    "h-6 w-6 text-gray-600 transition-colors",
+                    cartBounce && "text-primary-600"
+                  )}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -72,7 +92,12 @@ export function Header() {
                   />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary-600 text-xs text-white flex items-center justify-center">
+                  <span
+                    className={cn(
+                      "absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary-600 text-xs text-white flex items-center justify-center transition-transform",
+                      cartBounce && "scale-125"
+                    )}
+                  >
                     {itemCount}
                   </span>
                 )}
@@ -181,4 +206,3 @@ export function Header() {
     </header>
   );
 }
-

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, cn } from "@/lib/utils";
 import Image from "next/image";
+import { CheckIcon } from "@/components/atoms/icons";
 
 interface ProductCardProps {
   uuid: string;
@@ -28,7 +30,16 @@ export function ProductCard({
   isAuthenticated,
   onAddToCart,
 }: ProductCardProps) {
+  const [isAdded, setIsAdded] = useState(false);
   const isOutOfStock = stock <= 0;
+
+  const handleAddToCart = () => {
+    if (onAddToCart) {
+      onAddToCart();
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 1500);
+    }
+  };
 
   return (
     <Card hover className="group flex flex-col h-full overflow-hidden p-0">
@@ -88,8 +99,22 @@ export function ProductCard({
         )}
 
         {isAuthenticated && !isOutOfStock && onAddToCart && (
-          <Button size="sm" onClick={onAddToCart}>
-            Aggiungi
+          <Button
+            size="sm"
+            onClick={handleAddToCart}
+            className={cn(
+              "min-w-[100px] transition-all duration-300",
+              isAdded && "bg-green-600 hover:bg-green-600"
+            )}
+          >
+            {isAdded ? (
+              <span className="flex items-center gap-1">
+                <CheckIcon className="w-4 h-4" />
+                Aggiunto
+              </span>
+            ) : (
+              "Aggiungi"
+            )}
           </Button>
         )}
       </CardFooter>
