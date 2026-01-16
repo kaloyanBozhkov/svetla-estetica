@@ -87,6 +87,7 @@ model user {
   role           user_role @default(customer)
 
   bookings    booking[]
+  cart_items  cart_item[]
   orders      order[]
   magic_links magic_link[]
 
@@ -106,6 +107,23 @@ model magic_link {
 
   @@index([token])
   @@index([user_id])
+}
+
+model cart_item {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  quantity Int
+
+  product    product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id Int
+  user       user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+
+  @@unique([user_id, product_id])
+  @@index([user_id])
+  @@index([product_id])
 }
 
 model brand {
@@ -136,6 +154,7 @@ model product {
   priority    Int              @default(0)
   stock       Int              @default(0)
 
+  cart_items  cart_item[]
   order_items order_item[]
   brand       brand        @relation(fields: [brand_id], references: [id])
   brand_id    Int

@@ -52,7 +52,7 @@ export function ProductCard({
         aria-label={`Vai a ${name}`}
       />
 
-      <div className="relative aspect-square bg-gray-50 overflow-hidden">
+      <div className="relative z-0 aspect-square bg-gray-50 overflow-hidden pointer-events-none">
         {imageUrl ? (
           <Image
             src={imageUrl}

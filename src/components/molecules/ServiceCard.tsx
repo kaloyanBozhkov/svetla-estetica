@@ -45,7 +45,7 @@ export function ServiceCard({
         aria-label={`Vai a ${name}`}
       />
 
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 overflow-hidden">
+      <div className="relative z-0 aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 overflow-hidden pointer-events-none">
         {imageUrl ? (
           <Image
             src={imageUrl}

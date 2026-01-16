@@ -8,17 +8,41 @@ import { CartIcon } from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
 import { SHIPPING_COST } from "@/lib/constants";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function CartContent() {
   const router = useRouter();
-  const { items, updateQuantity, removeItem, getTotal, clearCart } = useCartStore();
+  const { items, updateQuantity, removeItem, getTotal, clearCart, syncWithDb, hasOutOfStockItems, isSyncing } = useCartStore();
   const { isAuthenticated, isLoading } = useAuthStore();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState("");
   const [cancelMessage, setCancelMessage] = useState("");
+  const [syncMessage, setSyncMessage] = useState("");
+  const hasSynced = useRef(false);
 
   const searchParams = useSearchParams();
+
+  // Sync cart with database on load
+  useEffect(() => {
+    if (!hasSynced.current && items.length > 0) {
+      hasSynced.current = true;
+      syncWithDb().then((result) => {
+        const messages = [];
+        if (result.removedCount > 0) {
+          messages.push(`${result.removedCount} prodotto/i non più disponibile/i rimosso/i`);
+        }
+        if (result.adjustedCount > 0) {
+          messages.push(`${result.adjustedCount} quantità aggiornata/e per disponibilità`);
+        }
+        if (result.outOfStockCount > 0) {
+          messages.push(`${result.outOfStockCount} prodotto/i esaurito/i`);
+        }
+        if (messages.length > 0) {
+          setSyncMessage(messages.join(". ") + ".");
+        }
+      });
+    }
+  }, [items.length, syncWithDb]);
 
   // Show message if user cancelled checkout
   useEffect(() => {
@@ -114,6 +138,7 @@ export function CartContent() {
                   stock={item.stock ?? 999}
                   imageUrl={item.imageUrl}
                   productUuid={item.productUuid}
+                  outOfStock={item.outOfStock}
                   onIncrease={() => updateQuantity(item.productId, item.quantity + 1)}
                   onDecrease={() => updateQuantity(item.productId, item.quantity - 1)}
                   onRemove={() => removeItem(item.productId)}
@@ -151,6 +176,10 @@ export function CartContent() {
                 <span>{formatPrice(getTotal() + SHIPPING_COST)}</span>
               </div>
 
+              {syncMessage && (
+                <p className="mb-3 text-sm text-amber-600 text-center">{syncMessage}</p>
+              )}
+
               {cancelMessage && (
                 <p className="mb-3 text-sm text-amber-600 text-center">{cancelMessage}</p>
               )}
@@ -159,13 +188,20 @@ export function CartContent() {
                 <p className="mb-3 text-sm text-red-600 text-center">{error}</p>
               )}
 
+              {hasOutOfStockItems() && (
+                <p className="mb-3 text-sm text-red-600 text-center">
+                  Rimuovi i prodotti esauriti per procedere al checkout
+                </p>
+              )}
+
               <ActionButton
                 className="w-full whitespace-nowrap"
                 size="lg"
                 onClick={handleCheckout}
-                loading={checkoutLoading}
+                loading={checkoutLoading || isSyncing}
+                disabled={hasOutOfStockItems()}
               >
-                Procedi al Checkout
+                {isSyncing ? "Verifica disponibilità..." : "Procedi al Checkout"}
               </ActionButton>
 
               <p className="mt-4 text-xs text-center text-gray-500">

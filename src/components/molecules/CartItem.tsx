@@ -12,6 +12,7 @@ interface CartItemProps {
   stock: number;
   imageUrl?: string;
   productUuid: string;
+  outOfStock?: boolean;
   onIncrease: () => void;
   onDecrease: () => void;
   onRemove: () => void;
@@ -24,13 +25,16 @@ export function CartItem({
   stock,
   imageUrl,
   productUuid,
+  outOfStock,
   onIncrease,
   onDecrease,
   onRemove,
 }: CartItemProps) {
   const isAtMax = stock > 0 && quantity >= stock;
+  const isOutOfStock = outOfStock || stock <= 0;
+  
   return (
-    <div className="py-4 border-b border-gray-100 last:border-0">
+    <div className={`py-4 border-b border-gray-100 last:border-0 ${isOutOfStock ? "bg-red-50" : ""}`}>
       <div className="flex gap-3 sm:gap-4">
         <Link
           href={`/prodotti/${productUuid}`}
@@ -62,6 +66,11 @@ export function CartItem({
           <p className="mt-1 text-sm text-primary-600 font-semibold">
             {formatPrice(price)}
           </p>
+          {isOutOfStock && (
+            <p className="mt-1 text-xs text-red-600 font-medium">
+              ⚠ Esaurito - Rimuovi per procedere
+            </p>
+          )}
         </div>
       </div>
 
