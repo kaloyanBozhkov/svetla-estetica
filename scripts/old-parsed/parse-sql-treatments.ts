@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { generateImageUrl } from "./parse-sql-products";
 /**
  * Parses SQL INSERT statements for treatments (trattamenti) and extracts all columns
  *
@@ -15,7 +16,7 @@ import path from "path";
 
 // Paste your SQL INSERT statement here
 const sqlInput = fs.readFileSync(
-  path.join(__dirname, "../ALL_TREATMENTS.txt"),
+  path.join(__dirname, "./ALL_TREATMENTS.txt"),
   "utf8"
 );
 
@@ -207,8 +208,8 @@ function generateTypeScriptArray(treatments: ParsedTreatment[]): string {
     name: ${escapeString(t.name_it)},
     description: ${escapeString(t.description_it)},
     price: ${t.price},
-    img: ${escapeString(t.img)},
-    category: service_category.${t.category.toLowerCase().split(' ').join('_')},
+    img: ${escapeString(generateImageUrl(t.name_it))},
+    category: service_category.${t.category.toLowerCase().split(" ").join("_")},
   },`;
   });
 

@@ -16,7 +16,7 @@ import { images } from "./images";
  */
 
 const sqlInput = fs.readFileSync(
-  path.join(__dirname, "../ALL_PRODUCTS.txt"),
+  path.join(__dirname, "./ALL_PRODUCTS.txt"),
   "utf8"
 );
 
@@ -211,8 +211,12 @@ function escapeForTs(value: string | number | null): string {
     .replace(/\r/g, "")}\``;
 }
 
-function generateImageUrl(name: string): string {
-  const found = images.find((i) => i.name === name);
+export function generateImageUrl(name: string): string {
+  const found = images.find(
+    (i) =>
+      i.name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'") ===
+      name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'")
+  );
   if (!found) {
     console.log("no image found for", name);
   }

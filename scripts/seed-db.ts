@@ -7,19 +7,22 @@
 import { PrismaClient, service_category } from "@prisma/client";
 import { oldTreatments } from "./old-parsed/TREATMENTS";
 import { oldProducts } from "./old-parsed/PRODUCTS";
+import { images } from "./old-parsed/images";
 
 const db = new PrismaClient();
 
 // Generate image URL from service name (first letter of each word)
-function generateImageUrl(
-  name: string,
-  imageType: "trattamenti" | "prodotti"
-): string {
-  const initials = name
-    .split(/\s+/)
-    .map((word) => word.charAt(0).toLowerCase())
-    .join("");
-  return `https://svetla-estetica.s3.eu-west-1.amazonaws.com/images/${imageType}/${initials}.jpg`;
+function generateImageUrl(name: string): string {
+  const found = images.find(
+    (i) =>
+      i.name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'") ===
+      name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'")
+  );
+  if (!found) {
+    console.log("no image found for", name);
+    return "";
+  }
+  return found.img ?? "";
 }
 
 async function seed() {
@@ -41,7 +44,7 @@ async function seed() {
           price: service.price,
           duration_min: 0,
           category: service.category,
-          image_url: generateImageUrl(service.name, "trattamenti"),
+          image_url: generateImageUrl(service.name),
           active: true,
         },
       });
@@ -80,7 +83,7 @@ async function seed() {
       }
       await db.product.create({
         data: {
-          image_url: generateImageUrl(product.name, "prodotti"),
+          image_url: generateImageUrl(product.name),
           name: product.name,
           description: product.description,
           price: product.price,
