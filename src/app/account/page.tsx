@@ -43,7 +43,7 @@ export default async function AccountPage() {
             <div className="mb-4">
               <p className="text-sm text-gray-500">Email</p>
               <p className="font-medium">{user.email}</p>
-            </div>
+              </div>
             <ProfileForm initialPhone={user.phone} initialName={user.name} />
           </Card>
 

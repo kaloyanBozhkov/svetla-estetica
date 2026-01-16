@@ -33,8 +33,13 @@ export default async function ProductsPage() {
   }));
 
   return (
-    <div className="py-12 min-h-screen bg-gradient-to-b from-primary-50/60 via-primary-50/20 to-transparent">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="relative py-12 min-h-screen overflow-hidden">
+      {/* Decorative Blobs */}
+      <div className="absolute top-0 right-[10%] w-80 h-80 bg-gradient-to-br from-primary-200 to-violet-200 rounded-full blur-3xl opacity-40 pointer-events-none" />
+      <div className="absolute top-[30%] left-[-5%] w-72 h-72 bg-gradient-to-br from-fuchsia-200 to-pink-200 rounded-full blur-3xl opacity-30 pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[5%] w-64 h-64 bg-gradient-to-br from-violet-200 to-purple-200 rounded-full blur-3xl opacity-35 pointer-events-none" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="font-display text-4xl font-bold text-gray-900">
             I Nostri Prodotti
