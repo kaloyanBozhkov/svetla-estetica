@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "svetla-estetica.s3.eu-west-1.amazonaws.com",
+        pathname: "/images/**",
       },
     ],
   },

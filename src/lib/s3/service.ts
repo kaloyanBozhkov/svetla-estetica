@@ -61,7 +61,6 @@ export class S3Service {
 
       xhr.open("PUT", uploadUrl);
       xhr.setRequestHeader("Content-Type", fileType);
-      xhr.setRequestHeader("x-amz-acl", "public-read");
       xhr.send(file);
     });
   }

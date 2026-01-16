@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { s3 } from "@/lib/s3/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { s3Client } from "@/lib/s3/s3";
 import { BUCKET_NAME, S3Service, type ImageType } from "@/lib/s3/service";
 import { requireAdmin } from "@/lib/auth";
 
@@ -24,15 +26,16 @@ export async function GET(request: Request) {
     const uniqueFileName = S3Service.generateFileName(fileName);
     const key = S3Service.getImageKey(imageType as ImageType, uniqueFileName);
 
-    const params = {
+    const command = new PutObjectCommand({
       Bucket: BUCKET_NAME,
       Key: key,
-      Expires: 300,
       ContentType: fileType,
-      ACL: "public-read",
-    };
+    });
 
-    const uploadUrl = await s3.getSignedUrlPromise("putObject", params);
+    const uploadUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 300,
+      signableHeaders: new Set(["content-type"]),
+    });
     const publicUrl = S3Service.getImageUrl(
       imageType as ImageType,
       uniqueFileName

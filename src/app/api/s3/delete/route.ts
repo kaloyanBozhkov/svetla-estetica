@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { s3 } from "@/lib/s3/s3";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "@/lib/s3/s3";
 import { BUCKET_NAME, S3Service } from "@/lib/s3/service";
 import { requireAdmin } from "@/lib/auth";
 
@@ -27,12 +28,12 @@ export async function DELETE(request: Request) {
 
     const key = S3Service.getImageKey(imageType, fileName);
 
-    await s3
-      .deleteObject({
+    await s3Client.send(
+      new DeleteObjectCommand({
         Bucket: BUCKET_NAME,
         Key: key,
       })
-      .promise();
+    );
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {

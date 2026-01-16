@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Button } from "@/components/atoms";
 import { S3Service, type ImageType } from "@/lib/s3/service";
@@ -21,61 +21,101 @@ export function ImageUpload({
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      setError("Seleziona un file immagine valido");
-      return;
-    }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError("L'immagine deve essere inferiore a 5MB");
-      return;
-    }
-
-    setError("");
-    setUploading(true);
-    setProgress(0);
-
-    try {
-      // Get presigned URL
-      const response = await fetch(
-        `/api/s3/upload-url?${new URLSearchParams({
-          fileName: file.name,
-          fileType: file.type,
-          imageType,
-        })}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Errore nel caricamento");
+  const uploadFile = useCallback(
+    async (file: File) => {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setError("Seleziona un file immagine valido");
+        return;
       }
 
-      const { uploadUrl, publicUrl } = await response.json();
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError("L'immagine deve essere inferiore a 5MB");
+        return;
+      }
 
-      // Upload to S3
-      await S3Service.uploadFileToS3({
-        uploadUrl,
-        file,
-        fileType: file.type,
-        onUploadProgress: setProgress,
-      });
-
-      onChange(publicUrl);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore nel caricamento");
-    } finally {
-      setUploading(false);
+      setError("");
+      setUploading(true);
       setProgress(0);
-      if (inputRef.current) {
-        inputRef.current.value = "";
+
+      try {
+        // Get presigned URL
+        const response = await fetch(
+          `/api/s3/upload-url?${new URLSearchParams({
+            fileName: file.name,
+            fileType: file.type,
+            imageType,
+          })}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Errore nel caricamento");
+        }
+
+        const { uploadUrl, publicUrl } = await response.json();
+
+        // Upload to S3
+        await S3Service.uploadFileToS3({
+          uploadUrl,
+          file,
+          fileType: file.type,
+          onUploadProgress: setProgress,
+        });
+
+        onChange(publicUrl);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Errore nel caricamento");
+      } finally {
+        setUploading(false);
+        setProgress(0);
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
       }
+    },
+    [imageType, onChange]
+  );
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) uploadFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    if (uploading) return;
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) uploadFile(file);
+  };
+
+  const handleClick = () => {
+    if (!uploading) {
+      inputRef.current?.click();
     }
   };
 
@@ -115,7 +155,7 @@ export function ImageUpload({
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => inputRef.current?.click()}
+              onClick={handleClick}
               disabled={uploading}
             >
               Sostituisci
@@ -134,17 +174,30 @@ export function ImageUpload({
         </div>
       ) : (
         <div
-          onClick={() => !uploading && inputRef.current?.click()}
+          onClick={handleClick}
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           className={`
             relative flex flex-col items-center justify-center w-full max-w-sm aspect-video
             border-2 border-dashed rounded-lg cursor-pointer transition-colors
-            ${uploading ? "border-primary-400 bg-primary-50" : "border-gray-300 hover:border-primary-400 hover:bg-gray-50"}
+            ${
+              uploading
+                ? "border-primary-400 bg-primary-50"
+                : isDragging
+                  ? "border-primary-500 bg-primary-50"
+                  : "border-gray-300 hover:border-primary-400 hover:bg-gray-50"
+            }
           `}
         >
           {uploading ? (
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-2">
-                <svg className="animate-spin h-full w-full text-primary-600" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-full w-full text-primary-600"
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -168,7 +221,7 @@ export function ImageUpload({
           ) : (
             <>
               <svg
-                className="w-10 h-10 text-gray-400 mb-2"
+                className={`w-10 h-10 mb-2 ${isDragging ? "text-primary-500" : "text-gray-400"}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -180,8 +233,12 @@ export function ImageUpload({
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <p className="text-sm text-gray-600">Clicca per caricare</p>
-              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP (max 5MB)</p>
+              <p className="text-sm text-gray-600">
+                {isDragging ? "Rilascia per caricare" : "Clicca o trascina"}
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                PNG, JPG, WEBP (max 5MB)
+              </p>
             </>
           )}
         </div>
@@ -199,4 +256,3 @@ export function ImageUpload({
     </div>
   );
 }
-

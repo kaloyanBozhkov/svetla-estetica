@@ -11,7 +11,10 @@ import { oldProducts } from "./old-parsed/PRODUCTS";
 const db = new PrismaClient();
 
 // Generate image URL from service name (first letter of each word)
-function generateImageUrl(name: string, imageType: "trattamenti" | "prodotti"): string {
+function generateImageUrl(
+  name: string,
+  imageType: "trattamenti" | "prodotti"
+): string {
   const initials = name
     .split(/\s+/)
     .map((word) => word.charAt(0).toLowerCase())
@@ -25,9 +28,9 @@ async function seed() {
   let createdServices = 0;
   let createdProducts = 0;
 
-  db.service.deleteMany();
-  db.product.deleteMany();
-  db.brand.deleteMany();
+  await db.service.deleteMany();
+  await db.product.deleteMany();
+  await db.brand.deleteMany();
 
   for (const service of oldTreatments) {
     try {

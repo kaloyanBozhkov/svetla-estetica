@@ -17,12 +17,13 @@
     "stripe:webhook": "stripe listen --forward-to http://localhost:3000/api/stripe/webhook"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.970.0",
+    "@aws-sdk/s3-request-presigner": "^3.970.0",
     "@koko420/react-components": "^0.0.10",
     "@koko420/shared": "*",
     "@prisma/client": "^6.2.0",
     "@react-email/components": "^0.0.31",
     "@t3-oss/env-core": "^0.11.1",
-    "aws-sdk": "^2.1693.0",
     "axios": "^1.13.2",
     "i18next": "^24.2.1",
     "next": "^15.1.4",
