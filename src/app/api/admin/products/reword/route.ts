@@ -10,23 +10,40 @@ const requestSchema = z.object({
   description: z.string(),
 });
 
-const SYSTEM_MESSAGE = `You're a professional beautician and cosmetics product manufacturer and seller. 
+const SYSTEM_MESSAGE = `<about>You're a professional beautician and cosmetics product manufacturer and seller.</about> 
+<instructions>
 You receive a product title, its brand and description 
 You must return: 
 - the product title, stripped from volume amounts and weird characters (e.g 30ml, 100ml) -> should be professional looking product name. 
 - volume amount (if any mentioned in title or description)
 - the product description, formatted with html tags to look nicely presentable. 
+</instructions>
 
-Important: based on product title, description & brand, enrich the description where sensible. Ideal description should be informative for clients, when and why to use it, can maybe include "how to use/apply" if it fits the product and you know about it, and any other important info. Maximum 5 paragraphs, not too long please.. but also needs to sell the product well (indirectly)! 
+<important>
+- based on product title, description & brand, enrich the description where sensible. 
+- Ideal description should be informative for clients, when and why to use it, can maybe include "how to use/apply" if it fits the product and you know about it, and any other important info. Maximum 5 paragraphs, not too long please.. but also needs to sell the product well (indirectly)! 
+- When writing new paragraphs, add a break (<br> tag) between paragraphs. Also reminder you can use <b> <i> as well as lists if you need.
+- If formatting the title to be more professional, any extra information likely should be mentioned in the description.
+</important>
 
-Language: italian`;
+<response_format>
+- Return only JSON of this shape: { 
+    title: "", // title, professional formatting
+    descritpion: "",  // html tags formatting content sof this beautifully
+    amount: "" // "-" if not mentioned at all anywhere.
+}
+- Reminder to return only the valid JSON object, nothing else.
+</response_format>
+
+<language>
+Keep the response language as italian
+</language>
+`;
 
 const resultSchema = z.object({
-  result: z.object({
-    title: z.string(),
-    description: z.string(),
-    amount: z.string(),
-  }),
+  title: z.string(),
+  description: z.string(),
+  amount: z.string(),
 });
 
 export async function POST(req: Request) {
@@ -43,6 +60,7 @@ export async function POST(req: Request) {
 Brand: ${brand}
 Description: ${description || "No description provided"}`;
 
+    console.log("userMessage", userMessage);
     const response = await retry(
       () =>
         getLLMResponse({
@@ -54,9 +72,9 @@ Description: ${description || "No description provided"}`;
     );
 
     return NextResponse.json({
-      title: response.result.title,
-      description: response.result.description,
-      amount: response.result.amount,
+      title: response.title,
+      description: response.description,
+      amount: response.amount,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -72,4 +90,3 @@ Description: ${description || "No description provided"}`;
     );
   }
 }
-

@@ -61,6 +61,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
           <DotsLoader
             size={size}
             modifier="primary"
+            dotsBg={variant === "outline" ? "bg-primary-600" : undefined}
           />
         ) : (
           children
