@@ -127,7 +127,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                     <SortIcon active={sortBy === "price"} order={sortOrder} />
                   </th>
                   <th className={thClass} onClick={() => handleSort("stock")}>
-                    <span>Stock</span>
+                    <span>Disponibile</span>
                     <SortIcon active={sortBy === "stock"} order={sortOrder} />
                   </th>
                   <th className={thClass} onClick={() => handleSort("active")}>

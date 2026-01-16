@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, Badge } from "@/components/atoms";
+import { Button, Badge, HtmlContent } from "@/components/atoms";
 import { useCartStore, useAuthStore } from "@/stores";
 import { formatPrice } from "@/lib/utils";
 import type { product } from "@prisma/client";
@@ -110,9 +110,10 @@ export function ProductDetail({ product }: Props) {
           </h1>
 
           {product.description && (
-            <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
+            <HtmlContent
+              html={product.description}
+              className="mt-4 text-lg text-gray-600 leading-relaxed [&>br]:block"
+            />
           )}
 
           {/* Price */}

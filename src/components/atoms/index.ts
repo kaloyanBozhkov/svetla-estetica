@@ -16,5 +16,7 @@ export {
 export { Modal } from "./Modal";
 export { Select } from "./Select";
 export { Textarea } from "./Textarea";
+export { HtmlContent } from "./HtmlContent";
+export { RichTextEditor } from "./RichTextEditor";
 export * from "./icons";
 

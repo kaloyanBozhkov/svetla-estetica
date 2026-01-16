@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input, Select, Textarea, Card, Modal } from "@/components/atoms";
+import { Button, Input, Select, Card, Modal, RichTextEditor } from "@/components/atoms";
 import { ImageUpload } from "@/components/molecules";
 import { type product_category } from "@prisma/client";
 
@@ -138,11 +138,10 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             required
           />
 
-          <Textarea
+          <RichTextEditor
             label="Descrizione"
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            rows={4}
+            onChange={(value) => setForm({ ...form, description: value })}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

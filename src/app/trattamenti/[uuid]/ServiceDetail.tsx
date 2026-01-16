@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, Badge } from "@/components/atoms";
+import { Button, Badge, HtmlContent } from "@/components/atoms";
 import { useAuthStore } from "@/stores";
 import { formatPrice } from "@/lib/utils";
 import type { service } from "@prisma/client";
@@ -95,9 +95,10 @@ export function ServiceDetail({ service }: Props) {
           </h1>
 
           {service.description && (
-            <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-              {service.description}
-            </p>
+            <HtmlContent
+              html={service.description}
+              className="mt-4 text-lg text-gray-600 leading-relaxed [&>br]:block"
+            />
           )}
 
           {/* Duration & Price Card */}

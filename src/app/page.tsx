@@ -28,16 +28,66 @@ const categoryLabels: Record<string, string> = {
 };
 
 const services = [
-  { name: "Viso", slug: "viso", Icon: FaceIcon, color: "from-purple-400 to-fuchsia-500" },
-  { name: "Corpo", slug: "corpo", Icon: BodyIcon, color: "from-violet-400 to-purple-500" },
-  { name: "Make Up", slug: "make_up", Icon: MakeupIcon, color: "from-fuchsia-400 to-pink-500" },
-  { name: "Manicure", slug: "manicure", Icon: ManicureIcon, color: "from-pink-400 to-rose-500" },
-  { name: "Pedicure", slug: "pedicure", Icon: PedicureIcon, color: "from-indigo-400 to-violet-500" },
-  { name: "Ceretta", slug: "ceretta", Icon: WaxIcon, color: "from-amber-400 to-orange-400" },
-  { name: "Solarium", slug: "solarium", Icon: SolariumIcon, color: "from-yellow-400 to-amber-400" },
-  { name: "Luce Pulsata", slug: "luce_pulsata", Icon: LaserIcon, color: "from-violet-500 to-purple-600" },
-  { name: "Appuntamento", slug: "appuntamento", Icon: AppointmentIcon, color: "from-purple-500 to-indigo-500" },
-  { name: "Grotta di Sale", slug: "grotta_di_sale", Icon: SaltCaveIcon, color: "from-slate-400 to-slate-500" },
+  {
+    name: "Viso",
+    slug: "viso",
+    Icon: FaceIcon,
+    color: "from-purple-400 to-fuchsia-500",
+  },
+  {
+    name: "Corpo",
+    slug: "corpo",
+    Icon: BodyIcon,
+    color: "from-violet-400 to-purple-500",
+  },
+  {
+    name: "Make Up",
+    slug: "make_up",
+    Icon: MakeupIcon,
+    color: "from-fuchsia-400 to-pink-500",
+  },
+  {
+    name: "Manicure",
+    slug: "manicure",
+    Icon: ManicureIcon,
+    color: "from-pink-400 to-rose-500",
+  },
+  {
+    name: "Pedicure",
+    slug: "pedicure",
+    Icon: PedicureIcon,
+    color: "from-indigo-400 to-violet-500",
+  },
+  {
+    name: "Ceretta",
+    slug: "ceretta",
+    Icon: WaxIcon,
+    color: "from-amber-400 to-orange-400",
+  },
+  {
+    name: "Solarium",
+    slug: "solarium",
+    Icon: SolariumIcon,
+    color: "from-yellow-400 to-amber-400",
+  },
+  {
+    name: "Luce Pulsata",
+    slug: "luce_pulsata",
+    Icon: LaserIcon,
+    color: "from-violet-500 to-purple-600",
+  },
+  {
+    name: "Appuntamento",
+    slug: "appuntamento",
+    Icon: AppointmentIcon,
+    color: "from-purple-500 to-indigo-500",
+  },
+  {
+    name: "Grotta di Sale",
+    slug: "grotta_di_sale",
+    Icon: SaltCaveIcon,
+    color: "from-slate-400 to-slate-500",
+  },
 ];
 
 async function getFeaturedProducts() {
@@ -59,8 +109,21 @@ export default async function HomePage() {
         <div className="absolute inset-0 opacity-[0.03]">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="hero-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <circle cx="20" cy="20" r="1.5" fill="currentColor" className="text-primary-900" />
+              <pattern
+                id="hero-pattern"
+                x="0"
+                y="0"
+                width="40"
+                height="40"
+                patternUnits="userSpaceOnUse"
+              >
+                <circle
+                  cx="20"
+                  cy="20"
+                  r="1.5"
+                  fill="currentColor"
+                  className="text-primary-900"
+                />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#hero-pattern)" />
@@ -83,31 +146,48 @@ export default async function HomePage() {
                 </span>
                 Centro Estetico a Dalmine
               </div>
-              
+
               <h1 className="font-display text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Il Tuo Momento di
                 <span className="block mt-2 bg-gradient-to-r from-primary-600 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
                   Bellezza e Relax
                 </span>
               </h1>
-              
+
               <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-                Da oltre 15 anni ci prendiamo cura della tua bellezza con trattamenti 
-                personalizzati, prodotti di qualità e un ambiente accogliente dove 
-                sentirti coccolata.
+                Da oltre 15 anni ci prendiamo cura della tua bellezza con
+                trattamenti personalizzati, prodotti di qualità e un ambiente
+                accogliente dove sentirti coccolata.
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link href="/trattamenti">
-                  <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-primary-200">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto shadow-lg shadow-primary-200"
+                  >
                     Scopri i Trattamenti
-                    <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <svg
+                      className="ml-2 h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
                     </svg>
                   </Button>
                 </Link>
                 <Link href="/prodotti">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
                     Vedi i Prodotti
                   </Button>
                 </Link>
@@ -118,12 +198,17 @@ export default async function HomePage() {
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="h-8 w-8 rounded-full bg-gradient-to-br from-primary-300 to-primary-400 ring-2 ring-white flex items-center justify-center text-xs font-bold text-white">
+                      <div
+                        key={i}
+                        className="h-8 w-8 rounded-full bg-gradient-to-br from-primary-300 to-primary-400 ring-2 ring-white flex items-center justify-center text-xs font-bold text-white"
+                      >
                         {["S", "E", "💄", "✨"][i - 1]}
                       </div>
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600">1000+ clienti soddisfatte</span>
+                  <span className="text-sm text-gray-600">
+                    1000+ clienti soddisfatte
+                  </span>
                 </div>
               </div>
             </div>
@@ -132,13 +217,34 @@ export default async function HomePage() {
             <div className="relative lg:pl-8 hidden lg:block">
               <div className="relative">
                 {/* Main Card */}
-                <div className="relative z-10 rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 p-8 shadow-2xl">
+                <div className="relative z-10 rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 p-8 shadow-2xl overflow-hidden">
                   <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-accent-400/20 via-transparent to-transparent" />
+                  {/* Rose decoration */}
+                  <div
+                    className="absolute bottom-[94px] right-[10px] w-40 h-40 opacity-[0.08] pointer-events-none"
+                    style={{
+                      backgroundImage: "url(/rose.svg)",
+                      backgroundSize: "contain",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      transform: "rotate(-15deg)",
+                    }}
+                  />
                   <div className="relative text-white">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                        <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="h-7 w-7"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                       </div>
                       <div>
@@ -146,7 +252,7 @@ export default async function HomePage() {
                         <p className="font-semibold">Lun-Ven 9:00-20:00</p>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">
@@ -168,15 +274,30 @@ export default async function HomePage() {
                       </div>
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-white/20">
-                      <a href="tel:+393935026350" className="flex items-center gap-3 group">
+                    <div className="mt-8 pt-6 border-t border-white/20 pl-10">
+                      <a
+                        href="tel:+393935026350"
+                        className="flex items-center gap-3 group"
+                      >
                         <div className="h-12 w-12 rounded-xl bg-accent-500 flex items-center justify-center group-hover:scale-105 transition-transform">
-                          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                            />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-primary-200 text-sm">Prenota Ora</p>
+                          <p className="text-primary-200 text-sm">
+                            Prenota Ora
+                          </p>
                           <p className="font-bold text-lg">393 502 6350</p>
                         </div>
                       </a>
@@ -191,7 +312,7 @@ export default async function HomePage() {
                     <p className="text-xs">Anni</p>
                   </div>
                 </div>
-                
+
                 <div className="absolute -bottom-6 -left-6 h-20 w-20 rounded-2xl bg-white shadow-xl flex items-center justify-center z-20">
                   <div className="text-center">
                     <p className="text-3xl">⭐</p>
@@ -205,8 +326,16 @@ export default async function HomePage() {
 
         {/* Bottom Curve */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+          <svg
+            viewBox="0 0 1440 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-auto"
+          >
+            <path
+              d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+              fill="white"
+            />
           </svg>
         </div>
       </section>
@@ -230,7 +359,9 @@ export default async function HomePage() {
                 href={`/trattamenti?categoria=${service.slug}`}
                 className="group relative flex flex-col items-center rounded-2xl bg-gray-50 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               >
-                <div className={`flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br ${service.color} text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}>
+                <div
+                  className={`flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br ${service.color} text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                >
                   <service.Icon className="h-8 w-8" />
                 </div>
                 <span className="mt-4 text-center font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
@@ -250,7 +381,9 @@ export default async function HomePage() {
               <div>
                 <div className="flex items-center gap-2 text-primary-600 mb-2">
                   <TagIcon className="h-5 w-5" />
-                  <span className="text-sm font-semibold uppercase tracking-wider">Novità</span>
+                  <span className="text-sm font-semibold uppercase tracking-wider">
+                    Novità
+                  </span>
                 </div>
                 <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
                   I Nostri Prodotti
@@ -259,8 +392,18 @@ export default async function HomePage() {
               <Link href="/prodotti">
                 <Button variant="outline">
                   Vedi Tutti
-                  <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <svg
+                    className="ml-2 h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
                   </svg>
                 </Button>
               </Link>
@@ -330,7 +473,10 @@ export default async function HomePage() {
               </h2>
               <ul className="mt-8 space-y-5">
                 {[
-                  { text: "Oltre 15 anni di esperienza nel settore", icon: "⭐" },
+                  {
+                    text: "Oltre 15 anni di esperienza nel settore",
+                    icon: "⭐",
+                  },
                   { text: "Prodotti di alta qualità selezionati", icon: "✓" },
                   { text: "Ambiente accogliente e rilassante", icon: "✓" },
                   { text: "Trattamenti personalizzati", icon: "✓" },
@@ -338,8 +484,18 @@ export default async function HomePage() {
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                      <svg className="h-5 w-5 text-accent-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="h-5 w-5 text-accent-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     </div>
                     <span className="text-lg">{item.text}</span>
@@ -348,7 +504,9 @@ export default async function HomePage() {
               </ul>
             </div>
             <div className="rounded-2xl bg-white/10 p-8 backdrop-blur-sm ring-1 ring-white/20">
-              <h3 className="font-display text-2xl font-bold">Orario di Apertura</h3>
+              <h3 className="font-display text-2xl font-bold">
+                Orario di Apertura
+              </h3>
               <ul className="mt-6 space-y-3">
                 <li className="flex justify-between py-2 border-b border-white/10">
                   <span>Lunedì - Venerdì</span>
@@ -365,8 +523,18 @@ export default async function HomePage() {
                   href="tel:+393935026350"
                   className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-primary-600 transition-all hover:bg-gray-100 hover:scale-[1.02]"
                 >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
                   </svg>
                   (+39) 393 5026 350
                 </a>
@@ -390,8 +558,18 @@ export default async function HomePage() {
               <Link href="/accedi">
                 <Button size="lg">
                   Accedi Ora
-                  <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <svg
+                    className="ml-2 h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
                   </svg>
                 </Button>
               </Link>
