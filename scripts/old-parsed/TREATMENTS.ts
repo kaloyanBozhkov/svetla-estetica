@@ -340,7 +340,7 @@ export const oldTreatments = [
     name: `Seduta singola special`,
     description: `Una seduta singola di 40 minuti presso la grotta di sale himalayano. Vale solo per i ragazzi dai 10 ai 17 anni e gli anziani sopra i 60 anni.`,
     price: 15,
-    img: `sss.webp`,
+    img: `ss.webp`,
     category: service_category.grotta_di_sale,
   },
   {

@@ -199,7 +199,7 @@ export default function ContactPage() {
               {/* Map */}
               <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-gray-100">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2790.123456789!2d9.601234567890!3d45.649876543210!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4781516f1d6e5b5b%3A0x1234567890abcdef!2sDalmine%2C%20BG%2C%20Italy!5e0!3m2!1sen!2sit!4v1234567890123"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d493.0138478039089!2d9.602949872562638!3d45.6526797088034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4781520a049a6ae5%3A0xc3a83e5635025f72!2sSvetla+Estetica!5e0!3m2!1sen!2sus!4v1494076022105"
                   width="100%"
                   height="400"
                   style={{ border: 0 }}
@@ -220,14 +220,27 @@ export default function ContactPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-display text-xl font-bold text-gray-900">
                       Svetla Estetica
                     </h3>
                     <p className="mt-2 text-gray-600">
-                      Dalmine, Bergamo<br />
+                      Viale Natale Betelli, 51<br />
+                      24044 Dalmine (BG)<br />
                       Italia
                     </p>
+                    <a
+                      href="https://maps.app.goo.gl/Z4VmfJ8fHzos1ZbM6"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Apri Google Maps
+                    </a>
                   </div>
                 </div>
               </div>

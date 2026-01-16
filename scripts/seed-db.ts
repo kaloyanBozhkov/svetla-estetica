@@ -3,11 +3,12 @@
  *
  * Run: npx tsx scripts/seed-services.ts
  */
-
-import { PrismaClient, service_category } from "@prisma/client";
+import fs from "fs";
+import { PrismaClient } from "@prisma/client";
 import { oldTreatments } from "./old-parsed/TREATMENTS";
 import { oldProducts } from "./old-parsed/PRODUCTS";
 import { images } from "./old-parsed/images";
+import path from "path";
 
 const db = new PrismaClient();
 
@@ -15,11 +16,22 @@ const db = new PrismaClient();
 function generateImageUrl(name: string): string {
   const found = images.find(
     (i) =>
-      i.name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'") ===
-      name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'")
+      i.name
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll("`", "'")
+        .replaceAll("-", "")
+        .replaceAll(",", "")
+        .replaceAll("'", "") ===
+      name
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll("`", "'")
+        .replaceAll("-", "")
+        .replaceAll(",", "")
+        .replaceAll("'", "")
   );
   if (!found) {
-    console.log("no image found for", name);
     return "";
   }
   return found.img ?? "";
@@ -35,7 +47,15 @@ async function seed() {
   await db.product.deleteMany();
   await db.brand.deleteMany();
 
+  let withoutImageServices = [];
+  let withoutImageProducts = [];
+
   for (const service of oldTreatments) {
+    const imgUrl = generateImageUrl(service.name);
+    if (!imgUrl) {
+      console.info("no image found for service", service.name);
+      withoutImageServices.push(service);
+    }
     try {
       await db.service.create({
         data: {
@@ -44,7 +64,7 @@ async function seed() {
           price: service.price,
           duration_min: 0,
           category: service.category,
-          image_url: generateImageUrl(service.name),
+          image_url: imgUrl,
           active: true,
         },
       });
@@ -81,9 +101,15 @@ async function seed() {
       if (!productBrand) {
         console.info("no brnad for product", product.name);
       }
+      const imgUrl = generateImageUrl(product.name);
+
+      if (!imgUrl) {
+        console.info("no image found for product", product.name);
+        withoutImageProducts.push(product);
+      }
       await db.product.create({
         data: {
-          image_url: generateImageUrl(product.name),
+          image_url: imgUrl,
           name: product.name,
           description: product.description,
           price: product.price * 100,
@@ -103,6 +129,20 @@ async function seed() {
   console.log(`\n=== Seeding Complete ===`);
   console.log(`Created: ${createdServices} services`);
   console.log(`Created: ${createdProducts} products`);
+  if (withoutImageServices.length > 0) {
+    console.log(`✗ Without image services: ${withoutImageServices.length}`);
+    fs.writeFileSync(
+      path.join(__dirname, "scripts", "withoutImageServices.json"),
+      JSON.stringify(withoutImageServices, null, 2)
+    );
+  }
+  if (withoutImageProducts.length > 0) {
+    console.log(`✗ Without image products: ${withoutImageProducts.length}`);
+    fs.writeFileSync(
+      path.join(__dirname, "scripts", "withoutImageProducts.json"),
+      JSON.stringify(withoutImageProducts, null, 2)
+    );
+  }
 }
 
 seed()
