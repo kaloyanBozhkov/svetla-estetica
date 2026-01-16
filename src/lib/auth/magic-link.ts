@@ -32,7 +32,7 @@ export async function sendMagicLinkEmail(email: string, token: string): Promise<
   const magicLinkUrl = `${env.BASE_URL}/auth/verify?token=${token}`;
 
   await resend.emails.send({
-    from: "Svetla Estetica <noreply@svetla-estetica.it>",
+    from: "Svetla Estetica <noreply@svetlaestetica.com>",
     to: email,
     subject: "Il tuo link di accesso - Svetla Estetica",
     react: MagicLinkEmail({ magicLinkUrl }),

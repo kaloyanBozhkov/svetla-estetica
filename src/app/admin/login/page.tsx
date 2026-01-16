@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
           <Input
             type="email"
             label="Email"
-            placeholder="admin@svetla-estetica.it"
+            placeholder="email@domain.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
