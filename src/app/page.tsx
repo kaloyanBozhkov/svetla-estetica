@@ -15,6 +15,7 @@ import {
 } from "@/components/atoms/icons";
 import { db } from "@/lib/db";
 import { formatPrice } from "@/lib/utils";
+import Image from "next/image";
 
 const categoryLabels: Record<string, string> = {
   viso: "Viso",
@@ -274,9 +275,11 @@ export default async function HomePage() {
                 >
                   <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
                     {product.image_url ? (
-                      <img
+                      <Image
                         src={product.image_url}
                         alt={product.name}
+                        width={100}
+                        height={100}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (

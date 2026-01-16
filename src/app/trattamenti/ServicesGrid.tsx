@@ -38,13 +38,14 @@ export function ServicesGrid({
   categories,
 }: ServicesGridProps) {
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState<service_category | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<service_category | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAndSortedServices = useMemo(() => {
-    let result = selectedCategory
+    const result = selectedCategory
       ? services.filter((s) => s.category === selectedCategory)
       : [...services];
 
@@ -57,7 +58,9 @@ export function ServicesGrid({
     return result;
   }, [services, selectedCategory, sortBy]);
 
-  const totalPages = Math.ceil(filteredAndSortedServices.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(
+    filteredAndSortedServices.length / ITEMS_PER_PAGE
+  );
   const paginatedServices = filteredAndSortedServices.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -120,20 +123,48 @@ export function ServicesGrid({
           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${viewMode === "grid" ? "bg-primary-600 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}`}
+              className={`p-2 ${
+                viewMode === "grid"
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
               aria-label="Grid view"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
               </svg>
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${viewMode === "list" ? "bg-primary-600 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}`}
+              className={`p-2 ${
+                viewMode === "list"
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
               aria-label="List view"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
@@ -257,8 +288,18 @@ function ServiceListItem({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-primary-300">
-            <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            <svg
+              className="w-16 h-16"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              />
             </svg>
           </div>
         )}
@@ -268,7 +309,9 @@ function ServiceListItem({
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="default">{service.categoryLabel}</Badge>
-            <span className="text-sm text-gray-500">{service.durationMin} min</span>
+            <span className="text-sm text-gray-500">
+              {service.durationMin} min
+            </span>
           </div>
           <Link href={`/trattamenti/${service.uuid}`}>
             <h3 className="font-display text-lg font-semibold text-gray-900 hover:text-primary-600 transition-colors">
@@ -288,7 +331,9 @@ function ServiceListItem({
               {formatPrice(service.price)}
             </span>
           ) : (
-            <span className="text-sm text-gray-500 italic">Accedi per i prezzi</span>
+            <span className="text-sm text-gray-500 italic">
+              Accedi per i prezzi
+            </span>
           )}
 
           {isAuthenticated && (

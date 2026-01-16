@@ -44,7 +44,7 @@ export function ProductsGrid({
   const addItem = useCartStore((s) => s.addItem);
 
   const filteredAndSortedProducts = useMemo(() => {
-    let result = selectedCategory
+    const result = selectedCategory
       ? products.filter((p) => p.category === selectedCategory)
       : [...products];
 

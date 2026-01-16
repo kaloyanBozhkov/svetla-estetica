@@ -34,7 +34,7 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
   const treatments: ParsedTreatment[] = [];
 
   // Remove the INSERT INTO header
-  let content = sql.replace(/INSERT INTO.*?VALUES\s*/is, "").trim();
+  let content = sql.replace(/INSERT INTO.*?VALUES\s*/, "").trim();
 
   // Remove trailing semicolon
   content = content.replace(/;\s*$/, "");

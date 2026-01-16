@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 
     const order = await db.order.create({
       data: {
-        user_id: session.userId,
+        user_id: session.id,
         total,
         status: "pending",
         payment_status: "pending",

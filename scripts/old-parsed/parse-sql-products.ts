@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { images } from "./images";
 
 /**
  * Parses SQL INSERT statements for products and extracts all columns
@@ -211,11 +212,11 @@ function escapeForTs(value: string | number | null): string {
 }
 
 function generateImageUrl(name: string): string {
-  const initials = name
-    .split(/\s+/)
-    .map((word) => word.charAt(0).toLowerCase())
-    .join("");
-  return `https://svetlaestetica.com/img/prodotti/${initials}.jpg`;
+  const found = images.find((i) => i.name === name);
+  if (!found) {
+    console.log("no image found for", name);
+  }
+  return found?.img ?? "";
 }
 
 function generateTypeScriptArray(products: ParsedProduct[]): string {
