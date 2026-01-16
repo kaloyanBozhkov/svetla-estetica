@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { ProductDetail } from "./ProductDetail";
 import type { Metadata } from "next";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/seo";
+import { BASE_URL } from "@/lib/constants";
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -66,9 +67,9 @@ export default async function ProductPage({ params }: Props) {
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: "https://svetlaestetica.com" },
-    { name: "Prodotti", url: "https://svetlaestetica.com/prodotti" },
-    { name: product.name, url: `https://svetlaestetica.com/prodotti/${product.uuid}` },
+    { name: "Home", url: BASE_URL },
+    { name: "Prodotti", url: `${BASE_URL}/prodotti` },
+    { name: product.name, url: `${BASE_URL}/prodotti/${product.uuid}` },
   ]);
 
   return (

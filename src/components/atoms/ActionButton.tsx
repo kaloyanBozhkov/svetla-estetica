@@ -10,7 +10,7 @@ type ButtonSize = "sm" | "md" | "lg";
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  isLoading?: boolean;
+  loading?: boolean;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -36,7 +36,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
       className,
       variant = "primary",
       size = "md",
-      isLoading = false,
+      loading = false,
       disabled,
       children,
       ...props
@@ -54,10 +54,10 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
           sizeStyles[size],
           className
         )}
-        disabled={disabled || isLoading}
+        disabled={disabled || loading}
         {...props}
       >
-        {isLoading ? (
+        {loading ? (
           <DotsLoader
             size={size}
             modifier="primary"

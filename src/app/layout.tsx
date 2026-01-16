@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Lora } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header, Footer } from "@/components/organisms";
+import { BASE_URL } from "@/lib/constants";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -17,8 +18,6 @@ const lora = Lora({
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-
-const BASE_URL = "https://svetlaestetica.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -186,6 +185,9 @@ Piedi,mani,pedicure,manicure,gel,semipermanente,stezzano,bergamo,provincia,low c
   alternates: {
     canonical: BASE_URL,
   },
+  other: {
+    "ai-content-declaration": "llms.txt",
+  },
 };
 
 export default function RootLayout({
@@ -195,6 +197,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it" className={`${cormorant.variable} ${lora.variable}`}>
+      <head>
+        <link rel="ai-content-declaration" href="/llms.txt" />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
           <Header />

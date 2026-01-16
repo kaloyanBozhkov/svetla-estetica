@@ -31,9 +31,14 @@ export default async function AccountPage() {
     <div className="py-12">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-3xl font-bold text-gray-900">
-            Il Mio Account
-          </h1>
+          <div>
+            <h1 className="font-display text-3xl font-bold text-gray-900">
+              {user.name ? `Ciao, ${user.name}!` : "Il Mio Account"}
+            </h1>
+            {user.name && (
+              <p className="text-gray-500 mt-1">{user.email}</p>
+            )}
+          </div>
           <LogoutButton />
         </div>
 

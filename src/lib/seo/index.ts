@@ -1,4 +1,4 @@
-const BASE_URL = "https://svetlaestetica.com";
+import { BASE_URL } from "@/lib/constants";
 
 // Business info for structured data
 export const businessInfo = {
@@ -9,7 +9,7 @@ export const businessInfo = {
   whatsapp: "+393935026350",
   telephoneAlt: "+390350632279",
   address: {
-    streetAddress: "Via Example 123",
+    streetAddress: "Viale Natale Betelli, 51",
     addressLocality: "Dalmine",
     addressRegion: "BG",
     postalCode: "24044",

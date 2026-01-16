@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { ServiceDetail } from "./ServiceDetail";
 import type { Metadata } from "next";
 import { generateServiceSchema, generateBreadcrumbSchema } from "@/lib/seo";
+import { BASE_URL } from "@/lib/constants";
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -63,9 +64,9 @@ export default async function ServicePage({ params }: Props) {
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: "https://svetlaestetica.com" },
-    { name: "Trattamenti", url: "https://svetlaestetica.com/trattamenti" },
-    { name: service.name, url: `https://svetlaestetica.com/trattamenti/${service.uuid}` },
+    { name: "Home", url: BASE_URL },
+    { name: "Trattamenti", url: `${BASE_URL}/trattamenti` },
+    { name: service.name, url: `${BASE_URL}/trattamenti/${service.uuid}` },
   ]);
 
   return (

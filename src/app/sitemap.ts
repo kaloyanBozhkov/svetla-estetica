@@ -1,7 +1,6 @@
 import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
-
-const BASE_URL = "https://svetlaestetica.com";
+import { BASE_URL } from "@/lib/constants";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

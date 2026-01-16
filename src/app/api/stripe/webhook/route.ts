@@ -34,6 +34,55 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
+    case "checkout.session.completed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const orderUuid = session.metadata?.order_uuid;
+      const userId = session.metadata?.user_id;
+
+      // Update order with payment intent ID and mark as paid
+      if (orderUuid && session.payment_intent) {
+        await db.order.updateMany({
+          where: { uuid: orderUuid },
+          data: {
+            external_stripe_payment_intent_id: session.payment_intent as string,
+            payment_status: "paid",
+            status: "confirmed",
+          },
+        });
+      }
+
+      // Update user name and phone if they are empty
+      if (userId) {
+        const user = await db.user.findUnique({
+          where: { id: parseInt(userId) },
+          select: { name: true, phone: true },
+        });
+
+        if (user) {
+          const updates: { name?: string; phone?: string } = {};
+
+          // Get name from shipping details
+          if (!user.name && session.shipping_details?.name) {
+            updates.name = session.shipping_details.name;
+          }
+
+          // Get phone from customer details
+          if (!user.phone && session.customer_details?.phone) {
+            updates.phone = session.customer_details.phone;
+          }
+
+          if (Object.keys(updates).length > 0) {
+            await db.user.update({
+              where: { id: parseInt(userId) },
+              data: updates,
+            });
+          }
+        }
+      }
+
+      break;
+    }
+
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 

@@ -142,7 +142,7 @@ export default function CartPage() {
                 className="w-full whitespace-nowrap"
                 size="lg"
                 onClick={handleCheckout}
-                isLoading={checkoutLoading}
+                loading={checkoutLoading}
               >
                 Procedi al Checkout
               </ActionButton>

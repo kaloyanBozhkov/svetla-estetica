@@ -2,10 +2,29 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { resend } from "@/lib/email";
+import BookingApprovedEmail from "@/app/_components/emails/BookingApprovedEmail";
+import BookingRejectedEmail from "@/app/_components/emails/BookingRejectedEmail";
 
 const updateBookingSchema = z.object({
   status: z.enum(["pending", "approved", "rejected", "completed", "cancelled"]),
 });
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("it-IT", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString("it-IT", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export async function PATCH(
   request: Request,
@@ -17,10 +36,70 @@ export async function PATCH(
     const body = await request.json();
     const { status } = updateBookingSchema.parse(body);
 
+    // Get booking with user and service info before updating
+    const existingBooking = await db.booking.findUnique({
+      where: { uuid },
+      include: {
+        user: true,
+        service: true,
+      },
+    });
+
+    if (!existingBooking) {
+      return NextResponse.json(
+        { error: "Prenotazione non trovata" },
+        { status: 404 }
+      );
+    }
+
+    const previousStatus = existingBooking.status;
+
+    // Update booking
     const booking = await db.booking.update({
       where: { uuid },
       data: { status },
     });
+
+    // Send email if status changed to approved or rejected
+    if (status !== previousStatus && existingBooking.user.email) {
+      const customerName = existingBooking.user.name || "Cliente";
+      const serviceName = existingBooking.service.name;
+      const bookingDate = formatDate(existingBooking.date);
+      const bookingTime = formatTime(existingBooking.date);
+
+      try {
+        if (status === "approved") {
+          await resend.emails.send({
+            from: "Svetla Estetica <noreply@svetlaestetica.com>",
+            to: existingBooking.user.email,
+            subject: "✅ Appuntamento Confermato - Svetla Estetica",
+            react: BookingApprovedEmail({
+              customerName,
+              serviceName,
+              bookingDate,
+              bookingTime,
+              duration: existingBooking.duration_min,
+            }),
+          });
+        } else if (status === "rejected") {
+          await resend.emails.send({
+            from: "Svetla Estetica <noreply@svetlaestetica.com>",
+            to: existingBooking.user.email,
+            subject: "Aggiornamento Appuntamento - Svetla Estetica",
+            react: BookingRejectedEmail({
+              customerName,
+              serviceName,
+              serviceUuid: existingBooking.service.uuid,
+              bookingDate,
+              bookingTime,
+            }),
+          });
+        }
+      } catch (emailError) {
+        console.error("Failed to send booking status email:", emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     return NextResponse.json({ booking });
   } catch (error) {
@@ -43,4 +122,3 @@ export async function PATCH(
     );
   }
 }
-

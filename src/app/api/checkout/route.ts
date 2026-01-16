@@ -83,8 +83,61 @@ export async function POST(req: Request) {
       cancel_url: `${env.BASE_URL}/carrello?cancelled=true`,
       metadata: {
         order_uuid: order.uuid,
+        user_id: session.id.toString(),
       },
       customer_email: session.email,
+      shipping_address_collection: {
+        allowed_countries: [
+          // European Union
+          "AT", // Austria
+          "BE", // Belgium
+          "BG", // Bulgaria
+          "HR", // Croatia
+          "CY", // Cyprus
+          "CZ", // Czech Republic
+          "DK", // Denmark
+          "EE", // Estonia
+          "FI", // Finland
+          "FR", // France
+          "DE", // Germany
+          "GR", // Greece
+          "HU", // Hungary
+          "IE", // Ireland
+          "IT", // Italy
+          "LV", // Latvia
+          "LT", // Lithuania
+          "LU", // Luxembourg
+          "MT", // Malta
+          "NL", // Netherlands
+          "PL", // Poland
+          "PT", // Portugal
+          "RO", // Romania
+          "SK", // Slovakia
+          "SI", // Slovenia
+          "ES", // Spain
+          "SE", // Sweden
+          // Other European countries
+          "AL", // Albania
+          "AD", // Andorra
+          "BA", // Bosnia and Herzegovina
+          "CH", // Switzerland
+          "GB", // United Kingdom
+          "IS", // Iceland
+          "LI", // Liechtenstein
+          "MC", // Monaco
+          "ME", // Montenegro
+          "MK", // North Macedonia
+          "NO", // Norway
+          "RS", // Serbia
+          "SM", // San Marino
+          "UA", // Ukraine
+          "VA", // Vatican City
+          "XK", // Kosovo
+        ],
+      },
+      phone_number_collection: {
+        enabled: true,
+      },
     });
 
     await db.order.update({
@@ -104,4 +157,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Errore interno" }, { status: 500 });
   }
 }
-
