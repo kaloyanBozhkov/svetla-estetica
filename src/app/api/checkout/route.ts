@@ -17,7 +17,7 @@ const checkoutSchema = z.object({
 export async function POST(req: Request) {
   try {
     const session = await getSession();
-    if (!session?.userId) {
+    if (!session?.id) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
 

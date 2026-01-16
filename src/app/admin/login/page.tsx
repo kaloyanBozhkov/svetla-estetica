@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button, Input, Card } from "@/components/atoms";
 import { z } from "zod";
 
@@ -53,6 +54,13 @@ export default function AdminLoginPage() {
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
       <Card className="max-w-md w-full">
         <div className="text-center mb-8">
+          <Image
+            src="/logo-cropped.webp"
+            alt="Svetla Estetica"
+            width={80}
+            height={80}
+            className="mx-auto mb-4"
+          />
           <h1 className="font-display text-3xl font-bold text-gray-900">
             Accesso Admin
           </h1>

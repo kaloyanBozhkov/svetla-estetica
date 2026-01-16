@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
@@ -44,8 +45,16 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile header */}
-      <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-gray-900 px-4 py-3 lg:hidden">
-        <h2 className="font-display text-lg font-bold text-white">Admin</h2>
+      <header className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-between bg-gray-900 px-4 py-3 lg:hidden">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/logo-cropped.webp"
+            alt="Svetla Estetica"
+            width={32}
+            height={32}
+          />
+          <span className="font-display text-lg font-bold text-white">Admin</span>
+        </Link>
         <button
           onClick={() => setOpen(!open)}
           className="p-2 text-white hover:bg-gray-800 rounded-lg transition-colors"
@@ -66,7 +75,7 @@ export function AdminSidebar() {
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-[55] bg-black/50 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
@@ -74,12 +83,20 @@ export function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transition-transform duration-300 lg:translate-x-0 lg:pt-16 flex flex-col",
+          "fixed inset-y-0 left-0 z-[60] w-64 bg-gray-900 text-white transition-transform duration-300 lg:translate-x-0 lg:pt-16 flex flex-col",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="p-6 pt-16 lg:pt-6">
-          <h2 className="font-display text-xl font-bold">Admin Panel</h2>
+          <Link href="/" className="flex flex-col items-start gap-3 hover:opacity-80 transition-opacity">
+            <Image
+              src="/logo-cropped.webp"
+              alt="Svetla Estetica"
+              width={80}
+              height={80}
+            />
+            <h2 className="font-display text-xl font-bold">Admin Panel</h2>
+          </Link>
         </div>
         <nav className="mt-4 flex-1">
           {adminNav.map((item) => (

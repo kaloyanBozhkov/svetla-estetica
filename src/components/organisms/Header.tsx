@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useAuthStore, useCartStore } from "@/stores";
 import { Button } from "@/components/atoms";
 import { useState } from "react";
@@ -18,6 +19,12 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isAuthenticated, isAdmin } = useAuthStore();
   const itemCount = useCartStore((s) => s.getItemCount());
+  const pathname = usePathname();
+
+  // Hide header on admin pages (they have their own header)
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">

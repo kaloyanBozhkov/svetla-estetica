@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Button, Input, Card } from "@/components/atoms";
 import { z } from "zod";
 
@@ -49,7 +50,13 @@ export default function LoginPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center px-4">
         <Card className="max-w-md w-full text-center">
-          <div className="text-5xl mb-4">📧</div>
+          <Image
+            src="/logo-cropped.webp"
+            alt="Svetla Estetica"
+            width={80}
+            height={80}
+            className="mx-auto mb-4"
+          />
           <h1 className="font-display text-2xl font-bold text-gray-900">
             Controlla la tua email!
           </h1>
@@ -68,6 +75,13 @@ export default function LoginPage() {
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
       <Card className="max-w-md w-full">
         <div className="text-center mb-8">
+          <Image
+            src="/logo-cropped.webp"
+            alt="Svetla Estetica"
+            width={80}
+            height={80}
+            className="mx-auto mb-4"
+          />
           <h1 className="font-display text-3xl font-bold text-gray-900">
             Accedi
           </h1>
