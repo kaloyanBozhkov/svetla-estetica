@@ -31,12 +31,14 @@ export async function createMagicLink(email: string): Promise<string> {
 export async function sendMagicLinkEmail(email: string, token: string): Promise<void> {
   const magicLinkUrl = `${env.BASE_URL}/auth/verify?token=${token}`;
 
-  await resend.emails.send({
+  const result = await resend.emails.send({
     from: "Svetla Estetica <noreply@svetlaestetica.com>",
     to: email,
     subject: "Il tuo link di accesso - Svetla Estetica",
     react: MagicLinkEmail({ magicLinkUrl }),
   });
+
+  console.log("Magic link email result:", result);
 }
 
 export async function verifyMagicLink(token: string): Promise<number | null> {

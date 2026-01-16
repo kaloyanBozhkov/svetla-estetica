@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, Spinner } from "@/components/atoms";
+import { CheckIcon, XIcon } from "@/components/atoms/icons";
 import { Suspense } from "react";
 
 function VerifyContent() {
@@ -61,7 +62,9 @@ function VerifyContent() {
 
         {status === "success" && (
           <>
-            <div className="text-5xl mb-4">✅</div>
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <CheckIcon className="h-8 w-8 text-green-600" />
+            </div>
             <h1 className="font-display text-2xl font-bold text-green-600">
               Accesso Effettuato!
             </h1>
@@ -71,7 +74,9 @@ function VerifyContent() {
 
         {status === "error" && (
           <>
-            <div className="text-5xl mb-4">❌</div>
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+              <XIcon className="h-8 w-8 text-red-600" />
+            </div>
             <h1 className="font-display text-2xl font-bold text-red-600">
               Errore
             </h1>
