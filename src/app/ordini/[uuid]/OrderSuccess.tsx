@@ -21,6 +21,8 @@ interface OrderItem {
 interface OrderSuccessProps {
   order: {
     uuid: string;
+    subtotal: number;
+    shippingCost: number;
     total: number;
     status: string;
     paymentStatus: string;
@@ -61,7 +63,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
 
   return (
     <div className="py-12">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {isNewOrder && (
           <div className="mb-8 text-center">
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -138,8 +140,16 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             ))}
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <div className="flex justify-between items-center text-lg font-bold">
+          <div className="mt-6 pt-6 border-t border-gray-100 space-y-2">
+            <div className="flex justify-between items-center text-gray-600">
+              <span>Subtotale</span>
+              <span>{formatPrice(order.subtotal)}</span>
+            </div>
+            <div className="flex justify-between items-center text-gray-600">
+              <span>Spedizione</span>
+              <span>{formatPrice(order.shippingCost)}</span>
+            </div>
+            <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-gray-100">
               <span>Totale</span>
               <span className="text-primary-600">{formatPrice(order.total)}</span>
             </div>

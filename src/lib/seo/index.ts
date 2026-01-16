@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/lib/constants";
+import { BASE_URL, openingHoursSchema } from "@/lib/constants";
 
 // Business info for structured data
 export const businessInfo = {
@@ -19,10 +19,7 @@ export const businessInfo = {
     latitude: 45.649876,
     longitude: 9.601234,
   },
-  openingHours: [
-    "Mo-Fr 09:00-20:00",
-    "Sa 09:00-18:00",
-  ],
+  openingHours: openingHoursSchema,
   image: `${BASE_URL}/logo-cropped.webp`,
   priceRange: "€€",
   sameAs: [

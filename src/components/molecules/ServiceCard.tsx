@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardContent, CardFooter, Button, Badge } from "@/components/atoms";
+import { Card, CardFooter, Button, Badge } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
@@ -28,9 +28,24 @@ export function ServiceCard({
   isAuthenticated,
   onBook,
 }: ServiceCardProps) {
+  const handleBook = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onBook) {
+      onBook();
+    }
+  };
+
   return (
-    <Card hover className="group flex flex-col h-full overflow-hidden p-0">
-      <Link href={`/trattamenti/${uuid}`} className="relative aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 block overflow-hidden">
+    <Card hover className="group relative flex flex-col h-full overflow-hidden p-0">
+      {/* Invisible link covering entire card */}
+      <Link
+        href={`/trattamenti/${uuid}`}
+        className="absolute inset-0 z-0"
+        aria-label={`Vai a ${name}`}
+      />
+
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 overflow-hidden">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -54,14 +69,12 @@ export function ServiceCard({
         >
           {category}
         </Badge>
-      </Link>
+      </div>
 
-      <CardContent className="flex-1 p-4">
-        <Link href={`/trattamenti/${uuid}`}>
-          <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {name}
-          </h3>
-        </Link>
+      <div className="flex-1 p-4">
+        <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          {name}
+        </h3>
         {description && (
           <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
         )}
@@ -76,21 +89,25 @@ export function ServiceCard({
           </svg>
           <span>{durationMin} min</span>
         </div>
-      </CardContent>
+      </div>
 
-      <CardFooter className="flex items-center justify-between p-4 pt-0 mt-auto border-0">
+      <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
         {isAuthenticated ? (
           <span className="font-display text-xl font-bold text-primary-600">
             {formatPrice(price)}
           </span>
         ) : (
-          <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
+          <Link
+            href="/accedi"
+            className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
             Accedi per i prezzi
           </Link>
         )}
 
         {isAuthenticated && onBook && (
-          <Button size="sm" onClick={onBook}>
+          <Button size="sm" onClick={handleBook}>
             Prenota
           </Button>
         )}

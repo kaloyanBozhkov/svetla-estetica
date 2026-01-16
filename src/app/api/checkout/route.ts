@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth/session";
 import { env } from "@/env";
+import { SHIPPING_COST } from "@/lib/constants";
 import { z } from "zod";
 
 const checkoutSchema = z.object({
@@ -51,14 +52,30 @@ export async function POST(req: Request) {
       };
     });
 
-    const total = items.reduce((sum, item) => {
+    // Add shipping as a line item
+    lineItems.push({
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: "Spedizione",
+        },
+        unit_amount: SHIPPING_COST,
+      },
+      quantity: 1,
+    });
+
+    const subtotal = items.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId)!;
       return sum + product.price * item.quantity;
     }, 0);
 
+    const total = subtotal + SHIPPING_COST;
+
     const order = await db.order.create({
       data: {
         user_id: session.id,
+        subtotal,
+        shipping_cost: SHIPPING_COST,
         total,
         status: "pending",
         payment_status: "pending",

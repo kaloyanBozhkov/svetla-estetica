@@ -43,6 +43,9 @@ async function seed() {
   let createdServices = 0;
   let createdProducts = 0;
 
+  await db.order.deleteMany();
+  await db.order_item.deleteMany();
+  await db.booking.deleteMany();
   await db.service.deleteMany();
   await db.product.deleteMany();
   await db.brand.deleteMany();

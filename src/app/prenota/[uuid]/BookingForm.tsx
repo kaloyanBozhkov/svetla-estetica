@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardTitle, Button, Input } from "@/components/atoms";
 import { formatPrice } from "@/lib/utils";
+import { OPENING_HOUR, CLOSING_HOUR_WEEKDAY } from "@/lib/constants";
 import { z } from "zod";
 
 interface BookingFormProps {
@@ -14,20 +15,26 @@ interface BookingFormProps {
     price: number;
     durationMin: number;
   };
+  user: {
+    name: string;
+    phone: string;
+  };
 }
 
 const bookingSchema = z.object({
+  name: z.string().min(2, "Nome richiesto"),
   date: z.string().min(1, "Data richiesta"),
   time: z.string().min(1, "Ora richiesta"),
   phone: z.string().min(6, "Numero di telefono richiesto"),
   notes: z.string().optional(),
 });
 
-export function BookingForm({ service }: BookingFormProps) {
+export function BookingForm({ service, user }: BookingFormProps) {
   const router = useRouter();
+  const [name, setName] = useState(user.name);
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [phone, setPhone] = useState("");
+  const [time, setTime] = useState(OPENING_HOUR);
+  const [phone, setPhone] = useState(user.phone);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,13 +46,14 @@ export function BookingForm({ service }: BookingFormProps) {
     setLoading(true);
 
     try {
-      bookingSchema.parse({ date, time, phone, notes });
+      bookingSchema.parse({ name, date, time, phone, notes });
 
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           serviceUuid: service.uuid,
+          name,
           date,
           time,
           phone,
@@ -107,6 +115,24 @@ export function BookingForm({ service }: BookingFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Input
+          type="text"
+          label="Nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Il tuo nome"
+          required
+        />
+
+        <Input
+          type="tel"
+          label="Numero di telefono"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="+39 333 1234567"
+          required
+        />
+
+        <Input
           type="date"
           label="Data"
           value={date}
@@ -120,17 +146,8 @@ export function BookingForm({ service }: BookingFormProps) {
           label="Ora preferita"
           value={time}
           onChange={(e) => setTime(e.target.value)}
-          min="09:00"
-          max="20:00"
-          required
-        />
-
-        <Input
-          type="tel"
-          label="Numero di telefono"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="+39 333 1234567"
+          min={OPENING_HOUR}
+          max={CLOSING_HOUR_WEEKDAY}
           required
         />
 
@@ -161,4 +178,3 @@ export function BookingForm({ service }: BookingFormProps) {
     </Card>
   );
 }
-

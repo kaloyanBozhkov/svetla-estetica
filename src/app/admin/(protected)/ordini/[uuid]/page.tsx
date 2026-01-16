@@ -32,6 +32,8 @@ export default async function AdminOrderDetailPage({
       order={{
         id: order.id,
         uuid: order.uuid,
+        subtotal: order.subtotal,
+        shippingCost: order.shipping_cost,
         total: order.total,
         status: order.status,
         paymentStatus: order.payment_status,

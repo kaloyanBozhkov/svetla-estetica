@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardFooter, Button, Badge } from "@/components/atoms";
+import { Card, CardFooter, Button, Badge } from "@/components/atoms";
 import { formatPrice, cn } from "@/lib/utils";
 import Image from "next/image";
 import { CheckIcon } from "@/components/atoms/icons";
@@ -33,7 +33,9 @@ export function ProductCard({
   const [isAdded, setIsAdded] = useState(false);
   const isOutOfStock = stock <= 0;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (onAddToCart) {
       onAddToCart();
       setIsAdded(true);
@@ -42,8 +44,15 @@ export function ProductCard({
   };
 
   return (
-    <Card hover className="group flex flex-col h-full overflow-hidden p-0">
-      <Link href={`/prodotti/${uuid}`} className="relative aspect-square bg-gray-50 block overflow-hidden">
+    <Card hover className="group relative flex flex-col h-full overflow-hidden p-0">
+      {/* Invisible link covering entire card */}
+      <Link
+        href={`/prodotti/${uuid}`}
+        className="absolute inset-0 z-0"
+        aria-label={`Vai a ${name}`}
+      />
+
+      <div className="relative aspect-square bg-gray-50 overflow-hidden">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -74,26 +83,28 @@ export function ProductCard({
             </Badge>
           </div>
         )}
-      </Link>
+      </div>
 
-      <CardContent className="flex-1 p-4">
-        <Link href={`/prodotti/${uuid}`}>
-          <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {name}
-          </h3>
-        </Link>
+      <div className="flex-1 p-4">
+        <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          {name}
+        </h3>
         {description && (
           <p className="mt-2 text-sm text-gray-600 line-clamp-2">{description}</p>
         )}
-      </CardContent>
+      </div>
 
-      <CardFooter className="flex items-center justify-between p-4 pt-0 mt-auto border-0">
+      <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
         {isAuthenticated ? (
           <span className="font-display text-xl font-bold text-primary-600">
             {formatPrice(price)}
           </span>
         ) : (
-          <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
+          <Link
+            href="/accedi"
+            className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
             Accedi per i prezzi
           </Link>
         )}

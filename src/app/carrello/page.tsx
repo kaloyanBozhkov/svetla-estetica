@@ -6,6 +6,7 @@ import { CartItem } from "@/components/molecules";
 import { ActionButton, Button, Card } from "@/components/atoms";
 import { CartIcon } from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
+import { SHIPPING_COST } from "@/lib/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -141,13 +142,13 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Spedizione</span>
-                  <span>Da calcolare</span>
+                  <span>{formatPrice(SHIPPING_COST)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between py-4 text-lg font-bold text-gray-900">
                 <span>Totale</span>
-                <span>{formatPrice(getTotal())}</span>
+                <span>{formatPrice(getTotal() + SHIPPING_COST)}</span>
               </div>
 
               {cancelMessage && (

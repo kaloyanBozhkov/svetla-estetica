@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const businessHours = [
-  { day: "Lunedì", hours: "09.00 - 20.00" },
-  { day: "Martedì", hours: "09.00 - 20.00" },
-  { day: "Mercoledì", hours: "09.00 - 20.00" },
-  { day: "Giovedì", hours: "09.00 - 20.00" },
-  { day: "Venerdì", hours: "09.00 - 20.00" },
-  { day: "Sabato", hours: "09.00 - 18.00" },
-];
+import { businessHours } from "@/lib/constants";
 
 const socialLinks = [
   {

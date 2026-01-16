@@ -13,6 +13,8 @@ interface OrderDetailProps {
   order: {
     id: number;
     uuid: string;
+    subtotal: number;
+    shippingCost: number;
     total: number;
     status: order_status;
     paymentStatus: payment_status;
@@ -196,11 +198,21 @@ export function OrderDetail({ order }: OrderDetailProps) {
                 </div>
               ))}
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
-              <span className="font-semibold text-gray-900">Totale</span>
-              <span className="text-xl font-bold text-primary-600">
-                {formatPrice(order.total)}
-              </span>
+            <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
+              <div className="flex justify-between items-center text-gray-600">
+                <span>Subtotale</span>
+                <span>{formatPrice(order.subtotal)}</span>
+              </div>
+              <div className="flex justify-between items-center text-gray-600">
+                <span>Spedizione</span>
+                <span>{formatPrice(order.shippingCost)}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                <span className="font-semibold text-gray-900">Totale</span>
+                <span className="text-xl font-bold text-primary-600">
+                  {formatPrice(order.total)}
+                </span>
+              </div>
             </div>
           </Card>
 

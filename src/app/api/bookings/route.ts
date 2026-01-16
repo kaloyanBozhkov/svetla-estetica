@@ -9,6 +9,7 @@ const ADMIN_EMAIL = "rosacosmetica@gmail.com";
 
 const createBookingSchema = z.object({
   serviceUuid: z.string().uuid(),
+  name: z.string().min(2),
   date: z.string(),
   time: z.string(),
   phone: z.string().min(6),
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuth();
     const body = await request.json();
-    const { serviceUuid, date, time, phone, notes } = createBookingSchema.parse(body);
+    const { serviceUuid, name, date, time, phone, notes } = createBookingSchema.parse(body);
 
     const service = await db.service.findUnique({
       where: { uuid: serviceUuid, active: true },
@@ -34,11 +35,18 @@ export async function POST(request: Request) {
 
     const bookingDate = new Date(`${date}T${time}`);
 
-    // Update user phone only if not already set
+    // Update user name and phone if not already set
+    const updates: { name?: string; phone?: string } = {};
+    if (name && !user.name) {
+      updates.name = name;
+    }
     if (phone && !user.phone) {
+      updates.phone = phone;
+    }
+    if (Object.keys(updates).length > 0) {
       await db.user.update({
         where: { id: user.id },
-        data: { phone },
+        data: updates,
       });
     }
 
@@ -57,14 +65,14 @@ export async function POST(request: Request) {
     // Celebrate new booking
     await sendCelebration({
       event: "Nuovo Appuntamento",
-      servizio: service.title,
+      servizio: service.name,
       data: `${date} ${time}`,
       cliente: user.email,
     });
 
     // Send email notification to admin
     try {
-      const customerName = user.name || "Cliente";
+      const customerName = name || user.name || "Cliente";
       
       await resend.emails.send({
         from: "Svetla Estetica <noreply@svetlaestetica.com>",

@@ -34,9 +34,12 @@ export default async function BookingPage({ params }: BookingPageProps) {
             price: service.price,
             durationMin: service.duration_min,
           }}
+          user={{
+            name: user.name || "",
+            phone: user.phone || "",
+          }}
         />
       </div>
     </div>
   );
 }
-

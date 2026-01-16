@@ -36,6 +36,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
     <OrderSuccess
       order={{
         uuid: order.uuid,
+        subtotal: order.subtotal,
+        shippingCost: order.shipping_cost,
         total: order.total,
         status: order.status,
         paymentStatus: order.payment_status,
