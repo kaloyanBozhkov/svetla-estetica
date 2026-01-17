@@ -32,9 +32,7 @@ export async function sendMagicLinkEmail(
   email: string,
   token: string
 ): Promise<void> {
-  const magicLinkUrl = `${
-    env.IS_PROD ? env.NEXT_PUBLIC_BASE_URL : "http://localhost:3000"
-  }/auth/verify?token=${token}`;
+  const magicLinkUrl = `${env.NEXT_PUBLIC_BASE_URL}/auth/verify?token=${token}`;
 
   const result = await resend.emails.send({
     from: "Svetla Estetica <noreply@svetlaestetica.com>",

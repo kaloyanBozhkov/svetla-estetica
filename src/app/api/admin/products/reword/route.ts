@@ -14,8 +14,7 @@ const SYSTEM_MESSAGE = `<about>You're a professional beautician and cosmetics pr
 <instructions>
 You receive a product title, its brand and description 
 You must return: 
-- the product title, stripped from volume amounts and weird characters (e.g 30ml, 100ml) -> should be professional looking product name. 
-- volume amount (if any mentioned in title or description)
+- the product title, as professionaly formatted product name. Any volume amounts and weird characters (e.g 30ml, 100ml) -> should be properly and consistnetly formatted (e.g. 30ml. -> is good, 30 ml or 30ml is not good (first has space between the unit and numebr latter has missing . for abbreviaton))
 - the product description, formatted with html tags to look nicely presentable. 
 </instructions>
 
@@ -23,14 +22,13 @@ You must return:
 - based on product title, description & brand, enrich the description where sensible. 
 - Ideal description should be informative for clients, when and why to use it, can maybe include "how to use/apply" if it fits the product and you know about it, and any other important info. Maximum 5 paragraphs, not too long please.. but also needs to sell the product well (indirectly)! 
 - When writing new paragraphs, add a break (<br> tag) between paragraphs. Also reminder you can use <b> <i> as well as lists if you need.
-- If formatting the title to be more professional, any extra information likely should be mentioned in the description.
+- If formatting the title to be more professional, any extra information removed from the original title likely should be mentioned in the description.
 </important>
 
 <response_format>
 - Return only JSON of this shape: { 
     title: "", // title, professional formatting
     descritpion: "",  // html tags formatting content sof this beautifully
-    amount: "" // "-" if not mentioned at all anywhere.
 }
 - Reminder to return only the valid JSON object, nothing else.
 </response_format>
@@ -43,7 +41,6 @@ Keep the response language as italian
 const resultSchema = z.object({
   title: z.string(),
   description: z.string(),
-  amount: z.string(),
 });
 
 export async function POST(req: Request) {
@@ -74,7 +71,6 @@ Description: ${description || "No description provided"}`;
     return NextResponse.json({
       title: response.title,
       description: response.description,
-      amount: response.amount,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

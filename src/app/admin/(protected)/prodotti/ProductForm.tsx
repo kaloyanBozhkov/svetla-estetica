@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input, Select, Card, Modal, RichTextEditor, ActionButton } from "@/components/atoms";
+import {
+  Button,
+  Input,
+  Select,
+  Card,
+  Modal,
+  RichTextEditor,
+  ActionButton,
+} from "@/components/atoms";
 import { ImageUpload } from "@/components/molecules";
 import { SparkleIcon } from "@/components/atoms/icons";
 import { type product_category } from "@prisma/client";
@@ -49,7 +57,6 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [error, setError] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiAmount, setAiAmount] = useState("");
 
   const [form, setForm] = useState<ProductFormData>(
     initialData || {
@@ -165,7 +172,6 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
         name: data.title,
         description: data.description,
       });
-      setAiAmount(data.amount);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Errore AI");
     } finally {
@@ -173,7 +179,10 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
     }
   };
 
-  const brandOptions = brands.map((b) => ({ value: String(b.id), label: b.name }));
+  const brandOptions = brands.map((b) => ({
+    value: String(b.id),
+    label: b.name,
+  }));
 
   return (
     <>
@@ -188,7 +197,9 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="block text-sm font-medium text-gray-700">Descrizione</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Descrizione
+              </label>
               <ActionButton
                 type="button"
                 size="sm"
@@ -205,11 +216,6 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               value={form.description}
               onChange={(value) => setForm({ ...form, description: value })}
             />
-            {aiAmount && aiAmount !== "-" && (
-              <p className="text-sm text-primary-600">
-                <strong>Quantità rilevata:</strong> {aiAmount}
-              </p>
-            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -219,7 +225,9 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               step="0.01"
               min="0"
               value={form.price}
-              onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
+              onChange={(e) =>
+                setForm({ ...form, price: parseFloat(e.target.value) || 0 })
+              }
               required
             />
 
@@ -228,7 +236,9 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               type="number"
               min="0"
               value={form.stock}
-              onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+              onChange={(e) =>
+                setForm({ ...form, stock: parseInt(e.target.value) || 0 })
+              }
               required
             />
 
@@ -237,7 +247,9 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               type="number"
               min="0"
               value={form.priority}
-              onChange={(e) => setForm({ ...form, priority: parseInt(e.target.value) || 0 })}
+              onChange={(e) =>
+                setForm({ ...form, priority: parseInt(e.target.value) || 0 })
+              }
             />
           </div>
 
@@ -245,14 +257,21 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             <Select
               label="Categoria"
               value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value as product_category })}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  category: e.target.value as product_category,
+                })
+              }
               options={categoryOptions}
             />
 
             <Select
               label="Brand"
               value={String(form.brandId)}
-              onChange={(e) => setForm({ ...form, brandId: parseInt(e.target.value) })}
+              onChange={(e) =>
+                setForm({ ...form, brandId: parseInt(e.target.value) })
+              }
               options={brandOptions}
             />
           </div>
@@ -268,7 +287,9 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             <div>
               <p className="font-medium text-gray-900">Stato prodotto</p>
               <p className="text-sm text-gray-500">
-                {form.active ? "Visibile nel catalogo" : "Nascosto dal catalogo"}
+                {form.active
+                  ? "Visibile nel catalogo"
+                  : "Nascosto dal catalogo"}
               </p>
             </div>
             <button
@@ -312,7 +333,11 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               >
                 Annulla
               </Button>
-              <Button type="submit" loading={loading} className="w-full sm:w-auto">
+              <Button
+                type="submit"
+                loading={loading}
+                className="w-full sm:w-auto"
+              >
                 {isEdit ? "Salva" : "Crea"}
               </Button>
             </div>
@@ -325,7 +350,8 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
           Conferma eliminazione
         </h3>
         <p className="text-gray-600 mb-6">
-          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione non può essere annullata.
+          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione
+          non può essere annullata.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setDeleteModal(false)}>
@@ -339,4 +365,3 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
     </>
   );
 }
-
