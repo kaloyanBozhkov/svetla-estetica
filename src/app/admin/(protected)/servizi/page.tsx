@@ -4,21 +4,11 @@ import { Button } from "@/components/atoms";
 import Link from "next/link";
 import { type service_category } from "@prisma/client";
 import { Pagination } from "@/components/atoms/Pagination";
+import { SERVICE_CATEGORY_LABELS } from "@/lib/constants";
 
 const ITEMS_PER_PAGE = 30;
 
-const categoryLabels: Record<service_category, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  make_up: "Make Up",
-  ceretta: "Ceretta",
-  solarium: "Solarium",
-  pedicure: "Pedicure",
-  manicure: "Manicure",
-  luce_pulsata: "Luce Pulsata",
-  appuntamento: "Appuntamento",
-  grotta_di_sale: "Grotta di Sale",
-};
+const categoryLabels = SERVICE_CATEGORY_LABELS as Record<service_category, string>;
 
 export default async function AdminServicesPage({
   searchParams,

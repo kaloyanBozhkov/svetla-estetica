@@ -6,17 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button, Badge, HtmlContent } from "@/components/atoms";
 import { useCartStore } from "@/stores";
 import { formatPrice } from "@/lib/utils";
+import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
 import type { product } from "@prisma/client";
-
-const categoryLabels: Record<string, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  solari: "Solari",
-  tisane: "Tisane",
-  make_up: "Make Up",
-  profumi: "Profumi",
-  mani_e_piedi: "Mani e Piedi",
-};
 
 interface Props {
   product: product;
@@ -95,7 +86,7 @@ export function ProductDetail({ product }: Props) {
         {/* Details */}
         <div className="flex flex-col">
           <Badge variant="default" className="self-start mb-4">
-            {categoryLabels[product.category] || product.category}
+            {PRODUCT_CATEGORY_LABELS[product.category] || product.category}
           </Badge>
 
           <h1 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">

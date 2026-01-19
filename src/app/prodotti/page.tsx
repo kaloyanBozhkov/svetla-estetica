@@ -3,6 +3,7 @@ import { ProductsGrid } from "./ProductsGrid";
 import { type product_category } from "@prisma/client";
 import type { Metadata } from "next";
 import { generateProductListSchema } from "@/lib/seo";
+import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Prodotti di Bellezza",
@@ -14,16 +15,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/prodotti",
   },
-};
-
-const categoryLabels: Record<product_category, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  solari: "Solari",
-  tisane: "Tisane",
-  make_up: "Make Up",
-  profumi: "Profumi",
-  mani_e_piedi: "Mani e Piedi",
 };
 
 export default async function ProductsPage() {
@@ -41,7 +32,7 @@ export default async function ProductsPage() {
     stock: p.stock,
     imageUrl: p.image_url,
     category: p.category,
-    categoryLabel: categoryLabels[p.category],
+    categoryLabel: PRODUCT_CATEGORY_LABELS[p.category],
   }));
 
   const jsonLd = generateProductListSchema(
@@ -77,7 +68,7 @@ export default async function ProductsPage() {
 
         <ProductsGrid
           products={productsWithLabels}
-          categories={Object.entries(categoryLabels).map(([value, label]) => ({
+          categories={Object.entries(PRODUCT_CATEGORY_LABELS).map(([value, label]) => ({
             value: value as product_category,
             label,
           }))}

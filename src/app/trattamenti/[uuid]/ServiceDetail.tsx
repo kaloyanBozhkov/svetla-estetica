@@ -5,20 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button, Badge, HtmlContent } from "@/components/atoms";
 import { useAuthStore } from "@/stores";
 import { formatPrice } from "@/lib/utils";
+import { SERVICE_CATEGORY_LABELS } from "@/lib/constants";
 import type { service } from "@prisma/client";
-
-const categoryLabels: Record<string, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  make_up: "Make Up",
-  ceretta: "Ceretta",
-  solarium: "Solarium",
-  pedicure: "Pedicure",
-  manicure: "Manicure",
-  luce_pulsata: "Luce Pulsata",
-  appuntamento: "Appuntamento",
-  grotta_di_sale: "Grotta di Sale",
-};
 
 interface Props {
   service: service;
@@ -78,7 +66,7 @@ export function ServiceDetail({ service }: Props) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" />
                   </svg>
                 </div>
-                <span className="text-primary-600 font-medium">{categoryLabels[service.category] || service.category}</span>
+                <span className="text-primary-600 font-medium">{SERVICE_CATEGORY_LABELS[service.category] || service.category}</span>
               </div>
             </div>
           )}
@@ -87,7 +75,7 @@ export function ServiceDetail({ service }: Props) {
         {/* Details */}
         <div className="flex flex-col">
           <Badge variant="default" className="self-start mb-4 bg-primary-100 text-primary-700">
-            {categoryLabels[service.category] || service.category}
+            {SERVICE_CATEGORY_LABELS[service.category] || service.category}
           </Badge>
 
           <h1 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">

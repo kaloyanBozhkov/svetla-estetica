@@ -4,18 +4,11 @@ import { Button } from "@/components/atoms";
 import Link from "next/link";
 import { type product_category } from "@prisma/client";
 import { Pagination } from "@/components/atoms/Pagination";
+import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
 
 const ITEMS_PER_PAGE = 30;
 
-const categoryLabels: Record<product_category, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  solari: "Solari",
-  tisane: "Tisane",
-  make_up: "Make Up",
-  profumi: "Profumi",
-  mani_e_piedi: "Mani e Piedi",
-};
+const categoryLabels = PRODUCT_CATEGORY_LABELS as Record<product_category, string>;
 
 export default async function AdminProductsPage({
   searchParams,

@@ -24,3 +24,28 @@ export const openingHoursSchema = [
 ];
 
 export const CONTACTS_EMAIL = "rosacosmetica@gmail.com"; // email to contact for notifications and alerts (admin owner)
+
+// Category labels for products
+export const PRODUCT_CATEGORY_LABELS: Record<string, string> = {
+  viso: "Viso",
+  corpo: "Corpo",
+  solari: "Solari",
+  tisane: "Tisane",
+  make_up: "Make Up",
+  profumi: "Profumi",
+  mani_e_piedi: "Mani e Piedi",
+};
+
+// Category labels for services/treatments
+export const SERVICE_CATEGORY_LABELS: Record<string, string> = {
+  viso: "Viso",
+  corpo: "Corpo",
+  make_up: "Make Up",
+  ceretta: "Ceretta",
+  solarium: "Solarium",
+  pedicure: "Pedicure",
+  manicure: "Manicure",
+  luce_pulsata: "Luce Pulsata",
+  appuntamento: "Appuntamento",
+  grotta_di_sale: "Grotta di Sale",
+};

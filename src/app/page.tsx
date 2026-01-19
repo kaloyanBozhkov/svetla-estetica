@@ -15,17 +15,8 @@ import {
 } from "@/components/atoms/icons";
 import { db } from "@/lib/db";
 import { formatPrice, stripHtml } from "@/lib/utils";
+import { PRODUCT_CATEGORY_LABELS, SERVICE_CATEGORY_LABELS } from "@/lib/constants";
 import Image from "next/image";
-
-const categoryLabels: Record<string, string> = {
-  viso: "Viso",
-  corpo: "Corpo",
-  solari: "Solari",
-  tisane: "Tisane",
-  make_up: "Make Up",
-  profumi: "Profumi",
-  mani_e_piedi: "Mani e Piedi",
-};
 
 const services = [
   {
@@ -98,8 +89,19 @@ async function getFeaturedProducts() {
   });
 }
 
+async function getFeaturedTreatments() {
+  return db.service.findMany({
+    where: { active: true },
+    orderBy: [{ priority: "desc" }, { created_at: "asc" }],
+    take: 4,
+  });
+}
+
 export default async function HomePage() {
-  const products = await getFeaturedProducts();
+  const [products, treatments] = await Promise.all([
+    getFeaturedProducts(),
+    getFeaturedTreatments(),
+  ]);
 
   return (
     <>
@@ -436,7 +438,7 @@ export default async function HomePage() {
                     )}
                     <div className="absolute top-3 left-3">
                       <span className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-700 shadow-sm">
-                        {categoryLabels[product.category] || product.category}
+                        {PRODUCT_CATEGORY_LABELS[product.category] || product.category}
                       </span>
                     </div>
                   </div>
@@ -453,6 +455,94 @@ export default async function HomePage() {
                       </span>
                       <span className="text-sm text-primary-600 font-medium group-hover:underline">
                         Dettagli →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Treatments Section */}
+      {treatments.length > 0 && (
+        <section className="py-20 bg-gradient-to-b from-primary-50/50 to-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-2 text-primary-600 mb-2">
+                  <FaceIcon className="h-5 w-5" />
+                  <span className="text-sm font-semibold uppercase tracking-wider">
+                    Trattamenti
+                  </span>
+                </div>
+                <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
+                  I Nostri Trattamenti
+                </h2>
+              </div>
+              <Link href="/trattamenti">
+                <Button variant="outline">
+                  Vedi Tutti
+                  <svg
+                    className="ml-2 h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {treatments.map((treatment) => (
+                <Link
+                  key={treatment.id}
+                  href={`/trattamenti/${treatment.uuid}`}
+                  className="group relative overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                >
+                  <div className="aspect-[4/3] bg-gradient-to-br from-primary-50 to-gray-50 relative overflow-hidden">
+                    {treatment.image_url ? (
+                      <Image
+                        src={treatment.image_url}
+                        alt={treatment.name}
+                        width={400}
+                        height={300}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <div className="h-20 w-20 rounded-full bg-primary-100 flex items-center justify-center">
+                          <FaceIcon className="h-10 w-10 text-primary-500" />
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute top-3 left-3">
+                      <span className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-700 shadow-sm">
+                        {SERVICE_CATEGORY_LABELS[treatment.category] || treatment.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-1 group-hover:text-primary-600 transition-colors">
+                      {treatment.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                      {treatment.description ? stripHtml(treatment.description) : "Trattamento professionale"}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="font-display text-lg font-bold text-primary-600">
+                        {formatPrice(treatment.price)}
+                      </span>
+                      <span className="text-sm text-primary-600 font-medium group-hover:underline">
+                        Prenota →
                       </span>
                     </div>
                   </div>
