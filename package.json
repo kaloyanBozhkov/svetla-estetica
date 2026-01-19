@@ -11,6 +11,8 @@
     "db:studio": "prisma studio",
     "dev": "next dev",
     "email:dev": "email dev --dir ./src/components/emails",
+    "format:all": "pnpm tsx scripts/format-all.ts",
+    "format:rollback": "pnpm tsx scripts/rollback-format.ts",
     "llms:update": "pnpm tsx scripts/update-llms-txt.ts",
     "postinstall": "prisma generate",
     "lint": "next lint",

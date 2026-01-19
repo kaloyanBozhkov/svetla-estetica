@@ -342,38 +342,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
-              I Nostri Trattamenti
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Scopri tutti i servizi che offriamo per il tuo benessere
-            </p>
-          </div>
-
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 lg:gap-6">
-            {services.map((service) => (
-              <Link
-                key={service.name}
-                href={`/trattamenti?categoria=${service.slug}`}
-                className="group relative flex flex-col items-center rounded-2xl bg-gray-50 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-              >
-                <div
-                  className={`flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br ${service.color} text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
-                >
-                  <service.Icon className="h-8 w-8" />
-                </div>
-                <span className="mt-4 text-center font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
-                  {service.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Featured Products Section */}
       {products.length > 0 && (
@@ -467,7 +435,7 @@ export default async function HomePage() {
 
       {/* Featured Treatments Section */}
       {treatments.length > 0 && (
-        <section className="py-20 bg-gradient-to-b from-primary-50/50 to-white">
+        <section className="py-20 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
               <div>
@@ -552,6 +520,39 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Treatment Categories Section */}
+      <section className="py-20 bg-gradient-to-b from-primary-50/30 to-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
+              Esplora per Categoria
+            </h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              Trova il trattamento perfetto per le tue esigenze. Scopri la nostra gamma completa di servizi professionali.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 lg:gap-6">
+            {services.map((service) => (
+              <Link
+                key={service.name}
+                href={`/trattamenti?categoria=${service.slug}`}
+                className="group relative flex flex-col items-center rounded-2xl bg-gradient-to-br from-gray-50 to-white p-6 ring-1 ring-gray-100 transition-all duration-300 hover:shadow-xl hover:ring-primary-200 hover:-translate-y-1"
+              >
+                <div
+                  className={`flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br ${service.color} text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}
+                >
+                  <service.Icon className="h-8 w-8" />
+                </div>
+                <span className="mt-4 text-center text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
+                  {service.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Why Choose Us Section */}
       <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800 text-white">
