@@ -26,7 +26,7 @@ interface OrderDetailProps {
       name: string | null;
       email: string;
       phone: string | null;
-    };
+    } | null;
     items: {
       id: number;
       quantity: number;
@@ -244,22 +244,26 @@ export function OrderDetail({ order }: OrderDetailProps) {
             <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
               Cliente
             </h2>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-500">Nome</p>
-                <p className="font-medium text-gray-900">{order.user.name || "—"}</p>
+            {order.user ? (
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-gray-500">Nome</p>
+                  <p className="font-medium text-gray-900">{order.user.name || "—"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <a href={`mailto:${order.user.email}`} className="font-medium text-primary-600 hover:underline">
+                    {order.user.email}
+                  </a>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Telefono</p>
+                  <p className="font-medium text-gray-900">{order.user.phone || "—"}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Email</p>
-                <a href={`mailto:${order.user.email}`} className="font-medium text-primary-600 hover:underline">
-                  {order.user.email}
-                </a>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Telefono</p>
-                <p className="font-medium text-gray-900">{order.user.phone || "—"}</p>
-              </div>
-            </div>
+            ) : (
+              <p className="text-gray-500 italic">Ordine ospite (utente non registrato)</p>
+            )}
           </Card>
 
           {/* Order Info */}

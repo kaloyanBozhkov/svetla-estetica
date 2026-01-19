@@ -23,3 +23,4 @@ export const openingHoursSchema = [
   "Sa 09:00-18:00",
 ];
 
+export const CONTACTS_EMAIL = "rosacosmetica@gmail.com"; // email to contact for notifications and alerts (admin owner)

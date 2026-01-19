@@ -284,7 +284,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             />
 
             <Input
-              label="Stock"
+              label="Quantità"
               type="number"
               min="0"
               value={form.stock}

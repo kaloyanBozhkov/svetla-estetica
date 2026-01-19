@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
 import { sendCelebration, sendErrorLog } from "@/lib/alerts";
-
-const ADMIN_EMAIL = "rosacosmetica@gmail.com";
+import { CONTACTS_EMAIL } from "@/lib/constants";
 
 const createBookingSchema = z.object({
   serviceUuid: z.string().uuid(),
@@ -20,7 +20,8 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuth();
     const body = await request.json();
-    const { serviceUuid, name, date, time, phone, notes } = createBookingSchema.parse(body);
+    const { serviceUuid, name, date, time, phone, notes } =
+      createBookingSchema.parse(body);
 
     const service = await db.service.findUnique({
       where: { uuid: serviceUuid, active: true },
@@ -62,6 +63,8 @@ export async function POST(request: Request) {
       },
     });
 
+    revalidatePath("/admin/prenotazioni");
+
     // Celebrate new booking
     await sendCelebration({
       event: "Nuovo Appuntamento",
@@ -73,10 +76,10 @@ export async function POST(request: Request) {
     // Send email notification to admin
     try {
       const customerName = name || user.name || "Cliente";
-      
+
       await resend.emails.send({
         from: "Svetla Estetica <noreply@svetlaestetica.com>",
-        to: ADMIN_EMAIL,
+        to: CONTACTS_EMAIL,
         subject: "Appuntamento | SvetlaEstetica",
         html: `
           <h2>Nuova Richiesta di Appuntamento!</h2>
@@ -95,16 +98,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ booking });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Dati non validi" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Dati non validi" }, { status: 400 });
     }
     if (error instanceof Error && error.message === "Unauthorized") {
-      return NextResponse.json(
-        { error: "Non autorizzato" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
     console.error("Create booking error:", error);
     await sendErrorLog({
@@ -117,4 +114,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

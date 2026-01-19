@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth/session";
@@ -94,6 +95,8 @@ export async function POST(req: Request) {
     }
 
     const order = await db.order.create({ data: orderCreateData });
+
+    revalidatePath("/admin/ordini");
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "payment",

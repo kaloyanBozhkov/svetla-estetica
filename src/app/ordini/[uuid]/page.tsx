@@ -1,9 +1,8 @@
 import { notFound, redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { OrderSuccess } from "./OrderSuccess";
-import { createSessionForUser } from "@/lib/auth/session";
+import { env } from "@/env";
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -67,12 +66,10 @@ export default async function OrderPage({ params, searchParams }: Props) {
   }
 
   // If this is a new order (just completed checkout) and user is not logged in
-  // but the order has a user, auto-sign them in
+  // but the order has a user, redirect to auto-sign-in API route
   if (isNewOrder && !user && order.user) {
-    const cookieStore = await cookies();
-    const sessionCookie = await createSessionForUser(order.user.id);
-    cookieStore.set(sessionCookie.name, sessionCookie.value, sessionCookie.options);
-    user = order.user;
+    const token = Buffer.from(`${order.uuid}:${order.user.id}`).toString("base64");
+    redirect(`${env.NEXT_PUBLIC_BASE_URL}/api/auth/auto-sign-in?order=${order.uuid}&token=${token}`);
   }
 
   // Security check: only the order owner can view the order

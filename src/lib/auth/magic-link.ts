@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
 import { env } from "@/env";
@@ -12,6 +13,7 @@ export async function createMagicLink(email: string): Promise<string> {
     user = await db.user.create({
       data: { email },
     });
+    revalidatePath("/admin/utenti");
   }
 
   const token = crypto.randomUUID();

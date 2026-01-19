@@ -1,4 +1,6 @@
+import { CONTACTS_EMAIL } from "@/lib/constants";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
@@ -6,8 +8,6 @@ import { env } from "@/env";
 import { resend } from "@/lib/email";
 import { sendCelebration, sendErrorLog } from "@/lib/alerts";
 import type Stripe from "stripe";
-
-const ADMIN_EMAIL = "rosacosmetica@gmail.com";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -41,9 +41,10 @@ export async function POST(request: Request) {
     case "checkout.session.completed": {
       const eventSession = event.data.object as Stripe.Checkout.Session;
 
-      // Retrieve full session with expanded fields
+      // Retrieve full session with expanded customer_details
+      // Note: shipping_details is already on the session object, no need to expand
       const session = await stripe.checkout.sessions.retrieve(eventSession.id, {
-        expand: ["customer_details", "shipping_details"],
+        expand: ["customer_details"],
       });
 
       const orderUuid = session.metadata?.order_uuid;
@@ -81,6 +82,7 @@ export async function POST(request: Request) {
               },
             });
             console.log("Created new user from guest checkout:", user.id);
+            revalidatePath("/admin/utenti");
           } else if (!user.email_verified) {
             // If user exists but email not verified, verify it now
             await db.user.update({
@@ -134,7 +136,7 @@ export async function POST(request: Request) {
 
             await resend.emails.send({
               from: "Svetla Estetica <noreply@svetlaestetica.com>",
-              to: ADMIN_EMAIL,
+              to: CONTACTS_EMAIL,
               subject: "Ordine | SvetlaEstetica",
               html: `
                 <h2>Nuovo Ordine Ricevuto!</h2>

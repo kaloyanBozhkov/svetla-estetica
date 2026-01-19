@@ -102,26 +102,22 @@ export function ServiceDetail({ service }: Props) {
           )}
 
           {/* Duration & Price Card */}
-          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-xl">
+          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-primary-50 to-white ring-1 ring-primary-100">
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <p className="text-primary-200 text-sm mb-1">Durata</p>
-                <p className="text-2xl font-bold flex items-center gap-2">
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <p className="text-gray-500 text-sm mb-1">Durata</p>
+                <p className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                  <svg className="h-6 w-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {formatDuration(service.duration_min)}
                 </p>
               </div>
               <div>
-                <p className="text-primary-200 text-sm mb-1">Prezzo</p>
-                {isAuth ? (
-                  <p className="text-2xl font-bold">
-                    {formatPrice(service.price)}
-                  </p>
-                ) : (
-                  <p className="text-lg">Accedi per vedere</p>
-                )}
+                <p className="text-gray-500 text-sm mb-1">Prezzo</p>
+                <p className="text-2xl font-bold text-primary-600">
+                  {formatPrice(service.price)}
+                </p>
               </div>
             </div>
           </div>

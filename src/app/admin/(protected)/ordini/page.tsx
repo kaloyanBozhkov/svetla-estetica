@@ -53,8 +53,8 @@ export default async function AdminOrdersPage({
     paymentStatus: o.payment_status,
     paymentLabel: paymentLabels[o.payment_status],
     createdAt: o.created_at,
-    userName: o.user.name ?? o.user.email,
-    userEmail: o.user.email,
+    userName: o.user?.name ?? o.user?.email ?? "Ospite",
+    userEmail: o.user?.email ?? "-",
     itemCount: o.items.reduce((sum, i) => sum + i.quantity, 0),
   }));
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { verifyAdminCredentials, createSessionToken, setSessionCookie } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
           email_verified: true,
         },
       });
+      revalidatePath("/admin/utenti");
     }
 
     const sessionToken = await createSessionToken(admin.id);

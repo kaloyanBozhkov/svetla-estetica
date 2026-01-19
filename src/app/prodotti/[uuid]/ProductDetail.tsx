@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Badge, HtmlContent } from "@/components/atoms";
-import { useCartStore, useAuthStore } from "@/stores";
+import { useCartStore } from "@/stores";
 import { formatPrice } from "@/lib/utils";
 import type { product } from "@prisma/client";
 
@@ -26,17 +26,10 @@ export function ProductDetail({ product }: Props) {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCartStore();
-  const { isAuthenticated, isLoading } = useAuthStore();
-  const isAuth = !isLoading && isAuthenticated();
 
   const isOutOfStock = product.stock <= 0;
 
   const handleAddToCart = () => {
-    if (!isAuth) {
-      router.push("/accedi");
-      return;
-    }
-
     for (let i = 0; i < quantity; i++) {
       addItem({
         productId: product.id,
@@ -118,31 +111,20 @@ export function ProductDetail({ product }: Props) {
 
           {/* Price */}
           <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-primary-50 to-white ring-1 ring-primary-100">
-            {isAuth ? (
-              <div className="flex items-baseline gap-2">
-                <span className="font-display text-4xl font-bold text-primary-600">
-                  {formatPrice(product.price)}
+            <div className="flex items-baseline gap-2">
+              <span className="font-display text-4xl font-bold text-primary-600">
+                {formatPrice(product.price)}
+              </span>
+              {product.stock > 0 && product.stock <= 5 && (
+                <span className="text-sm text-amber-600">
+                  Solo {product.stock} disponibili
                 </span>
-                {product.stock > 0 && product.stock <= 5 && (
-                  <span className="text-sm text-amber-600">
-                    Solo {product.stock} disponibili
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div>
-                <p className="text-gray-600 mb-3">
-                  Accedi per vedere il prezzo
-                </p>
-                <Link href="/accedi">
-                  <Button>Accedi</Button>
-                </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Quantity & Add to Cart */}
-          {isAuth && !isOutOfStock && (
+          {!isOutOfStock && (
             <div className="mt-8 space-y-4">
               <div className="flex items-center gap-4">
                 <span className="font-medium text-gray-700">Quantità:</span>

@@ -41,11 +41,13 @@ export default async function AdminOrderDetailPage({
         notes: order.notes,
         createdAt: order.created_at.toISOString(),
         updatedAt: order.updated_at.toISOString(),
-        user: {
-          name: order.user.name,
-          email: order.user.email,
-          phone: order.user.phone,
-        },
+        user: order.user
+          ? {
+              name: order.user.name,
+              email: order.user.email,
+              phone: order.user.phone,
+            }
+          : null,
         items: order.items.map((item) => ({
           id: item.id,
           quantity: item.quantity,
