@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input, Select, Card, Modal, RichTextEditor } from "@/components/atoms";
+import { Button, Input, Select, Card, Modal, RichTextEditor, ActionButton } from "@/components/atoms";
 import { ImageUpload } from "@/components/molecules";
+import { SparkleIcon } from "@/components/atoms/icons";
 import { type service_category } from "@prisma/client";
 
 const categoryOptions: { value: service_category; label: string }[] = [
@@ -42,6 +43,9 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
   const [deleting, setDeleting] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [error, setError] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [formatLoading, setFormatLoading] = useState(false);
+  const [rewordModal, setRewordModal] = useState(false);
 
   const [form, setForm] = useState<ServiceFormData>(
     initialData || {
@@ -96,6 +100,80 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
     }
   };
 
+  const handleAiReword = async () => {
+    if (!form.name) {
+      setError("Inserisci almeno il nome del trattamento");
+      return;
+    }
+
+    setAiLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/services/reword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: form.name,
+          description: form.description || "",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore AI");
+      }
+
+      const data = await res.json();
+      setForm({
+        ...form,
+        name: data.title,
+        description: data.description,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore AI");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleAiFormat = async () => {
+    if (!form.name) {
+      setError("Inserisci almeno il nome del trattamento");
+      return;
+    }
+
+    setFormatLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/services/format", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: form.name,
+          description: form.description || "",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Errore AI");
+      }
+
+      const data = await res.json();
+      setForm({
+        ...form,
+        name: data.title,
+        description: data.description,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore AI");
+    } finally {
+      setFormatLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
     setDeleting(true);
     try {
@@ -129,11 +207,41 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
             required
           />
 
-          <RichTextEditor
-            label="Descrizione"
-            value={form.description}
-            onChange={(value) => setForm({ ...form, description: value })}
-          />
+          <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Descrizione
+              </label>
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                <ActionButton
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setRewordModal(true)}
+                  loading={aiLoading}
+                  disabled={!form.name || formatLoading || aiLoading}
+                >
+                  <SparkleIcon className="w-4 h-4 mr-1" />
+                  Riformula con AI
+                </ActionButton>
+                <ActionButton
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleAiFormat}
+                  loading={formatLoading}
+                  disabled={!form.name || aiLoading || formatLoading}
+                >
+                  <SparkleIcon className="w-4 h-4 mr-1" />
+                  Formatta con AI
+                </ActionButton>
+              </div>
+            </div>
+            <RichTextEditor
+              value={form.description}
+              onChange={(value) => setForm({ ...form, description: value })}
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
@@ -248,6 +356,30 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
           </Button>
           <Button variant="danger" onClick={handleDelete} loading={deleting}>
             Elimina
+          </Button>
+        </div>
+      </Modal>
+
+      <Modal open={rewordModal} onClose={() => setRewordModal(false)}>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
+          Riformula con AI
+        </h3>
+        <p className="text-gray-600 mb-6">
+          Attenzione: il testo potrebbe essere modificato e arricchito
+          dall&apos;intelligenza artificiale. Verifica attentamente il
+          risultato prima di salvare.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button variant="ghost" onClick={() => setRewordModal(false)}>
+            Annulla
+          </Button>
+          <Button
+            onClick={() => {
+              setRewordModal(false);
+              handleAiReword();
+            }}
+          >
+            Procedi
           </Button>
         </div>
       </Modal>
