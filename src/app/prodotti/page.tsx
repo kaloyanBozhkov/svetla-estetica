@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { getSession } from "@/lib/auth";
 import { ProductsGrid } from "./ProductsGrid";
 import { type product_category } from "@prisma/client";
 import type { Metadata } from "next";
