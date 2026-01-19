@@ -45,27 +45,6 @@ export default function BookingApprovedEmail({
           </Section>
           <Section style={box}>
             <Section style={successBanner}>
-              <table style={{ margin: "0 auto" }}>
-                <tr>
-                  <td style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        width: "48px",
-                        height: "48px",
-                        borderRadius: "50%",
-                        backgroundColor: "#059669",
-                        margin: "0 auto",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                      dangerouslySetInnerHTML={{
-                        __html: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin: 10px;"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
-                      }}
-                    />
-                  </td>
-                </tr>
-              </table>
               <Text style={successText}>Appuntamento Confermato</Text>
             </Section>
 

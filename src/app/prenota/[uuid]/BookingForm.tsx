@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardTitle, Button, Input } from "@/components/atoms";
+import { CheckIcon } from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
 import { OPENING_HOUR, CLOSING_HOUR_WEEKDAY } from "@/lib/constants";
 import { z } from "zod";
@@ -81,7 +82,9 @@ export function BookingForm({ service, user }: BookingFormProps) {
   if (success) {
     return (
       <Card className="text-center">
-        <div className="text-5xl mb-4">✅</div>
+        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+          <CheckIcon className="w-8 h-8 text-green-600" />
+        </div>
         <CardTitle>Prenotazione Inviata!</CardTitle>
         <p className="mt-4 text-gray-600">
           La tua richiesta di prenotazione per <strong>{service.name}</strong> è

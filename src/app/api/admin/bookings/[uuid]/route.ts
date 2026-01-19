@@ -74,7 +74,7 @@ export async function PATCH(
           await resend.emails.send({
             from: "Svetla Estetica <noreply@svetlaestetica.com>",
             to: existingBooking.user.email,
-            subject: "✅ Appuntamento Confermato - Svetla Estetica",
+            subject: "Appuntamento Confermato - Svetla Estetica",
             react: BookingApprovedEmail({
               customerName,
               serviceName,
