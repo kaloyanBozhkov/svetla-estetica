@@ -28,7 +28,6 @@ const categoryLabels: Record<product_category, string> = {
 };
 
 export default async function ProductsPage() {
-  const user = await getSession();
   const products = await db.product.findMany({
     where: { active: true },
     orderBy: [{ priority: "desc" }, { name: "asc" }],

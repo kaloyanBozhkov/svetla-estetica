@@ -43,8 +43,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   const { uuid } = await params;
   const { success } = await searchParams;
   const isNewOrder = success === "true";
-
-  let user = await getSession();
+  const user = await getSession();
 
   // Find the order by UUID, with retry for webhook processing
   const order = isNewOrder
@@ -68,8 +67,12 @@ export default async function OrderPage({ params, searchParams }: Props) {
   // If this is a new order (just completed checkout) and user is not logged in
   // but the order has a user, redirect to auto-sign-in API route
   if (isNewOrder && !user && order.user) {
-    const token = Buffer.from(`${order.uuid}:${order.user.id}`).toString("base64");
-    redirect(`${env.NEXT_PUBLIC_BASE_URL}/api/auth/auto-sign-in?order=${order.uuid}&token=${token}`);
+    const token = Buffer.from(`${order.uuid}:${order.user.id}`).toString(
+      "base64"
+    );
+    redirect(
+      `${env.NEXT_PUBLIC_BASE_URL}/api/auth/auto-sign-in?order=${order.uuid}&token=${token}`
+    );
   }
 
   // Security check: only the order owner can view the order
@@ -102,4 +105,3 @@ export default async function OrderPage({ params, searchParams }: Props) {
     />
   );
 }
-
