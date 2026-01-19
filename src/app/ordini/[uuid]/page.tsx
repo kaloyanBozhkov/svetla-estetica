@@ -10,6 +10,36 @@ interface Props {
   searchParams: Promise<{ success?: string }>;
 }
 
+// Helper to wait for webhook to process and create user
+async function getOrderWithRetry(uuid: string, maxRetries = 5) {
+  for (let i = 0; i < maxRetries; i++) {
+    const order = await db.order.findUnique({
+      where: { uuid },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+        user: true,
+      },
+    });
+
+    // If order has user or it's not a new order, return it
+    if (order?.user || order?.payment_status === "paid") {
+      return order;
+    }
+
+    // Wait before retrying (increasing delay)
+    if (order && i < maxRetries - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
+    } else {
+      return order;
+    }
+  }
+  return null;
+}
+
 export default async function OrderPage({ params, searchParams }: Props) {
   const { uuid } = await params;
   const { success } = await searchParams;
@@ -17,18 +47,20 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
   let user = await getSession();
 
-  // First, find the order by UUID
-  const order = await db.order.findUnique({
-    where: { uuid },
-    include: {
-      items: {
+  // Find the order by UUID, with retry for webhook processing
+  const order = isNewOrder
+    ? await getOrderWithRetry(uuid)
+    : await db.order.findUnique({
+        where: { uuid },
         include: {
-          product: true,
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          user: true,
         },
-      },
-      user: true,
-    },
-  });
+      });
 
   if (!order) {
     notFound();
@@ -44,7 +76,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   }
 
   // Security check: only the order owner can view the order
-  // For new orders (from checkout redirect), we allow viewing
+  // For new orders (from checkout redirect), we allow viewing even without user
   if (!isNewOrder && (!user || order.user_id !== user.id)) {
     redirect("/accedi");
   }

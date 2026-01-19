@@ -2,14 +2,116 @@
 
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
-import { Button } from "@/components/atoms";
+import ReactCrop, { type Crop, type PixelCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { Button, Modal } from "@/components/atoms";
 import { S3Service, type ImageType } from "@/lib/s3/service";
+
+const TARGET_SIZE_KB = 150;
+const MAX_DIMENSION = 1200; // Max width/height for product images
 
 interface ImageUploadProps {
   value?: string;
   onChange: (url: string | null) => void;
   imageType: ImageType;
   label?: string;
+}
+
+// Compress image to target size
+async function compressImage(
+  canvas: HTMLCanvasElement,
+  targetSizeKB: number
+): Promise<Blob> {
+  let quality = 0.92;
+  let blob: Blob | null = null;
+
+  // Try WebP first (best compression), fallback to JPEG
+  const formats = ["image/webp", "image/jpeg"];
+
+  for (const format of formats) {
+    quality = 0.92;
+
+    while (quality > 0.1) {
+      blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, format, quality);
+      });
+
+      if (blob && blob.size <= targetSizeKB * 1024) {
+        return blob;
+      }
+
+      quality -= 0.05;
+    }
+
+    // If we got a blob but it's still too big, return best effort
+    if (blob) {
+      return blob;
+    }
+  }
+
+  // Fallback: return whatever we got
+  return (
+    blob ||
+    (await new Promise<Blob>((resolve) => {
+      canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.5);
+    }))
+  );
+}
+
+// Create cropped and compressed image from crop data
+async function getCroppedImage(
+  image: HTMLImageElement,
+  crop: PixelCrop
+): Promise<File> {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    throw new Error("No 2d context");
+  }
+
+  // Calculate scale to fit within max dimensions
+  const scaleX = image.naturalWidth / image.width;
+  const scaleY = image.naturalHeight / image.height;
+
+  const cropWidth = crop.width * scaleX;
+  const cropHeight = crop.height * scaleY;
+
+  // Scale down if larger than max dimension
+  let outputWidth = cropWidth;
+  let outputHeight = cropHeight;
+
+  if (outputWidth > MAX_DIMENSION || outputHeight > MAX_DIMENSION) {
+    const scale = Math.min(
+      MAX_DIMENSION / outputWidth,
+      MAX_DIMENSION / outputHeight
+    );
+    outputWidth *= scale;
+    outputHeight *= scale;
+  }
+
+  canvas.width = outputWidth;
+  canvas.height = outputHeight;
+
+  // Draw cropped and scaled image
+  ctx.drawImage(
+    image,
+    crop.x * scaleX,
+    crop.y * scaleY,
+    cropWidth,
+    cropHeight,
+    0,
+    0,
+    outputWidth,
+    outputHeight
+  );
+
+  // Compress to target size
+  const blob = await compressImage(canvas, TARGET_SIZE_KB);
+
+  // Create file from blob
+  const extension = blob.type === "image/webp" ? "webp" : "jpg";
+  return new File([blob], `cropped-image.${extension}`, { type: blob.type });
 }
 
 export function ImageUpload({
@@ -24,20 +126,16 @@ export function ImageUpload({
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Crop modal state
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
+
   const uploadFile = useCallback(
     async (file: File) => {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        setError("Seleziona un file immagine valido");
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError("L'immagine deve essere inferiore a 5MB");
-        return;
-      }
-
       setError("");
       setUploading(true);
       setProgress(0);
@@ -82,7 +180,60 @@ export function ImageUpload({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) uploadFile(file);
+    if (file) {
+      openCropModal(file);
+    }
+  };
+
+  const openCropModal = (file: File) => {
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setError("Seleziona un file immagine valido");
+      return;
+    }
+
+    // Validate file size (max 10MB for source, will be compressed)
+    if (file.size > 10 * 1024 * 1024) {
+      setError("L'immagine deve essere inferiore a 10MB");
+      return;
+    }
+
+    setOriginalFile(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result as string);
+      setCropModalOpen(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCropComplete = async () => {
+    if (!imageRef.current || !completedCrop || !originalFile) {
+      return;
+    }
+
+    try {
+      const croppedFile = await getCroppedImage(imageRef.current, completedCrop);
+      setCropModalOpen(false);
+      setImageSrc(null);
+      setCrop(undefined);
+      setCompletedCrop(undefined);
+      setOriginalFile(null);
+      await uploadFile(croppedFile);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Errore nel ritaglio");
+    }
+  };
+
+  const handleCropCancel = () => {
+    setCropModalOpen(false);
+    setImageSrc(null);
+    setCrop(undefined);
+    setCompletedCrop(undefined);
+    setOriginalFile(null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -110,7 +261,9 @@ export function ImageUpload({
     if (uploading) return;
 
     const file = e.dataTransfer.files?.[0];
-    if (file) uploadFile(file);
+    if (file) {
+      openCropModal(file);
+    }
   };
 
   const handleClick = () => {
@@ -133,6 +286,23 @@ export function ImageUpload({
     }
 
     onChange(null);
+  };
+
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { width, height } = e.currentTarget;
+    // Default to center crop with 80% of smallest dimension
+    const minDim = Math.min(width, height);
+    const cropSize = minDim * 0.8;
+    const x = (width - cropSize) / 2;
+    const y = (height - cropSize) / 2;
+
+    setCrop({
+      unit: "px",
+      x,
+      y,
+      width: cropSize,
+      height: cropSize,
+    });
   };
 
   return (
@@ -237,7 +407,7 @@ export function ImageUpload({
                 {isDragging ? "Rilascia per caricare" : "Clicca o trascina"}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                PNG, JPG, WEBP (max 5MB)
+                PNG, JPG, WEBP (max 10MB)
               </p>
             </>
           )}
@@ -253,6 +423,49 @@ export function ImageUpload({
       />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
+
+      {/* Crop Modal */}
+      <Modal
+        open={cropModalOpen}
+        onClose={handleCropCancel}
+      >
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-4">
+          Ritaglia immagine
+        </h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Seleziona l&apos;area da mantenere. L&apos;immagine verrà ottimizzata
+          automaticamente.
+        </p>
+
+        {imageSrc && (
+          <div className="max-h-[60vh] overflow-auto mb-4">
+            <ReactCrop
+              crop={crop}
+              onChange={(c) => setCrop(c)}
+              onComplete={(c) => setCompletedCrop(c)}
+              className="max-w-full"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                ref={imageRef}
+                src={imageSrc}
+                alt="Crop preview"
+                onLoad={onImageLoad}
+                style={{ maxWidth: "100%", maxHeight: "50vh" }}
+              />
+            </ReactCrop>
+          </div>
+        )}
+
+        <div className="flex justify-end gap-3">
+          <Button variant="ghost" onClick={handleCropCancel}>
+            Annulla
+          </Button>
+          <Button onClick={handleCropComplete} disabled={!completedCrop}>
+            Conferma e Carica
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

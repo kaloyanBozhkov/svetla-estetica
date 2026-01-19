@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -109,6 +110,9 @@ export async function PATCH(
         // Don't fail the request if email fails
       }
     }
+
+    // Revalidate admin pages
+    revalidatePath("/admin/prenotazioni");
 
     return NextResponse.json({ booking });
   } catch (error) {

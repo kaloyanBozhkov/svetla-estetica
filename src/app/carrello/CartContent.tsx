@@ -1,19 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCartStore, useAuthStore } from "@/stores";
+import { useCartStore } from "@/stores";
 import { CartItem } from "@/components/molecules";
 import { ActionButton, Button, Card } from "@/components/atoms";
 import { CartIcon } from "@/components/atoms/icons";
 import { formatPrice } from "@/lib/utils";
 import { SHIPPING_COST } from "@/lib/constants";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
 export function CartContent() {
-  const router = useRouter();
   const { items, updateQuantity, removeItem, getTotal, clearCart, syncWithDb, hasOutOfStockItems, isSyncing } = useCartStore();
-  const { isAuthenticated, isLoading } = useAuthStore();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState("");
   const [cancelMessage, setCancelMessage] = useState("");
@@ -84,19 +82,7 @@ export function CartContent() {
     }
   };
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated()) {
-      router.push("/accedi");
-    }
-  }, [isLoading, isAuthenticated, router]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary-600 border-t-transparent rounded-full" />
-      </div>
-    );
-  }
+  // No auth redirect - allow anonymous users to view cart and checkout
 
   if (items.length === 0) {
     return (

@@ -61,7 +61,7 @@ export async function POST(request: Request) {
             where: { email: customerEmail },
           });
 
-          // If no user exists, create one
+          // If no user exists, create one with verified email (Stripe validates it)
           if (!user) {
             const customerName =
               session.shipping_details?.name ||
@@ -75,11 +75,18 @@ export async function POST(request: Request) {
             user = await db.user.create({
               data: {
                 email: customerEmail,
+                email_verified: true, // Stripe validates the email
                 name: customerName,
                 phone: customerPhone,
               },
             });
             console.log("Created new user from guest checkout:", user.id);
+          } else if (!user.email_verified) {
+            // If user exists but email not verified, verify it now
+            await db.user.update({
+              where: { id: user.id },
+              data: { email_verified: true },
+            });
           }
 
           userId = user.id;

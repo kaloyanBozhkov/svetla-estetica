@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -55,9 +56,12 @@ export async function PATCH(
       data: { status },
     });
 
+    // Revalidate admin pages
+    revalidatePath("/admin/ordini");
+
     // Send email if status changed
-    if (status !== previousStatus && existingOrder.user.email) {
-      const customerName = existingOrder.user.name || "Cliente";
+    if (status !== previousStatus && existingOrder.user?.email) {
+      const customerName = existingOrder.user?.name || "Cliente";
 
       try {
         await resend.emails.send({

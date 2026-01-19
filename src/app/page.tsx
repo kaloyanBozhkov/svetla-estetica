@@ -552,7 +552,7 @@ export default async function HomePage() {
               Pronta a Prenderti Cura di Te?
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Accedi per vedere i prezzi e prenotare il tuo appuntamento
+              Accedi per prenotare il tuo appuntamento
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/accedi">
