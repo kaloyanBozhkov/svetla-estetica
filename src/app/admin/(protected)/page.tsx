@@ -158,7 +158,7 @@ async function RecentOrders() {
         >
           <div>
             <p className="font-medium">{formatPrice(order.total)}</p>
-            <p className="text-sm text-gray-500">{order.user.email}</p>
+            <p className="text-sm text-gray-500">{order.user?.email ?? "Ospite"}</p>
           </div>
           <span
             className={`text-sm px-2 py-1 rounded ${
