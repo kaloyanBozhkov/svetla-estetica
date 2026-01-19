@@ -79,7 +79,6 @@ export default async function ProductsPage() {
 
         <ProductsGrid
           products={productsWithLabels}
-          isAuthenticated={!!user}
           categories={Object.entries(categoryLabels).map(([value, label]) => ({
             value: value as product_category,
             label,

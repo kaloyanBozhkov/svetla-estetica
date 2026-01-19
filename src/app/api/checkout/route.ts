@@ -17,10 +17,8 @@ const checkoutSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+    // Session is optional - guests can checkout too
     const session = await getSession();
-    if (!session?.id) {
-      return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
-    }
 
     const body = await req.json();
     const { items } = checkoutSchema.parse(body);
@@ -71,26 +69,31 @@ export async function POST(req: Request) {
 
     const total = subtotal + SHIPPING_COST;
 
-    const order = await db.order.create({
-      data: {
-        user_id: session.id,
-        subtotal,
-        shipping_cost: SHIPPING_COST,
-        total,
-        status: "pending",
-        payment_status: "pending",
-        items: {
-          create: items.map((item) => {
-            const product = products.find((p) => p.id === item.productId)!;
-            return {
-              product_id: item.productId,
-              quantity: item.quantity,
-              price: product.price,
-            };
-          }),
-        },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const orderCreateData: any = {
+      subtotal,
+      shipping_cost: SHIPPING_COST,
+      total,
+      status: "pending",
+      payment_status: "pending",
+      items: {
+        create: items.map((item) => {
+          const product = products.find((p) => p.id === item.productId)!;
+          return {
+            product_id: item.productId,
+            quantity: item.quantity,
+            price: product.price,
+          };
+        }),
       },
-    });
+    };
+
+    // Connect user if logged in, otherwise guest checkout (user_id will be null)
+    if (session?.id) {
+      orderCreateData.user = { connect: { id: session.id } };
+    }
+
+    const order = await db.order.create({ data: orderCreateData });
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -100,9 +103,11 @@ export async function POST(req: Request) {
       cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/carrello?cancelled=true`,
       metadata: {
         order_uuid: order.uuid,
-        user_id: session.id.toString(),
+        user_id: session?.id?.toString() ?? "",
+        is_guest: session ? "false" : "true",
       },
-      customer_email: session.email,
+      // If logged in, use their email; otherwise Stripe will collect it
+      ...(session?.email ? { customer_email: session.email } : {}),
       shipping_address_collection: {
         allowed_countries: [
           // European Union

@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { OrderSuccess } from "./OrderSuccess";
+import { createSessionForUser } from "@/lib/auth/session";
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -11,25 +13,40 @@ interface Props {
 export default async function OrderPage({ params, searchParams }: Props) {
   const { uuid } = await params;
   const { success } = await searchParams;
-  const user = await getSession();
+  const isNewOrder = success === "true";
 
-  if (!user) {
-    redirect("/accedi");
-  }
+  let user = await getSession();
 
+  // First, find the order by UUID
   const order = await db.order.findUnique({
-    where: { uuid, user_id: user.id },
+    where: { uuid },
     include: {
       items: {
         include: {
           product: true,
         },
       },
+      user: true,
     },
   });
 
   if (!order) {
     notFound();
+  }
+
+  // If this is a new order (just completed checkout) and user is not logged in
+  // but the order has a user, auto-sign them in
+  if (isNewOrder && !user && order.user) {
+    const cookieStore = await cookies();
+    const sessionCookie = await createSessionForUser(order.user.id);
+    cookieStore.set(sessionCookie.name, sessionCookie.value, sessionCookie.options);
+    user = order.user;
+  }
+
+  // Security check: only the order owner can view the order
+  // For new orders (from checkout redirect), we allow viewing
+  if (!isNewOrder && (!user || order.user_id !== user.id)) {
+    redirect("/accedi");
   }
 
   return (
@@ -52,7 +69,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
           },
         })),
       }}
-      isNewOrder={success === "true"}
+      isNewOrder={isNewOrder}
     />
   );
 }

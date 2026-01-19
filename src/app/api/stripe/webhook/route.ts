@@ -47,21 +47,59 @@ export async function POST(request: Request) {
       });
 
       const orderUuid = session.metadata?.order_uuid;
-      const userId = session.metadata?.user_id;
+      const isGuest = session.metadata?.is_guest === "true";
+      let userId = session.metadata?.user_id
+        ? parseInt(session.metadata.user_id)
+        : null;
 
-      // Update order with payment intent ID and mark as paid
+      // For guest checkout, create or find user by email
+      if (isGuest || !userId) {
+        const customerEmail = session.customer_details?.email;
+        if (customerEmail) {
+          // Try to find existing user
+          let user = await db.user.findUnique({
+            where: { email: customerEmail },
+          });
+
+          // If no user exists, create one
+          if (!user) {
+            const customerName =
+              session.shipping_details?.name ||
+              session.customer_details?.name ||
+              null;
+            const customerPhone =
+              session.shipping_details?.phone ||
+              session.customer_details?.phone ||
+              null;
+
+            user = await db.user.create({
+              data: {
+                email: customerEmail,
+                name: customerName,
+                phone: customerPhone,
+              },
+            });
+            console.log("Created new user from guest checkout:", user.id);
+          }
+
+          userId = user.id;
+        }
+      }
+
+      // Update order with payment intent ID, user_id (if guest), and mark as paid
       if (orderUuid && session.payment_intent) {
         const order = await db.order.findUnique({
           where: { uuid: orderUuid },
           include: { items: true },
         });
 
-        await db.order.updateMany({
+        await db.order.update({
           where: { uuid: orderUuid },
           data: {
             external_stripe_payment_intent_id: session.payment_intent as string,
             payment_status: "paid",
             status: "confirmed",
+            ...(userId && !order?.user_id ? { user_id: userId } : {}),
           },
         });
 
@@ -81,9 +119,12 @@ export async function POST(request: Request) {
 
           // Send email notification to admin
           try {
-            const customerName = session.shipping_details?.name || session.customer_details?.name || "Cliente";
+            const customerName =
+              session.shipping_details?.name ||
+              session.customer_details?.name ||
+              "Cliente";
             const customerEmail = session.customer_details?.email || "N/A";
-            
+
             await resend.emails.send({
               from: "Svetla Estetica <noreply@svetlaestetica.com>",
               to: ADMIN_EMAIL,
@@ -98,7 +139,10 @@ export async function POST(request: Request) {
               `,
             });
           } catch (emailError) {
-            console.error("Failed to send admin order notification:", emailError);
+            console.error(
+              "Failed to send admin order notification:",
+              emailError
+            );
           }
         }
       }
@@ -106,7 +150,7 @@ export async function POST(request: Request) {
       // Update user name and phone if they are empty
       if (userId) {
         const user = await db.user.findUnique({
-          where: { id: parseInt(userId) },
+          where: { id: userId },
           select: { name: true, phone: true },
         });
 
@@ -131,16 +175,21 @@ export async function POST(request: Request) {
           if (Object.keys(updates).length > 0) {
             console.log("Updating user with:", updates);
             await db.user.update({
-              where: { id: parseInt(userId) },
+              where: { id: userId },
               data: updates,
             });
           }
         }
 
-        // Clear cart reminder timestamp on order completion
+        // Clear cart reminder timestamp and cart items on order completion
         await db.user.update({
-          where: { id: parseInt(userId) },
+          where: { id: userId },
           data: { last_cart_reminder_at: null },
+        });
+
+        // Clear user's cart items
+        await db.cart_item.deleteMany({
+          where: { user_id: userId },
         });
       }
 

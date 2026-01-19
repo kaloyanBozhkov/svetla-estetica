@@ -25,7 +25,7 @@ interface Service {
 
 interface ServicesGridProps {
   services: Service[];
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   categories: { value: service_category; label: string }[];
 }
 
@@ -34,7 +34,7 @@ type ViewMode = "grid" | "list";
 
 export function ServicesGrid({
   services,
-  isAuthenticated,
+  isAuthenticated = false,
   categories,
 }: ServicesGridProps) {
   const router = useRouter();
@@ -265,11 +265,11 @@ export function ServicesGrid({
 
 function ServiceListItem({
   service,
-  isAuthenticated,
+  isAuthenticated = false,
   onBook,
 }: {
   service: Service;
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   onBook: () => void;
 }) {
   return (
@@ -326,20 +326,18 @@ function ServiceListItem({
         </div>
 
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-          {isAuthenticated ? (
-            <span className="font-display text-xl font-bold text-primary-600">
-              {formatPrice(service.price)}
-            </span>
-          ) : (
-            <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
-              Accedi per i prezzi
-            </Link>
-          )}
+          <span className="font-display text-xl font-bold text-primary-600">
+            {formatPrice(service.price)}
+          </span>
 
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <Button size="sm" onClick={onBook}>
               Prenota
             </Button>
+          ) : (
+            <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
+              Accedi per prenotare
+            </Link>
           )}
         </div>
       </div>

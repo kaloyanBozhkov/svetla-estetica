@@ -202,8 +202,8 @@ model order {
   subtotal                          Int            @default(0)
   total                             Int
 
-  user    user @relation(fields: [user_id], references: [id])
-  user_id Int
+  user    user? @relation(fields: [user_id], references: [id])
+  user_id Int?
 
   items order_item[]
 

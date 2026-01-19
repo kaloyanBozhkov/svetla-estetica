@@ -91,7 +91,7 @@ async function seed() {
         data: {
           name: service.name,
           description: service.description,
-          price: service.price,
+          price: service.price * 100,
           duration_min: 0,
           category: service.category,
           image_url: imgUrl,

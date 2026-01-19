@@ -33,6 +33,32 @@ export async function setSessionCookie(token: string): Promise<void> {
   });
 }
 
+// Helper to create session and return cookie data for manual setting
+export async function createSessionForUser(userId: number): Promise<{
+  name: string;
+  value: string;
+  options: {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: "lax";
+    maxAge: number;
+    path: string;
+  };
+}> {
+  const token = await createSessionToken(userId);
+  return {
+    name: SESSION_COOKIE_NAME,
+    value: token,
+    options: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: SESSION_DURATION_MS / 1000,
+      path: "/",
+    },
+  };
+}
+
 export async function getSession(): Promise<user | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;

@@ -13,7 +13,7 @@ interface ServiceCardProps {
   durationMin: number;
   imageUrl?: string;
   category: string;
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   onBook?: () => void;
 }
 
@@ -25,7 +25,7 @@ export function ServiceCard({
   durationMin,
   imageUrl,
   category,
-  isAuthenticated,
+  isAuthenticated = false,
   onBook,
 }: ServiceCardProps) {
   const handleBook = (e: React.MouseEvent) => {
@@ -92,25 +92,23 @@ export function ServiceCard({
       </div>
 
       <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
-        {isAuthenticated ? (
-          <span className="font-display text-xl font-bold text-primary-600">
-            {formatPrice(price)}
-          </span>
-        ) : (
+        <span className="font-display text-xl font-bold text-primary-600">
+          {formatPrice(price)}
+        </span>
+
+        {isAuthenticated && onBook ? (
+          <Button size="sm" onClick={handleBook}>
+            Prenota
+          </Button>
+        ) : !isAuthenticated ? (
           <Link
             href="/accedi"
             className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            Accedi per i prezzi
+            Accedi per prenotare
           </Link>
-        )}
-
-        {isAuthenticated && onBook && (
-          <Button size="sm" onClick={handleBook}>
-            Prenota
-          </Button>
-        )}
+        ) : null}
       </CardFooter>
     </Card>
   );

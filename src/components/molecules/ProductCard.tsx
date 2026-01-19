@@ -15,7 +15,6 @@ interface ProductCardProps {
   imageUrl?: string;
   stock: number;
   category: string;
-  isAuthenticated: boolean;
   onAddToCart?: () => void;
 }
 
@@ -27,7 +26,6 @@ export function ProductCard({
   imageUrl,
   stock,
   category,
-  isAuthenticated,
   onAddToCart,
 }: ProductCardProps) {
   const [isAdded, setIsAdded] = useState(false);
@@ -95,21 +93,11 @@ export function ProductCard({
       </div>
 
       <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
-        {isAuthenticated ? (
-          <span className="font-display text-xl font-bold text-primary-600">
-            {formatPrice(price)}
-          </span>
-        ) : (
-          <Link
-            href="/accedi"
-            className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
-            onClick={(e) => e.stopPropagation()}
-          >
-            Accedi per i prezzi
-          </Link>
-        )}
+        <span className="font-display text-xl font-bold text-primary-600">
+          {formatPrice(price)}
+        </span>
 
-        {isAuthenticated && !isOutOfStock && onAddToCart && (
+        {!isOutOfStock && onAddToCart && (
           <Button
             size="sm"
             onClick={handleAddToCart}

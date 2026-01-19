@@ -25,7 +25,6 @@ interface Product {
 
 interface ProductsGridProps {
   products: Product[];
-  isAuthenticated: boolean;
   categories: { value: product_category; label: string }[];
 }
 
@@ -34,7 +33,6 @@ type ViewMode = "grid" | "list";
 
 export function ProductsGrid({
   products,
-  isAuthenticated,
   categories,
 }: ProductsGridProps) {
   const [selectedCategory, setSelectedCategory] =
@@ -195,7 +193,6 @@ export function ProductsGrid({
               imageUrl={product.imageUrl ?? undefined}
               stock={product.stock}
               category={product.categoryLabel}
-              isAuthenticated={isAuthenticated}
               onAddToCart={() => handleAddToCart(product)}
             />
           ))}
@@ -206,7 +203,6 @@ export function ProductsGrid({
             <ProductListItem
               key={product.id}
               product={product}
-              isAuthenticated={isAuthenticated}
               onAddToCart={() => handleAddToCart(product)}
             />
           ))}
@@ -272,11 +268,9 @@ export function ProductsGrid({
 
 function ProductListItem({
   product,
-  isAuthenticated,
   onAddToCart,
 }: {
   product: Product;
-  isAuthenticated: boolean;
   onAddToCart: () => void;
 }) {
   const isOutOfStock = product.stock <= 0;
@@ -330,17 +324,11 @@ function ProductListItem({
         </div>
 
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-          {isAuthenticated ? (
-            <span className="font-display text-xl font-bold text-primary-600">
-              {formatPrice(product.price)}
-            </span>
-          ) : (
-            <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
-              Accedi per i prezzi
-            </Link>
-          )}
+          <span className="font-display text-xl font-bold text-primary-600">
+            {formatPrice(product.price)}
+          </span>
 
-          {isAuthenticated && !isOutOfStock && (
+          {!isOutOfStock && (
             <Button size="sm" onClick={onAddToCart}>
               Aggiungi
             </Button>
