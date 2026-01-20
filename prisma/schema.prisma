@@ -146,14 +146,15 @@ model product {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  active      Boolean          @default(true)
-  category    product_category
-  description String?
-  image_url   String?
-  name        String
-  price       Int
-  priority    Int              @default(0)
-  stock       Int              @default(0)
+  active           Boolean          @default(true)
+  category         product_category
+  description      String?
+  discount_percent Int              @default(0) // 0-100, percentage off
+  image_url        String?
+  name             String
+  price            Int
+  priority         Int              @default(0)
+  stock            Int              @default(0)
 
   cart_items  cart_item[]
   order_items order_item[]
@@ -163,6 +164,7 @@ model product {
   @@index([category])
   @@index([active])
   @@index([priority])
+  @@index([discount_percent])
 }
 
 model service {
@@ -214,8 +216,10 @@ model order {
 model order_item {
   id Int @id @default(autoincrement())
 
-  price    Int
-  quantity Int
+  discount_percent Int @default(0) // discount at time of purchase
+  original_price   Int @default(0) // original price before discount
+  price            Int // final price after discount
+  quantity         Int
 
   order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id   Int

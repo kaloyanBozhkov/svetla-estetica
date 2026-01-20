@@ -46,6 +46,7 @@ export default async function AdminProductsPage({
     uuid: p.uuid,
     name: p.name,
     price: p.price,
+    discountPercent: p.discount_percent,
     stock: p.stock,
     category: p.category,
     categoryLabel: categoryLabels[p.category],

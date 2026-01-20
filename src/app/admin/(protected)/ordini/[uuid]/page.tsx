@@ -52,6 +52,8 @@ export default async function AdminOrderDetailPage({
           id: item.id,
           quantity: item.quantity,
           price: item.price,
+          originalPrice: item.original_price,
+          discountPercent: item.discount_percent,
           product: {
             uuid: item.product.uuid,
             name: item.product.name,

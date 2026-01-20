@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { calculateDiscountedPrice } from "@/lib/utils";
 
 const validateCartSchema = z.object({
   items: z.array(
@@ -29,6 +30,7 @@ export async function POST(req: Request) {
         uuid: true,
         name: true,
         price: true,
+        discount_percent: true,
         stock: true,
         active: true,
         image_url: true,
@@ -57,11 +59,18 @@ export async function POST(req: Request) {
         ? Math.min(item.quantity, product.stock) 
         : item.quantity;
 
+      // Calculate final price with discount
+      const finalPrice = product.discount_percent > 0
+        ? calculateDiscountedPrice(product.price, product.discount_percent)
+        : product.price;
+
       validatedItems.push({
         product_id: product.id,
         product_uuid: product.uuid,
         name: product.name,
-        price: product.price,
+        price: finalPrice,
+        original_price: product.price,
+        discount_percent: product.discount_percent,
         stock: product.stock,
         image_url: product.image_url,
         quantity,

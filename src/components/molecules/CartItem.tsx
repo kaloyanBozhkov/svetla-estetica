@@ -8,6 +8,8 @@ import Link from "next/link";
 interface CartItemProps {
   name: string;
   price: number;
+  originalPrice?: number;
+  discountPercent?: number;
   quantity: number;
   stock: number;
   imageUrl?: string;
@@ -21,6 +23,8 @@ interface CartItemProps {
 export function CartItem({
   name,
   price,
+  originalPrice,
+  discountPercent,
   quantity,
   stock,
   imageUrl,
@@ -32,6 +36,7 @@ export function CartItem({
 }: CartItemProps) {
   const isAtMax = stock > 0 && quantity >= stock;
   const isOutOfStock = outOfStock || stock <= 0;
+  const hasDiscount = discountPercent && discountPercent > 0 && originalPrice;
   
   return (
     <div className={`py-4 border-b border-gray-100 last:border-0 ${isOutOfStock ? "bg-red-50" : ""}`}>
@@ -63,9 +68,21 @@ export function CartItem({
           >
             {name}
           </Link>
-          <p className="mt-1 text-sm text-primary-600 font-semibold">
-            {formatPrice(price)}
-          </p>
+          <div className="mt-1 flex items-center gap-2">
+            {hasDiscount && (
+              <>
+                <span className="text-xs text-gray-400 line-through">
+                  {formatPrice(originalPrice)}
+                </span>
+                <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
+                  -{discountPercent}%
+                </span>
+              </>
+            )}
+            <span className={`text-sm font-semibold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+              {formatPrice(price)}
+            </span>
+          </div>
           {isOutOfStock && (
             <p className="mt-1 text-xs text-red-600 font-medium">
               ⚠ Esaurito - Rimuovi per procedere

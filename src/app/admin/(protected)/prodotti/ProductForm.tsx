@@ -36,6 +36,7 @@ interface ProductFormData {
   name: string;
   description: string;
   price: number;
+  discountPercent: number;
   stock: number;
   priority: number;
   category: product_category;
@@ -65,6 +66,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
       name: "",
       description: "",
       price: 0,
+      discountPercent: 0,
       stock: 0,
       priority: 0,
       category: "viso",
@@ -92,6 +94,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
           name: form.name,
           description: form.description || null,
           price: Math.round(form.price * 100),
+          discount_percent: form.discountPercent,
           stock: form.stock,
           priority: form.priority,
           category: form.category,
@@ -270,7 +273,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Input
               label="Prezzo (€)"
               type="number"
@@ -281,6 +284,18 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
                 setForm({ ...form, price: parseFloat(e.target.value) || 0 })
               }
               required
+            />
+
+            <Input
+              label="Sconto (%)"
+              type="number"
+              min="0"
+              max="100"
+              value={form.discountPercent}
+              onChange={(e) =>
+                setForm({ ...form, discountPercent: Math.min(100, Math.max(0, parseInt(e.target.value) || 0)) })
+              }
+              placeholder="0"
             />
 
             <Input

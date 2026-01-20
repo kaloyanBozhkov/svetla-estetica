@@ -31,6 +31,8 @@ interface OrderDetailProps {
       id: number;
       quantity: number;
       price: number;
+      originalPrice?: number;
+      discountPercent?: number;
       product: {
         uuid: string;
         name: string;
@@ -157,46 +159,63 @@ export function OrderDetail({ order }: OrderDetailProps) {
               Prodotti ({order.items.length})
             </h2>
             <div className="divide-y divide-gray-200">
-              {order.items.map((item) => (
-                <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex gap-4">
-                  <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                    {item.product.imageUrl ? (
-                      <Image
-                        src={item.product.imageUrl}
-                        alt={item.product.name}
-                        fill
-                        className="object-contain p-2"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        No img
+              {order.items.map((item) => {
+                const hasDiscount = item.discountPercent && item.discountPercent > 0 && item.originalPrice;
+                return (
+                  <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex gap-4">
+                    <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                      {item.product.imageUrl ? (
+                        <Image
+                          src={item.product.imageUrl}
+                          alt={item.product.name}
+                          fill
+                          className="object-contain p-2"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          No img
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <Link
+                        href={`/prodotti/${item.product.uuid}`}
+                        className="font-medium text-gray-900 hover:text-primary-600 line-clamp-2"
+                        target="_blank"
+                      >
+                        {item.product.name}
+                      </Link>
+                      <p className="text-sm text-gray-500">{item.product.brand}</p>
+                      <div className="mt-1 flex items-center gap-4 text-sm">
+                        <span className="text-gray-600">Qtà: {item.quantity}</span>
+                        {hasDiscount && item.originalPrice ? (
+                          <span className="flex items-center gap-2">
+                            <span className="text-gray-400 line-through">
+                              {formatPrice(item.originalPrice)}
+                            </span>
+                            <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
+                              -{item.discountPercent}%
+                            </span>
+                            <span className="font-medium text-red-600">
+                              {formatPrice(item.price)} cad.
+                            </span>
+                          </span>
+                        ) : (
+                          <span className="font-medium text-gray-900">
+                            {formatPrice(item.price)} cad.
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <Link
-                      href={`/prodotti/${item.product.uuid}`}
-                      className="font-medium text-gray-900 hover:text-primary-600 line-clamp-2"
-                      target="_blank"
-                    >
-                      {item.product.name}
-                    </Link>
-                    <p className="text-sm text-gray-500">{item.product.brand}</p>
-                    <div className="mt-1 flex items-center gap-4 text-sm">
-                      <span className="text-gray-600">Qtà: {item.quantity}</span>
-                      <span className="font-medium text-gray-900">
-                        {formatPrice(item.price)} cad.
-                      </span>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-semibold ${hasDiscount ? "text-red-600" : "text-gray-900"}`}>
+                        {formatPrice(item.price * item.quantity)}
+                      </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900">
-                      {formatPrice(item.price * item.quantity)}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
               <div className="flex justify-between items-center text-gray-600">

@@ -120,6 +120,8 @@ export function CartContent() {
                   key={item.productId}
                   name={item.name}
                   price={item.price}
+                  originalPrice={item.originalPrice}
+                  discountPercent={item.discountPercent}
                   quantity={item.quantity}
                   stock={item.stock ?? 999}
                   imageUrl={item.imageUrl}

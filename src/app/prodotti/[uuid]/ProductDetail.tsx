@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Badge, HtmlContent } from "@/components/atoms";
 import { useCartStore } from "@/stores";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, calculateDiscountedPrice } from "@/lib/utils";
 import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
 import type { product } from "@prisma/client";
 
@@ -19,6 +19,10 @@ export function ProductDetail({ product }: Props) {
   const { addItem } = useCartStore();
 
   const isOutOfStock = product.stock <= 0;
+  const hasDiscount = product.discount_percent > 0;
+  const finalPrice = hasDiscount 
+    ? calculateDiscountedPrice(product.price, product.discount_percent) 
+    : product.price;
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -26,7 +30,9 @@ export function ProductDetail({ product }: Props) {
         productId: product.id,
         productUuid: product.uuid,
         name: product.name,
-        price: product.price,
+        price: finalPrice,
+        originalPrice: product.price,
+        discountPercent: product.discount_percent,
         stock: product.stock,
         imageUrl: product.image_url || undefined,
       });
@@ -74,6 +80,13 @@ export function ProductDetail({ product }: Props) {
               </div>
             </div>
           )}
+          {hasDiscount && (
+            <div className="absolute top-4 right-4 z-10">
+              <Badge variant="danger" className="text-lg px-4 py-2 bg-red-500 text-white font-bold">
+                -{product.discount_percent}%
+              </Badge>
+            </div>
+          )}
           {isOutOfStock && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
               <Badge variant="danger" className="text-lg px-6 py-2">
@@ -101,11 +114,21 @@ export function ProductDetail({ product }: Props) {
           )}
 
           {/* Price */}
-          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-primary-50 to-white ring-1 ring-primary-100">
-            <div className="flex items-baseline gap-2">
-              <span className="font-display text-4xl font-bold text-primary-600">
-                {formatPrice(product.price)}
+          <div className={`mt-8 p-6 rounded-2xl bg-gradient-to-br ${hasDiscount ? "from-red-50 to-white ring-1 ring-red-100" : "from-primary-50 to-white ring-1 ring-primary-100"}`}>
+            <div className="flex items-baseline gap-3 flex-wrap">
+              {hasDiscount && (
+                <span className="font-display text-2xl text-gray-400 line-through">
+                  {formatPrice(product.price)}
+                </span>
+              )}
+              <span className={`font-display text-4xl font-bold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+                {formatPrice(finalPrice)}
               </span>
+              {hasDiscount && (
+                <span className="text-sm bg-red-100 text-red-600 px-2 py-1 rounded-lg font-medium">
+                  Risparmi {formatPrice(product.price - finalPrice)}
+                </span>
+              )}
               {product.stock > 0 && product.stock <= 5 && (
                 <span className="text-sm text-amber-600">
                   Solo {product.stock} disponibili

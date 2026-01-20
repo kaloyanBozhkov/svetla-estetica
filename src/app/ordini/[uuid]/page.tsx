@@ -95,6 +95,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
           id: item.id,
           quantity: item.quantity,
           price: item.price,
+          originalPrice: item.original_price,
+          discountPercent: item.discount_percent,
           product: {
             name: item.product.name,
             imageUrl: item.product.image_url,

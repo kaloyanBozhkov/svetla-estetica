@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ProductCard } from "@/components/molecules";
 import { Button, Badge, Card } from "@/components/atoms";
 import { useCartStore } from "@/stores";
-import { formatPrice, stripHtml } from "@/lib/utils";
+import { formatPrice, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
 import { type product_category } from "@prisma/client";
 
 const ITEMS_PER_PAGE = 30;
@@ -17,6 +18,7 @@ interface Product {
   name: string;
   description: string | null;
   price: number;
+  discountPercent: number;
   stock: number;
   imageUrl: string | null;
   category: product_category;
@@ -28,13 +30,14 @@ interface ProductsGridProps {
   categories: { value: product_category; label: string }[];
 }
 
-type SortOption = "default" | "price-asc" | "price-desc";
+type SortOption = "default" | "price-asc" | "price-desc" | "discount";
 type ViewMode = "grid" | "list";
 
 export function ProductsGrid({
   products,
   categories,
 }: ProductsGridProps) {
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] =
     useState<product_category | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("default");
@@ -42,15 +45,29 @@ export function ProductsGrid({
   const [currentPage, setCurrentPage] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
 
+  // Check URL params for initial sort
+  useEffect(() => {
+    const ordinamento = searchParams.get("ordinamento");
+    if (ordinamento === "sconto") {
+      setSortBy("discount");
+    }
+  }, [searchParams]);
+
   const filteredAndSortedProducts = useMemo(() => {
     const result = selectedCategory
       ? products.filter((p) => p.category === selectedCategory)
       : [...products];
 
     if (sortBy === "price-asc") {
-      result.sort((a, b) => a.price - b.price);
+      const getEffectivePrice = (p: Product) => 
+        p.discountPercent > 0 ? calculateDiscountedPrice(p.price, p.discountPercent) : p.price;
+      result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
     } else if (sortBy === "price-desc") {
-      result.sort((a, b) => b.price - a.price);
+      const getEffectivePrice = (p: Product) => 
+        p.discountPercent > 0 ? calculateDiscountedPrice(p.price, p.discountPercent) : p.price;
+      result.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
+    } else if (sortBy === "discount") {
+      result.sort((a, b) => b.discountPercent - a.discountPercent);
     }
 
     return result;
@@ -70,11 +87,16 @@ export function ProductsGrid({
   };
 
   const handleAddToCart = (product: Product) => {
+    const effectivePrice = product.discountPercent > 0 
+      ? calculateDiscountedPrice(product.price, product.discountPercent) 
+      : product.price;
     addItem({
       productId: product.id,
       productUuid: product.uuid,
       name: product.name,
-      price: product.price,
+      price: effectivePrice,
+      originalPrice: product.price,
+      discountPercent: product.discountPercent,
       stock: product.stock,
       imageUrl: product.imageUrl ?? undefined,
     });
@@ -122,6 +144,7 @@ export function ProductsGrid({
             <option value="default">Ordina per</option>
             <option value="price-asc">Prezzo: basso → alto</option>
             <option value="price-desc">Prezzo: alto → basso</option>
+            <option value="discount">Sconto: più alto</option>
           </select>
 
           {/* View toggle */}
@@ -190,6 +213,7 @@ export function ProductsGrid({
               name={product.name}
               description={product.description ?? undefined}
               price={product.price}
+              discountPercent={product.discountPercent}
               imageUrl={product.imageUrl ?? undefined}
               stock={product.stock}
               category={product.categoryLabel}
@@ -274,6 +298,10 @@ function ProductListItem({
   onAddToCart: () => void;
 }) {
   const isOutOfStock = product.stock <= 0;
+  const hasDiscount = product.discountPercent > 0;
+  const finalPrice = hasDiscount 
+    ? calculateDiscountedPrice(product.price, product.discountPercent) 
+    : product.price;
 
   return (
     <Card className="flex flex-col sm:flex-row overflow-hidden p-0">
@@ -298,6 +326,14 @@ function ProductListItem({
               </span>
             </div>
           </div>
+        )}
+        {hasDiscount && (
+          <Badge
+            variant="danger"
+            className="absolute top-3 right-3 bg-red-500 text-white font-bold"
+          >
+            -{product.discountPercent}%
+          </Badge>
         )}
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -324,9 +360,16 @@ function ProductListItem({
         </div>
 
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-          <span className="font-display text-xl font-bold text-primary-600">
-            {formatPrice(product.price)}
-          </span>
+          <div className="flex flex-col">
+            {hasDiscount && (
+              <span className="text-sm text-gray-400 line-through">
+                {formatPrice(product.price)}
+              </span>
+            )}
+            <span className={`font-display text-xl font-bold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+              {formatPrice(finalPrice)}
+            </span>
+          </div>
 
           {!isOutOfStock && (
             <Button size="sm" onClick={onAddToCart}>

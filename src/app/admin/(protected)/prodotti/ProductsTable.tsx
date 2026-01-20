@@ -12,6 +12,7 @@ interface Product {
   uuid: string;
   name: string;
   price: number;
+  discountPercent: number;
   stock: number;
   category: product_category;
   categoryLabel: string;
@@ -24,7 +25,7 @@ interface ProductsTableProps {
   initialSearch?: string;
 }
 
-type SortKey = "name" | "brand" | "category" | "price" | "stock" | "active";
+type SortKey = "name" | "brand" | "category" | "price" | "discount" | "stock" | "active";
 type SortOrder = "asc" | "desc";
 
 function SortIcon({ active, order }: { active: boolean; order: SortOrder }) {
@@ -85,6 +86,9 @@ export function ProductsTable({ products, initialSearch = "" }: ProductsTablePro
         case "price":
           comparison = a.price - b.price;
           break;
+        case "discount":
+          comparison = a.discountPercent - b.discountPercent;
+          break;
         case "stock":
           comparison = a.stock - b.stock;
           break;
@@ -134,6 +138,10 @@ export function ProductsTable({ products, initialSearch = "" }: ProductsTablePro
                     <span>Prezzo</span>
                     <SortIcon active={sortBy === "price"} order={sortOrder} />
                   </th>
+                  <th className={thClass} onClick={() => handleSort("discount")}>
+                    <span>Sconto</span>
+                    <SortIcon active={sortBy === "discount"} order={sortOrder} />
+                  </th>
                   <th className={thClass} onClick={() => handleSort("stock")}>
                     <span>Disponibile</span>
                     <SortIcon active={sortBy === "stock"} order={sortOrder} />
@@ -161,6 +169,15 @@ export function ProductsTable({ products, initialSearch = "" }: ProductsTablePro
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {formatPrice(product.price)}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {product.discountPercent > 0 ? (
+                        <Badge variant="danger" className="bg-red-100 text-red-700">
+                          -{product.discountPercent}%
+                        </Badge>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {product.stock}

@@ -11,6 +11,7 @@ const productSchema = z.object({
   name: z.string().min(1),
   description: z.string().nullable(),
   price: z.number().int().min(0),
+  discount_percent: z.number().int().min(0).max(100).default(0),
   stock: z.number().int().min(0),
   priority: z.number().int().min(0).default(0),
   category: z.enum([
@@ -48,6 +49,7 @@ export async function PUT(req: Request, { params }: Params) {
         name: data.name,
         description: data.description,
         price: data.price,
+        discount_percent: data.discount_percent,
         stock: data.stock,
         priority: data.priority,
         category: data.category,

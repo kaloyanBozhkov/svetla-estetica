@@ -12,6 +12,8 @@ interface OrderItem {
   id: number;
   quantity: number;
   price: number;
+  originalPrice?: number;
+  discountPercent?: number;
   product: {
     name: string;
     imageUrl: string | null;
@@ -92,7 +94,9 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             </div>
             <div>
               <p className="text-sm text-gray-500">Data</p>
-              <p className="font-medium">{formatDateTime(new Date(order.createdAt))}</p>
+              <p className="font-medium">
+                {formatDateTime(new Date(order.createdAt))}
+              </p>
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-1">Stato</p>
@@ -105,39 +109,61 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
           </h2>
 
           <div className="space-y-4">
-            {order.items.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0"
-              >
-                <div className="relative w-16 h-16 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                  {item.product.imageUrl ? (
-                    <Image
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
-                      fill
-                      unoptimized
-                      className="object-contain p-1"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-300">
-                      <span className="text-2xl">📦</span>
+            {order.items.map((item) => {
+              const hasDiscount =
+                item.discountPercent &&
+                item.discountPercent > 0 &&
+                item.originalPrice;
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0"
+                >
+                  <div className="relative w-16 h-16 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+                    {item.product.imageUrl ? (
+                      <Image
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                        fill
+                        unoptimized
+                        className="object-contain p-1"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        <span className="text-2xl">📦</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 truncate">
+                      {item.product.name}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm text-gray-500">
+                        Quantità: {item.quantity}
+                      </p>
+                      {Boolean(hasDiscount) && (
+                        <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
+                          -{item.discountPercent}%
+                        </span>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">
-                    {item.product.name}
+                    {Boolean(hasDiscount) && item.originalPrice && (
+                      <p className="text-xs text-gray-400 line-through mt-0.5">
+                        {formatPrice(item.originalPrice)} cad.
+                      </p>
+                    )}
+                  </div>
+                  <p
+                    className={`font-medium ${
+                      hasDiscount ? "text-red-600" : "text-gray-900"
+                    }`}
+                  >
+                    {formatPrice(item.price * item.quantity)}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Quantità: {item.quantity}
-                  </p>
                 </div>
-                <p className="font-medium text-gray-900">
-                  {formatPrice(item.price * item.quantity)}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-100 space-y-2">
@@ -151,14 +177,18 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             </div>
             <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-gray-100">
               <span>Totale</span>
-              <span className="text-primary-600">{formatPrice(order.total)}</span>
+              <span className="text-primary-600">
+                {formatPrice(order.total)}
+              </span>
             </div>
           </div>
         </Card>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:justify-center">
           <Link href="/prodotti" className="w-full sm:w-auto">
-            <Button variant="outline" className="w-full">Continua lo Shopping</Button>
+            <Button variant="outline" className="w-full">
+              Continua lo Shopping
+            </Button>
           </Link>
           <Link href="/account" className="w-full sm:w-auto">
             <Button className="w-full">I Miei Ordini</Button>
@@ -168,4 +198,3 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
     </div>
   );
 }
-

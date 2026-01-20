@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth/session";
 import { env } from "@/env";
 import { SHIPPING_COST } from "@/lib/constants";
+import { calculateDiscountedPrice } from "@/lib/utils";
 import { z } from "zod";
 
 const checkoutSchema = z.object({
@@ -38,14 +39,19 @@ export async function POST(req: Request) {
 
     const lineItems = items.map((item) => {
       const product = products.find((p) => p.id === item.productId)!;
+      const finalPrice = product.discount_percent > 0
+        ? calculateDiscountedPrice(product.price, product.discount_percent)
+        : product.price;
       return {
         price_data: {
           currency: "eur",
           product_data: {
-            name: product.name,
+            name: product.discount_percent > 0
+              ? `${product.name} (-${product.discount_percent}%)`
+              : product.name,
             ...(product.image_url && { images: [product.image_url] }),
           },
-          unit_amount: product.price,
+          unit_amount: finalPrice,
         },
         quantity: item.quantity,
       };
@@ -65,7 +71,10 @@ export async function POST(req: Request) {
 
     const subtotal = items.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId)!;
-      return sum + product.price * item.quantity;
+      const finalPrice = product.discount_percent > 0
+        ? calculateDiscountedPrice(product.price, product.discount_percent)
+        : product.price;
+      return sum + finalPrice * item.quantity;
     }, 0);
 
     const total = subtotal + SHIPPING_COST;
@@ -80,10 +89,15 @@ export async function POST(req: Request) {
       items: {
         create: items.map((item) => {
           const product = products.find((p) => p.id === item.productId)!;
+          const finalPrice = product.discount_percent > 0
+            ? calculateDiscountedPrice(product.price, product.discount_percent)
+            : product.price;
           return {
             product_id: item.productId,
             quantity: item.quantity,
-            price: product.price,
+            price: finalPrice,
+            original_price: product.price,
+            discount_percent: product.discount_percent,
           };
         }),
       },

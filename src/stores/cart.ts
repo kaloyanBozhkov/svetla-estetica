@@ -7,7 +7,9 @@ export interface CartItem {
   productId: number;
   productUuid: string;
   name: string;
-  price: number;
+  price: number; // final price after discount
+  originalPrice?: number; // original price before discount
+  discountPercent?: number;
   quantity: number;
   stock: number;
   imageUrl?: string;
@@ -159,6 +161,8 @@ export const useCartStore = create<CartState>()(
             product_uuid: string;
             name: string;
             price: number;
+            original_price: number;
+            discount_percent: number;
             stock: number;
             image_url: string | null;
             quantity: number;
@@ -173,6 +177,8 @@ export const useCartStore = create<CartState>()(
               productUuid: item.product_uuid,
               name: item.name,
               price: item.price,
+              originalPrice: item.original_price,
+              discountPercent: item.discount_percent,
               stock: item.stock,
               imageUrl: item.image_url || undefined,
               quantity: item.quantity,

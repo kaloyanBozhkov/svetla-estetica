@@ -147,6 +147,16 @@ export function TagIcon({ className = "h-8 w-8" }: IconProps) {
   );
 }
 
+export function PercentIcon({ className = "h-8 w-8" }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <path d="M19 5L5 19" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="6.5" cy="6.5" r="2.5" />
+      <circle cx="17.5" cy="17.5" r="2.5" />
+    </svg>
+  );
+}
+
 export function DashboardIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>

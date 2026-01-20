@@ -12,9 +12,10 @@ import {
   AppointmentIcon,
   SaltCaveIcon,
   TagIcon,
+  PercentIcon,
 } from "@/components/atoms/icons";
 import { db } from "@/lib/db";
-import { formatPrice, stripHtml } from "@/lib/utils";
+import { formatPrice, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
 import { PRODUCT_CATEGORY_LABELS, SERVICE_CATEGORY_LABELS } from "@/lib/constants";
 import Image from "next/image";
 
@@ -97,10 +98,22 @@ async function getFeaturedTreatments() {
   });
 }
 
+async function getOffersProducts() {
+  return db.product.findMany({
+    where: { 
+      active: true,
+      discount_percent: { gt: 0 },
+    },
+    orderBy: [{ discount_percent: "desc" }],
+    take: 4,
+  });
+}
+
 export default async function HomePage() {
-  const [products, treatments] = await Promise.all([
+  const [products, treatments, offers] = await Promise.all([
     getFeaturedProducts(),
     getFeaturedTreatments(),
+    getOffersProducts(),
   ]);
 
   return (
@@ -428,6 +441,109 @@ export default async function HomePage() {
                   </div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Offers Section */}
+      {offers.length > 0 && (
+        <section className="py-20 bg-gradient-to-b from-white via-rose-50/30 to-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-2 text-rose-600 mb-2">
+                  <PercentIcon className="h-5 w-5" />
+                  <span className="text-sm font-semibold uppercase tracking-wider">
+                    Offerte Speciali
+                  </span>
+                </div>
+                <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
+                  Le Nostre Offerte
+                </h2>
+              </div>
+              <Link href="/prodotti?ordinamento=sconto">
+                <Button variant="outline">
+                  Vedi Tutte
+                  <svg
+                    className="ml-2 h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {offers.map((product) => {
+                const discountedPrice = calculateDiscountedPrice(product.price, product.discount_percent);
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/prodotti/${product.uuid}`}
+                    className="group relative overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-rose-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  >
+                    <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
+                      {product.image_url ? (
+                        <Image
+                          src={product.image_url}
+                          alt={product.name}
+                          width={100}
+                          height={100}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-3xl font-display font-bold text-gray-400">
+                              {product.name.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute top-3 left-3">
+                        <span className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-700 shadow-sm">
+                          {PRODUCT_CATEGORY_LABELS[product.category] || product.category}
+                        </span>
+                      </div>
+                      <div className="absolute top-3 right-3">
+                        <span className="inline-flex items-center rounded-full bg-red-500 px-3 py-1 text-sm font-bold text-white shadow-sm">
+                          -{product.discount_percent}%
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-display text-lg font-semibold text-gray-900 line-clamp-1 group-hover:text-rose-600 transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                        {product.description ? stripHtml(product.description) : "Prodotto in offerta"}
+                      </p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-sm text-gray-400 line-through">
+                            {formatPrice(product.price)}
+                          </span>
+                          <span className="font-display text-lg font-bold text-rose-600">
+                            {formatPrice(discountedPrice)}
+                          </span>
+                        </div>
+                        <span className="text-sm text-rose-600 font-medium group-hover:underline">
+                          Dettagli →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

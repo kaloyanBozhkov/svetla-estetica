@@ -44,3 +44,15 @@ export function translateBookingStatus(status: string): string {
   return bookingStatusMap[status] || status;
 }
 
+// Calculate discounted price in cents
+export function calculateDiscountedPrice(priceInCents: number, discountPercent: number): number {
+  if (discountPercent <= 0 || discountPercent > 100) return priceInCents;
+  return Math.round(priceInCents * (1 - discountPercent / 100));
+}
+
+// Get savings amount in cents
+export function calculateSavings(priceInCents: number, discountPercent: number): number {
+  if (discountPercent <= 0 || discountPercent > 100) return 0;
+  return priceInCents - calculateDiscountedPrice(priceInCents, discountPercent);
+}
+

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Card, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice, cn, stripHtml } from "@/lib/utils";
+import { formatPrice, cn, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
 import Image from "next/image";
 import { CheckIcon } from "@/components/atoms/icons";
 
@@ -12,6 +12,7 @@ interface ProductCardProps {
   name: string;
   description?: string;
   price: number;
+  discountPercent?: number;
   imageUrl?: string;
   stock: number;
   category: string;
@@ -23,6 +24,7 @@ export function ProductCard({
   name,
   description,
   price,
+  discountPercent = 0,
   imageUrl,
   stock,
   category,
@@ -30,6 +32,8 @@ export function ProductCard({
 }: ProductCardProps) {
   const [isAdded, setIsAdded] = useState(false);
   const isOutOfStock = stock <= 0;
+  const hasDiscount = discountPercent > 0;
+  const finalPrice = hasDiscount ? calculateDiscountedPrice(price, discountPercent) : price;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -74,6 +78,14 @@ export function ProductCard({
         >
           {category}
         </Badge>
+        {hasDiscount && (
+          <Badge
+            variant="danger"
+            className="absolute top-3 right-3 bg-red-500 text-white font-bold"
+          >
+            -{discountPercent}%
+          </Badge>
+        )}
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
             <Badge variant="danger" className="text-sm">
@@ -93,9 +105,19 @@ export function ProductCard({
       </div>
 
       <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
-        <span className="font-display text-xl font-bold text-primary-600">
-          {formatPrice(price)}
-        </span>
+        <div className="flex flex-col">
+          {hasDiscount && (
+            <span className="text-sm text-gray-400 line-through">
+              {formatPrice(price)}
+            </span>
+          )}
+          <span className={cn(
+            "font-display text-xl font-bold",
+            hasDiscount ? "text-red-600" : "text-primary-600"
+          )}>
+            {formatPrice(finalPrice)}
+          </span>
+        </div>
 
         {!isOutOfStock && onAddToCart && (
           <Button
