@@ -96,6 +96,16 @@ export async function POST(request: Request) {
           },
         });
 
+        // Decrement product stock for each order item
+        if (order) {
+          for (const item of order.items) {
+            await db.product.update({
+              where: { id: item.product_id },
+              data: { stock: { decrement: item.quantity } },
+            });
+          }
+        }
+
         // Celebrate the sale and notify admin
         if (order) {
           const totalFormatted = new Intl.NumberFormat('it-IT', {
