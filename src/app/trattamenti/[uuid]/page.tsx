@@ -11,7 +11,7 @@ interface Props {
 
 async function getService(uuid: string) {
   return db.service.findUnique({
-    where: { uuid },
+    where: { uuid, deleted_at: null },
   });
 }
 
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   const services = await db.service.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     select: { uuid: true },
   });
   return services.map((s) => ({ uuid: s.uuid }));

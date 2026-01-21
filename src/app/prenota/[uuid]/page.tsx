@@ -16,7 +16,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
   }
 
   const service = await db.service.findUnique({
-    where: { uuid, active: true },
+    where: { uuid, active: true, deleted_at: null },
   });
 
   if (!service) {

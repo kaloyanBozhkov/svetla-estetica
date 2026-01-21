@@ -169,10 +169,11 @@ model product {
 }
 
 model service {
-  id         Int      @id @default(autoincrement())
-  uuid       String   @unique @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  uuid       String    @unique @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
   active       Boolean          @default(true)
   category     service_category

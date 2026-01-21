@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const { serviceUuid, name, date, time, phone, notes } = createBookingSchema.parse(body);
 
     const service = await db.service.findUnique({
-      where: { uuid: serviceUuid, active: true },
+      where: { uuid: serviceUuid, active: true, deleted_at: null },
     });
 
     if (!service) {

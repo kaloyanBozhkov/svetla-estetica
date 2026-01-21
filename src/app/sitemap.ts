@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic service pages
   const services = await db.service.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     select: { uuid: true, updated_at: true },
   });
 

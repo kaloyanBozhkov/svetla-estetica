@@ -24,7 +24,7 @@ const categoryLabels = SERVICE_CATEGORY_LABELS as Record<service_category, strin
 export default async function ServicesPage() {
   const user = await getSession();
   const services = await db.service.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     orderBy: [{ priority: 'desc' }, { name: 'asc' }],
   });
 

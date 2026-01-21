@@ -84,33 +84,44 @@ export async function DELETE(_req: Request, { params }: Params) {
 
     const { uuid } = await params;
 
-    // Get service to retrieve image URL before deleting
+    // Get service to check if it has booking references
     const service = await db.service.findUnique({
       where: { uuid },
-      select: { image_url: true },
+      select: { image_url: true, bookings: { take: 1 } },
     });
 
-    // Delete service from database
-    await db.service.delete({ where: { uuid } });
+    if (!service) {
+      return NextResponse.json({ error: 'Servizio non trovato' }, { status: 404 });
+    }
 
-    // Delete image from S3 if exists
-    if (service?.image_url) {
-      try {
-        const fileName = S3Service.extractFileName(service.image_url);
-        const imageType = S3Service.extractImageType(service.image_url);
+    // If service has booking references, soft delete instead
+    if (service.bookings.length > 0) {
+      await db.service.update({
+        where: { uuid },
+        data: { deleted_at: new Date(), active: false },
+      });
+    } else {
+      // No booking references, safe to hard delete
+      await db.service.delete({ where: { uuid } });
 
-        if (fileName && imageType) {
-          const key = S3Service.getImageKey(imageType, fileName);
-          await s3Client.send(
-            new DeleteObjectCommand({
-              Bucket: BUCKET_NAME,
-              Key: key,
-            })
-          );
+      // Delete image from S3 if exists (only on hard delete)
+      if (service.image_url) {
+        try {
+          const fileName = S3Service.extractFileName(service.image_url);
+          const imageType = S3Service.extractImageType(service.image_url);
+
+          if (fileName && imageType) {
+            const key = S3Service.getImageKey(imageType, fileName);
+            await s3Client.send(
+              new DeleteObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: key,
+              })
+            );
+          }
+        } catch (s3Error) {
+          console.error('Failed to delete service image from S3:', s3Error);
         }
-      } catch (s3Error) {
-        console.error('Failed to delete service image from S3:', s3Error);
-        // Continue even if S3 delete fails
       }
     }
 

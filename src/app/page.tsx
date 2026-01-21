@@ -92,7 +92,7 @@ async function getFeaturedProducts() {
 
 async function getFeaturedTreatments() {
   return db.service.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     orderBy: [{ priority: 'desc' }, { created_at: 'asc' }],
     take: 4,
   });

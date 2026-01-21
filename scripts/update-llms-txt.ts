@@ -24,7 +24,7 @@ async function main() {
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
     }),
     db.service.findMany({
-      where: { active: true },
+      where: { active: true, deleted_at: null },
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
     }),
   ]);
