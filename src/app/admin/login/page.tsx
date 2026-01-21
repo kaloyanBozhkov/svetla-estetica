@@ -1,43 +1,43 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Button, Input, Card } from "@/components/atoms";
-import { z } from "zod";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Button, Input, Card } from '@/components/atoms';
+import { z } from 'zod';
 
 const adminSchema = z.object({
-  email: z.string().email("Email non valida"),
-  password: z.string().min(1, "Password richiesta"),
+  email: z.string().email('Email non valida'),
+  password: z.string().min(1, 'Password richiesta'),
 });
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       adminSchema.parse({ email, password });
 
-      const res = await fetch("/api/auth/admin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/auth/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
-      router.push("/admin");
+      router.push('/admin');
       router.refresh();
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -61,12 +61,8 @@ export default function AdminLoginPage() {
             height={80}
             className="mx-auto mb-4"
           />
-          <h1 className="font-display text-3xl font-bold text-gray-900">
-            Accesso Admin
-          </h1>
-          <p className="mt-2 text-gray-600">
-            Inserisci le credenziali di amministratore
-          </p>
+          <h1 className="font-display text-3xl font-bold text-gray-900">Accesso Admin</h1>
+          <p className="mt-2 text-gray-600">Inserisci le credenziali di amministratore</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -97,4 +93,3 @@ export default function AdminLoginPage() {
     </div>
   );
 }
-

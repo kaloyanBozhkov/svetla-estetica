@@ -1,9 +1,9 @@
-import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { ProductDetail } from "./ProductDetail";
-import type { Metadata } from "next";
-import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/seo";
-import { BASE_URL } from "@/lib/constants";
+import { notFound } from 'next/navigation';
+import { db } from '@/lib/db';
+import { ProductDetail } from './ProductDetail';
+import type { Metadata } from 'next';
+import { generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo';
+import { BASE_URL } from '@/lib/constants';
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -19,10 +19,12 @@ async function getProduct(uuid: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { uuid } = await params;
   const product = await getProduct(uuid);
-  if (!product) return { title: "Prodotto non trovato" };
+  if (!product) return { title: 'Prodotto non trovato' };
 
-  const title = `${product.name}${product.brand?.name ? ` - ${product.brand.name}` : ""}`;
-  const description = product.description || `Acquista ${product.name} da Svetla Estetica. Prodotti di bellezza professionali.`;
+  const title = `${product.name}${product.brand?.name ? ` - ${product.brand.name}` : ''}`;
+  const description =
+    product.description ||
+    `Acquista ${product.name} da Svetla Estetica. Prodotti di bellezza professionali.`;
 
   return {
     title,
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | Svetla Estetica`,
       description,
       images: product.image_url ? [{ url: product.image_url }] : undefined,
-      type: "website",
+      type: 'website',
     },
     alternates: {
       canonical: `/prodotti/${uuid}`,
@@ -67,8 +69,8 @@ export default async function ProductPage({ params }: Props) {
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: BASE_URL },
-    { name: "Prodotti", url: `${BASE_URL}/prodotti` },
+    { name: 'Home', url: BASE_URL },
+    { name: 'Prodotti', url: `${BASE_URL}/prodotti` },
     { name: product.name, url: `${BASE_URL}/prodotti/${product.uuid}` },
   ]);
 
@@ -90,4 +92,3 @@ export default async function ProductPage({ params }: Props) {
     </>
   );
 }
-

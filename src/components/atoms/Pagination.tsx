@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Button from "./Button";
+import Link from 'next/link';
+import Button from './Button';
 
 interface PaginationProps {
   currentPage: number;
@@ -13,28 +13,28 @@ export function Pagination({ currentPage, totalPages, baseUrl, preserveParams }:
 
   const getPageUrl = (page: number) => {
     const params = new URLSearchParams();
-    
+
     // Add preserved params
     if (preserveParams) {
       Object.entries(preserveParams).forEach(([key, value]) => {
         if (value) params.set(key, value);
       });
     }
-    
+
     // Add page param (only if not page 1)
     if (page > 1) {
-      params.set("page", String(page));
+      params.set('page', String(page));
     }
-    
+
     const queryString = params.toString();
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
   // Generate page numbers to show
   const getPageNumbers = () => {
-    const pages: (number | "...")[] = [];
+    const pages: (number | '...')[] = [];
     const showPages = 5;
-    
+
     if (totalPages <= showPages + 2) {
       // Show all pages
       for (let i = 1; i <= totalPages; i++) {
@@ -43,27 +43,27 @@ export function Pagination({ currentPage, totalPages, baseUrl, preserveParams }:
     } else {
       // Always show first page
       pages.push(1);
-      
+
       if (currentPage > 3) {
-        pages.push("...");
+        pages.push('...');
       }
-      
+
       // Show pages around current
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
+
       if (currentPage < totalPages - 2) {
-        pages.push("...");
+        pages.push('...');
       }
-      
+
       // Always show last page
       pages.push(totalPages);
     }
-    
+
     return pages;
   };
 
@@ -80,14 +80,16 @@ export function Pagination({ currentPage, totalPages, baseUrl, preserveParams }:
             </Button>
           </Link>
         )}
-        
-        {getPageNumbers().map((page, idx) => (
-          page === "..." ? (
-            <span key={`ellipsis-${idx}`} className="px-2 text-gray-400">...</span>
+
+        {getPageNumbers().map((page, idx) =>
+          page === '...' ? (
+            <span key={`ellipsis-${idx}`} className="px-2 text-gray-400">
+              ...
+            </span>
           ) : (
             <Link key={page} href={getPageUrl(page)}>
               <Button
-                variant={page === currentPage ? "primary" : "outline"}
+                variant={page === currentPage ? 'primary' : 'outline'}
                 size="sm"
                 className="min-w-[36px]"
               >
@@ -95,8 +97,8 @@ export function Pagination({ currentPage, totalPages, baseUrl, preserveParams }:
               </Button>
             </Link>
           )
-        ))}
-        
+        )}
+
         {currentPage < totalPages && (
           <Link href={getPageUrl(currentPage + 1)}>
             <Button variant="outline" size="sm">

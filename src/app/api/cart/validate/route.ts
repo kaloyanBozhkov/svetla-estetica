@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { db } from "@/lib/db";
-import { calculateDiscountedPrice } from "@/lib/utils";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { db } from '@/lib/db';
+import { calculateDiscountedPrice } from '@/lib/utils';
 
 const validateCartSchema = z.object({
   items: z.array(
@@ -49,20 +49,19 @@ export async function POST(req: Request) {
         // Product no longer exists or is inactive
         removedItems.push({
           product_id: item.productId,
-          reason: "deleted",
+          reason: 'deleted',
         });
         continue;
       }
 
       // Cap quantity to available stock
-      const quantity = product.stock > 0 
-        ? Math.min(item.quantity, product.stock) 
-        : item.quantity;
+      const quantity = product.stock > 0 ? Math.min(item.quantity, product.stock) : item.quantity;
 
       // Calculate final price with discount
-      const finalPrice = product.discount_percent > 0
-        ? calculateDiscountedPrice(product.price, product.discount_percent)
-        : product.price;
+      const finalPrice =
+        product.discount_percent > 0
+          ? calculateDiscountedPrice(product.price, product.discount_percent)
+          : product.price;
 
       validatedItems.push({
         product_id: product.id,
@@ -85,16 +84,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid request data" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
-    console.error("Cart validation error:", error);
-    return NextResponse.json(
-      { error: "Failed to validate cart" },
-      { status: 500 }
-    );
+    console.error('Cart validation error:', error);
+    return NextResponse.json({ error: 'Failed to validate cart' }, { status: 500 });
   }
 }
-

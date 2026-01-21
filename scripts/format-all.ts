@@ -1,12 +1,12 @@
-import { db } from "../src/lib/db";
-import { writeFileSync, existsSync } from "fs";
-import { join } from "path";
-import { getLLMResponse } from "@koko420/ai-tools";
-import { retry } from "@koko420/shared";
-import { z } from "zod";
+import { db } from '../src/lib/db';
+import { writeFileSync, existsSync } from 'fs';
+import { join } from 'path';
+import { getLLMResponse } from '@koko420/ai-tools';
+import { retry } from '@koko420/shared';
+import { z } from 'zod';
 
-const PRODUCTS_BACKUP_FILE = ".backup-products.json";
-const SERVICES_BACKUP_FILE = ".backup-services.json";
+const PRODUCTS_BACKUP_FILE = '.backup-products.json';
+const SERVICES_BACKUP_FILE = '.backup-services.json';
 
 interface BackupEntry {
   id: number;
@@ -75,7 +75,7 @@ const resultSchema = z.object({
 
 async function formatProductTitle(title: string, description: string | null) {
   const userMessage = `Title: ${title}
-Description: ${description || "No description"}`;
+Description: ${description || 'No description'}`;
 
   const response = await retry(
     () =>
@@ -95,7 +95,7 @@ Description: ${description || "No description"}`;
 
 async function formatServiceTitle(title: string, description: string | null) {
   const userMessage = `Title: ${title}
-Description: ${description || "No description"}`;
+Description: ${description || 'No description'}`;
 
   const response = await retry(
     () =>
@@ -114,7 +114,7 @@ Description: ${description || "No description"}`;
 }
 
 async function formatProducts() {
-  console.log("📦 Fetching all products...");
+  console.log('📦 Fetching all products...');
   const products = await db.product.findMany({
     select: {
       id: true,
@@ -165,7 +165,7 @@ async function formatProducts() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`❌ Failed to format product ${product.id}:`, error);
-      console.log("Continuing with next product...\n");
+      console.log('Continuing with next product...\n');
     }
   }
 
@@ -178,7 +178,7 @@ async function formatProducts() {
 }
 
 async function formatServices() {
-  console.log("💆 Fetching all services...");
+  console.log('💆 Fetching all services...');
   const services = await db.service.findMany({
     select: {
       id: true,
@@ -229,7 +229,7 @@ async function formatServices() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`❌ Failed to format service ${service.id}:`, error);
-      console.log("Continuing with next service...\n");
+      console.log('Continuing with next service...\n');
     }
   }
 
@@ -242,31 +242,31 @@ async function formatServices() {
 }
 
 async function main() {
-  console.log("🚀 Starting AI formatting script...\n");
+  console.log('🚀 Starting AI formatting script...\n');
 
   // Check if backups already exist
   const productsBackupExists = existsSync(join(process.cwd(), PRODUCTS_BACKUP_FILE));
   const servicesBackupExists = existsSync(join(process.cwd(), SERVICES_BACKUP_FILE));
 
   if (productsBackupExists || servicesBackupExists) {
-    console.log("⚠️  Warning: Backup files already exist!");
-    console.log("Please review and remove them before running this script again.");
-    console.log("This prevents accidentally overwriting existing backups.\n");
+    console.log('⚠️  Warning: Backup files already exist!');
+    console.log('Please review and remove them before running this script again.');
+    console.log('This prevents accidentally overwriting existing backups.\n');
     process.exit(1);
   }
 
   try {
-    console.log("=== Formatting Products ===\n");
+    console.log('=== Formatting Products ===\n');
     await formatProducts();
 
-    console.log("\n=== Formatting Services ===\n");
+    console.log('\n=== Formatting Services ===\n');
     await formatServices();
 
-    console.log("\n✅ All done!");
-    console.log("📝 Review the changes in your database");
-    console.log("🔄 To rollback, use the backup files to restore original values");
+    console.log('\n✅ All done!');
+    console.log('📝 Review the changes in your database');
+    console.log('🔄 To rollback, use the backup files to restore original values');
   } catch (error) {
-    console.error("\n❌ Script failed:", error);
+    console.error('\n❌ Script failed:', error);
     process.exit(1);
   } finally {
     await db.$disconnect();
@@ -274,4 +274,3 @@ async function main() {
 }
 
 main();
-

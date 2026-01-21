@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button, Badge, HtmlContent } from "@/components/atoms";
-import { useCartStore } from "@/stores";
-import { formatPrice, calculateDiscountedPrice } from "@/lib/utils";
-import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
-import type { product } from "@prisma/client";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button, Badge, HtmlContent } from '@/components/atoms';
+import { useCartStore } from '@/stores';
+import { formatPrice, calculateDiscountedPrice } from '@/lib/utils';
+import { PRODUCT_CATEGORY_LABELS } from '@/lib/constants';
+import type { product } from '@prisma/client';
 
 interface Props {
   product: product;
@@ -20,8 +20,8 @@ export function ProductDetail({ product }: Props) {
 
   const isOutOfStock = product.stock <= 0;
   const hasDiscount = product.discount_percent > 0;
-  const finalPrice = hasDiscount 
-    ? calculateDiscountedPrice(product.price, product.discount_percent) 
+  const finalPrice = hasDiscount
+    ? calculateDiscountedPrice(product.price, product.discount_percent)
     : product.price;
 
   const handleAddToCart = () => {
@@ -38,7 +38,7 @@ export function ProductDetail({ product }: Props) {
       });
     }
 
-    router.push("/carrello");
+    router.push('/carrello');
   };
 
   return (
@@ -114,14 +114,18 @@ export function ProductDetail({ product }: Props) {
           )}
 
           {/* Price */}
-          <div className={`mt-8 p-6 rounded-2xl bg-gradient-to-br ${hasDiscount ? "from-red-50 to-white ring-1 ring-red-100" : "from-primary-50 to-white ring-1 ring-primary-100"}`}>
+          <div
+            className={`mt-8 p-6 rounded-2xl bg-gradient-to-br ${hasDiscount ? 'from-red-50 to-white ring-1 ring-red-100' : 'from-primary-50 to-white ring-1 ring-primary-100'}`}
+          >
             <div className="flex items-baseline gap-3 flex-wrap">
               {hasDiscount && (
                 <span className="font-display text-2xl text-gray-400 line-through">
                   {formatPrice(product.price)}
                 </span>
               )}
-              <span className={`font-display text-4xl font-bold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+              <span
+                className={`font-display text-4xl font-bold ${hasDiscount ? 'text-red-600' : 'text-primary-600'}`}
+              >
                 {formatPrice(finalPrice)}
               </span>
               {hasDiscount && (
@@ -130,9 +134,7 @@ export function ProductDetail({ product }: Props) {
                 </span>
               )}
               {product.stock > 0 && product.stock <= 5 && (
-                <span className="text-sm text-amber-600">
-                  Solo {product.stock} disponibili
-                </span>
+                <span className="text-sm text-amber-600">Solo {product.stock} disponibili</span>
               )}
             </div>
           </div>
@@ -149,13 +151,9 @@ export function ProductDetail({ product }: Props) {
                   >
                     −
                   </button>
-                  <span className="w-12 text-center font-semibold text-lg">
-                    {quantity}
-                  </span>
+                  <span className="w-12 text-center font-semibold text-lg">{quantity}</span>
                   <button
-                    onClick={() =>
-                      setQuantity(Math.min(product.stock, quantity + 1))
-                    }
+                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                     className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-white hover:shadow transition-all"
                   >
                     +
@@ -164,12 +162,7 @@ export function ProductDetail({ product }: Props) {
               </div>
 
               <Button size="lg" className="w-full" onClick={handleAddToCart}>
-                <svg
-                  className="mr-2 h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

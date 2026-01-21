@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { isAdmin } from "@/lib/auth";
-import { getLLMResponse } from "@koko420/ai-tools";
-import { retry } from "@koko420/shared";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { isAdmin } from '@/lib/auth';
+import { getLLMResponse } from '@koko420/ai-tools';
+import { retry } from '@koko420/shared';
 
 const requestSchema = z.object({
   title: z.string().min(1),
@@ -40,7 +40,7 @@ const resultSchema = z.object({
 export async function POST(req: Request) {
   const admin = await isAdmin();
   if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const { title, description } = requestSchema.parse(body);
 
     const userMessage = `Title: ${title}
-Description: ${description || "No description"}`;
+Description: ${description || 'No description'}`;
 
     const response = await retry(
       () =>
@@ -67,15 +67,11 @@ Description: ${description || "No description"}`;
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid request data", details: error.message },
+        { error: 'Invalid request data', details: error.message },
         { status: 400 }
       );
     }
-    console.error("AI format error:", error);
-    return NextResponse.json(
-      { error: "Failed to format with AI" },
-      { status: 500 }
-    );
+    console.error('AI format error:', error);
+    return NextResponse.json({ error: 'Failed to format with AI' }, { status: 500 });
   }
 }
-

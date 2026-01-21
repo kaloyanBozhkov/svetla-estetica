@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useAuthStore, useCartStore } from "@/stores";
-import { Button } from "@/components/atoms";
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useAuthStore, useCartStore } from '@/stores';
+import { Button } from '@/components/atoms';
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const navLinks = [
-  { href: "/prodotti", label: "Prodotti" },
-  { href: "/trattamenti", label: "Trattamenti" },
-  { href: "/chi-siamo", label: "Chi Siamo" },
-  { href: "/contatti", label: "Contatti" },
+  { href: '/prodotti', label: 'Prodotti' },
+  { href: '/trattamenti', label: 'Trattamenti' },
+  { href: '/chi-siamo', label: 'Chi Siamo' },
+  { href: '/contatti', label: 'Contatti' },
 ];
 
 export function Header() {
@@ -33,7 +33,7 @@ export function Header() {
   }, [lastAddedAt]);
 
   // Hide header on admin pages (they have their own header)
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith('/admin')) {
     return null;
   }
 
@@ -70,15 +70,12 @@ export function Header() {
             {/* Cart icon visible for all users */}
             <Link
               href="/carrello"
-              className={cn(
-                "relative p-2 transition-transform",
-                cartBounce && "animate-bounce"
-              )}
+              className={cn('relative p-2 transition-transform', cartBounce && 'animate-bounce')}
             >
               <svg
                 className={cn(
-                  "h-6 w-6 text-gray-600 transition-colors",
-                  cartBounce && "text-primary-600"
+                  'h-6 w-6 text-gray-600 transition-colors',
+                  cartBounce && 'text-primary-600'
                 )}
                 fill="none"
                 stroke="currentColor"
@@ -94,8 +91,8 @@ export function Header() {
               {itemCount > 0 && (
                 <span
                   className={cn(
-                    "absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary-600 text-xs text-white flex items-center justify-center transition-transform",
-                    cartBounce && "scale-125"
+                    'absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary-600 text-xs text-white flex items-center justify-center transition-transform',
+                    cartBounce && 'scale-125'
                   )}
                 >
                   {itemCount}
@@ -114,7 +111,7 @@ export function Header() {
                 )}
                 <Link href="/account">
                   <Button variant="outline" size="sm">
-                    {user?.name || "Account"}
+                    {user?.name || 'Account'}
                   </Button>
                 </Link>
               </div>
@@ -124,10 +121,7 @@ export function Header() {
               </Link>
             )}
 
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
+            <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <svg
                 className="h-6 w-6 text-gray-600"
                 fill="none"
@@ -156,8 +150,8 @@ export function Header() {
 
         <div
           className={cn(
-            "md:hidden overflow-hidden transition-all duration-300",
-            isMenuOpen ? "max-h-96 pb-4" : "max-h-0"
+            'md:hidden overflow-hidden transition-all duration-300',
+            isMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'
           )}
         >
           <nav className="flex flex-col gap-2 pt-4">

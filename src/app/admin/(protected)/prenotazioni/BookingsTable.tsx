@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Card, Badge, Button } from "@/components/atoms";
-import { formatPrice, formatDateTime } from "@/lib/utils";
-import { type booking_status } from "@prisma/client";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Card, Badge, Button } from '@/components/atoms';
+import { formatPrice, formatDateTime } from '@/lib/utils';
+import { type booking_status } from '@prisma/client';
 
 interface Booking {
   id: number;
@@ -31,8 +31,8 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
     setLoading(uuid);
     try {
       await fetch(`/api/admin/bookings/${uuid}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
       router.refresh();
@@ -43,16 +43,16 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
 
   const getStatusVariant = (status: booking_status) => {
     switch (status) {
-      case "pending":
-        return "warning";
-      case "approved":
-        return "success";
-      case "rejected":
-        return "danger";
-      case "completed":
-        return "info";
+      case 'pending':
+        return 'warning';
+      case 'approved':
+        return 'success';
+      case 'rejected':
+        return 'danger';
+      case 'completed':
+        return 'info';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -70,27 +70,13 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Servizio
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Cliente
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Data/Ora
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Durata
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Prezzo
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Stato
-              </th>
-              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">
-                Azioni
-              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Servizio</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Cliente</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Data/Ora</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Durata</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Prezzo</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Stato</th>
+              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">Azioni</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -106,25 +92,19 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
                 <td className="px-6 py-4 text-sm text-gray-600">
                   {formatDateTime(new Date(booking.date))}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {booking.durationMin} min
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {formatPrice(booking.price)}
-                </td>
+                <td className="px-6 py-4 text-sm text-gray-600">{booking.durationMin} min</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{formatPrice(booking.price)}</td>
                 <td className="px-6 py-4">
-                  <Badge variant={getStatusVariant(booking.status)}>
-                    {booking.statusLabel}
-                  </Badge>
+                  <Badge variant={getStatusVariant(booking.status)}>{booking.statusLabel}</Badge>
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
-                  {booking.status === "pending" && (
+                  {booking.status === 'pending' && (
                     <>
                       <Button
                         variant="primary"
                         size="sm"
                         loading={loading === booking.uuid}
-                        onClick={() => handleStatusChange(booking.uuid, "approved")}
+                        onClick={() => handleStatusChange(booking.uuid, 'approved')}
                       >
                         Approva
                       </Button>
@@ -132,18 +112,18 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
                         variant="danger"
                         size="sm"
                         loading={loading === booking.uuid}
-                        onClick={() => handleStatusChange(booking.uuid, "rejected")}
+                        onClick={() => handleStatusChange(booking.uuid, 'rejected')}
                       >
                         Rifiuta
                       </Button>
                     </>
                   )}
-                  {booking.status === "approved" && (
+                  {booking.status === 'approved' && (
                     <Button
                       variant="secondary"
                       size="sm"
                       loading={loading === booking.uuid}
-                      onClick={() => handleStatusChange(booking.uuid, "completed")}
+                      onClick={() => handleStatusChange(booking.uuid, 'completed')}
                     >
                       Completa
                     </Button>
@@ -157,4 +137,3 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
     </Card>
   );
 }
-

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Card, Button, Input, Textarea, ActionButton, Badge } from "@/components/atoms";
-import { ArrowLeftIcon, MailIcon } from "@/components/atoms/icons";
-import { formatPrice } from "@/lib/utils";
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { Card, Button, Input, Textarea, ActionButton, Badge } from '@/components/atoms';
+import { ArrowLeftIcon, MailIcon } from '@/components/atoms/icons';
+import { formatPrice } from '@/lib/utils';
 
 interface CartItem {
   id: number;
@@ -40,7 +40,7 @@ interface CartDetailProps {
   data: CartDetailData;
 }
 
-const DEFAULT_SUBJECT = "Il tuo carrello ti aspetta - Svetla Estetica";
+const DEFAULT_SUBJECT = 'Il tuo carrello ti aspetta - Svetla Estetica';
 const DEFAULT_MESSAGE = `Hai lasciato alcuni prodotti nel tuo carrello. Non lasciarli scappare!
 
 Completa il tuo ordine oggi stesso e goditi i nostri prodotti di alta qualità.`;
@@ -51,28 +51,28 @@ export function CartDetail({ data }: CartDetailProps) {
   const [subject, setSubject] = useState(DEFAULT_SUBJECT);
   const [customMessage, setCustomMessage] = useState(DEFAULT_MESSAGE);
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("it-IT", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Intl.DateTimeFormat('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     }).format(new Date(date));
   };
 
   const handleSendEmail = async () => {
     setSending(true);
-    setError("");
+    setError('');
     setSuccess(false);
 
     try {
       const res = await fetch(`/api/admin/carts/${data.user.uuid}/email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           subject,
           customMessage,
@@ -81,7 +81,7 @@ export function CartDetail({ data }: CartDetailProps) {
 
       if (!res.ok) {
         const errData = await res.json();
-        throw new Error(errData.error || "Errore invio email");
+        throw new Error(errData.error || 'Errore invio email');
       }
 
       setSuccess(true);
@@ -91,7 +91,7 @@ export function CartDetail({ data }: CartDetailProps) {
         setSuccess(false);
       }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore invio email");
+      setError(err instanceof Error ? err.message : 'Errore invio email');
     } finally {
       setSending(false);
     }
@@ -130,9 +130,7 @@ export function CartDetail({ data }: CartDetailProps) {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* User Info */}
         <Card className="lg:col-span-1">
-          <h2 className="font-display text-lg font-bold text-gray-900 mb-4">
-            Informazioni utente
-          </h2>
+          <h2 className="font-display text-lg font-bold text-gray-900 mb-4">Informazioni utente</h2>
           <dl className="space-y-3 text-sm">
             <div>
               <dt className="text-gray-500">Email</dt>
@@ -152,17 +150,16 @@ export function CartDetail({ data }: CartDetailProps) {
             )}
             <div>
               <dt className="text-gray-500">Registrato il</dt>
-              <dd className="font-medium text-gray-900">
-                {formatDate(data.user.createdAt)}
-              </dd>
+              <dd className="font-medium text-gray-900">{formatDate(data.user.createdAt)}</dd>
             </div>
             <div>
               <dt className="text-gray-500">Ultimo contatto</dt>
               <dd className="font-medium text-gray-900">
-                {data.user.lastContactedAt 
-                  ? formatDate(data.user.lastContactedAt)
-                  : <span className="text-gray-400">Mai contattato</span>
-                }
+                {data.user.lastContactedAt ? (
+                  formatDate(data.user.lastContactedAt)
+                ) : (
+                  <span className="text-gray-400">Mai contattato</span>
+                )}
               </dd>
             </div>
           </dl>
@@ -173,16 +170,13 @@ export function CartDetail({ data }: CartDetailProps) {
           <h2 className="font-display text-lg font-bold text-gray-900 mb-4">
             Prodotti nel carrello
           </h2>
-          
+
           {activeItems.length === 0 ? (
             <p className="text-gray-500">Nessun prodotto attivo nel carrello</p>
           ) : (
             <div className="space-y-4">
               {activeItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-4 p-3 rounded-lg bg-gray-50"
-                >
+                <div key={item.id} className="flex gap-4 p-3 rounded-lg bg-gray-50">
                   <div className="relative h-16 w-16 flex-shrink-0 rounded-lg bg-white overflow-hidden">
                     {item.product.imageUrl ? (
                       <Image
@@ -206,15 +200,15 @@ export function CartDetail({ data }: CartDetailProps) {
                       {item.product.name}
                     </Link>
                     <div className="flex flex-wrap items-center gap-2 mt-1 text-sm">
-                      <span className="text-gray-500">
-                        Qtà: {item.quantity}
-                      </span>
+                      <span className="text-gray-500">Qtà: {item.quantity}</span>
                       <span className="text-gray-300">·</span>
                       <span className="font-semibold text-primary-600">
                         {formatPrice(item.product.price * item.quantity)}
                       </span>
                       {item.product.stock <= 0 && (
-                        <Badge variant="danger" className="text-xs">Esaurito</Badge>
+                        <Badge variant="danger" className="text-xs">
+                          Esaurito
+                        </Badge>
                       )}
                       {item.product.stock > 0 && item.product.stock < item.quantity && (
                         <Badge variant="warning" className="text-xs">
@@ -250,9 +244,7 @@ export function CartDetail({ data }: CartDetailProps) {
           {/* Total */}
           <div className="mt-6 pt-4 border-t flex justify-between items-center">
             <span className="text-lg font-bold text-gray-900">Totale carrello</span>
-            <span className="text-xl font-bold text-primary-600">
-              {formatPrice(data.total)}
-            </span>
+            <span className="text-xl font-bold text-primary-600">{formatPrice(data.total)}</span>
           </div>
         </Card>
       </div>
@@ -260,16 +252,14 @@ export function CartDetail({ data }: CartDetailProps) {
       {/* Email Modal */}
       {showEmailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowEmailModal(false)}
-          />
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowEmailModal(false)} />
           <Card className="relative z-10 w-full max-w-lg">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
               Invia email promemoria
             </h2>
             <p className="text-sm text-gray-500 mb-4">
-              Invia un&apos;email a <strong>{data.user.email}</strong> per ricordare i prodotti nel carrello.
+              Invia un&apos;email a <strong>{data.user.email}</strong> per ricordare i prodotti nel
+              carrello.
             </p>
 
             <div className="space-y-4">
@@ -289,16 +279,13 @@ export function CartDetail({ data }: CartDetailProps) {
               />
 
               <p className="text-xs text-gray-500">
-                L&apos;email includerà automaticamente l&apos;elenco dei prodotti nel carrello e un pulsante per completare l&apos;ordine.
+                L&apos;email includerà automaticamente l&apos;elenco dei prodotti nel carrello e un
+                pulsante per completare l&apos;ordine.
               </p>
 
-              {error && (
-                <p className="text-sm text-red-600">{error}</p>
-              )}
+              {error && <p className="text-sm text-red-600">{error}</p>}
 
-              {success && (
-                <p className="text-sm text-green-600">Email inviata con successo!</p>
-              )}
+              {success && <p className="text-sm text-green-600">Email inviata con successo!</p>}
 
               <div className="flex gap-3 justify-end pt-2">
                 <Button
@@ -324,4 +311,3 @@ export function CartDetail({ data }: CartDetailProps) {
     </div>
   );
 }
-

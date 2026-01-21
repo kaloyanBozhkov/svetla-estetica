@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 import {
   DashboardIcon,
   PackageIcon,
@@ -14,16 +14,16 @@ import {
   UsersIcon,
   LogOutIcon,
   ShoppingBagIcon,
-} from "@/components/atoms/icons";
+} from '@/components/atoms/icons';
 
 const adminNav = [
-  { href: "/admin", label: "Dashboard", Icon: DashboardIcon },
-  { href: "/admin/prodotti", label: "Prodotti", Icon: PackageIcon },
-  { href: "/admin/servizi", label: "Servizi", Icon: SparkleIcon },
-  { href: "/admin/ordini", label: "Ordini", Icon: CartIcon },
-  { href: "/admin/carrelli", label: "Carrelli", Icon: ShoppingBagIcon },
-  { href: "/admin/prenotazioni", label: "Prenotazioni", Icon: CalendarIcon },
-  { href: "/admin/utenti", label: "Utenti", Icon: UsersIcon },
+  { href: '/admin', label: 'Dashboard', Icon: DashboardIcon },
+  { href: '/admin/prodotti', label: 'Prodotti', Icon: PackageIcon },
+  { href: '/admin/servizi', label: 'Servizi', Icon: SparkleIcon },
+  { href: '/admin/ordini', label: 'Ordini', Icon: CartIcon },
+  { href: '/admin/carrelli', label: 'Carrelli', Icon: ShoppingBagIcon },
+  { href: '/admin/prenotazioni', label: 'Prenotazioni', Icon: CalendarIcon },
+  { href: '/admin/utenti', label: 'Utenti', Icon: UsersIcon },
 ];
 
 export function AdminSidebar() {
@@ -33,14 +33,14 @@ export function AdminSidebar() {
   const router = useRouter();
 
   const isActive = (href: string) => {
-    if (href === "/admin") return pathname === "/admin";
+    if (href === '/admin') return pathname === '/admin';
     return pathname.startsWith(href);
   };
 
   const handleLogout = async () => {
     setLoggingOut(true);
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/admin/login");
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/admin/login');
     router.refresh();
   };
 
@@ -49,12 +49,7 @@ export function AdminSidebar() {
       {/* Mobile header */}
       <header className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-between bg-gray-900 px-4 py-3 lg:hidden">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo-cropped.webp"
-            alt="Svetla Estetica"
-            width={32}
-            height={32}
-          />
+          <Image src="/logo-cropped.webp" alt="Svetla Estetica" width={32} height={32} />
           <span className="font-display text-lg font-bold text-white">Admin</span>
         </Link>
         <button
@@ -64,11 +59,21 @@ export function AdminSidebar() {
         >
           {open ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           ) : (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           )}
         </button>
@@ -85,18 +90,16 @@ export function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-[60] w-64 bg-gray-900 text-white transition-transform duration-300 lg:translate-x-0 lg:pt-16 flex flex-col",
-          open ? "translate-x-0" : "-translate-x-full"
+          'fixed inset-y-0 left-0 z-[60] w-64 bg-gray-900 text-white transition-transform duration-300 lg:translate-x-0 lg:pt-16 flex flex-col',
+          open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div className="p-6 pt-16 lg:pt-6">
-          <Link href="/" className="flex flex-col items-start gap-3 hover:opacity-80 transition-opacity">
-            <Image
-              src="/logo-cropped.webp"
-              alt="Svetla Estetica"
-              width={80}
-              height={80}
-            />
+          <Link
+            href="/"
+            className="flex flex-col items-start gap-3 hover:opacity-80 transition-opacity"
+          >
+            <Image src="/logo-cropped.webp" alt="Svetla Estetica" width={80} height={80} />
             <h2 className="font-display text-xl font-bold">Admin Panel</h2>
           </Link>
         </div>
@@ -107,10 +110,10 @@ export function AdminSidebar() {
               href={item.href}
               onClick={() => setOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-6 py-3 transition-colors",
+                'flex items-center gap-3 px-6 py-3 transition-colors',
                 isActive(item.href)
-                  ? "bg-gray-800 text-white border-l-4 border-primary-500"
-                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  ? 'bg-gray-800 text-white border-l-4 border-primary-500'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               )}
             >
               <item.Icon className="w-5 h-5" />
@@ -127,11 +130,10 @@ export function AdminSidebar() {
             className="flex items-center gap-3 w-full px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
           >
             <LogOutIcon className="w-5 h-5" />
-            <span>{loggingOut ? "Uscita..." : "Esci"}</span>
+            <span>{loggingOut ? 'Uscita...' : 'Esci'}</span>
           </button>
         </div>
       </aside>
     </>
   );
 }
-

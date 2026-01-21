@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface CartItem {
   productId: number;
@@ -27,7 +27,7 @@ interface CartState {
   lastAddedAt: number;
   isSyncing: boolean;
   lastSyncedAt: number;
-  addItem: (item: Omit<CartItem, "quantity">) => void;
+  addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
@@ -44,15 +44,15 @@ const debouncedSaveToDb = (items: CartItem[]) => {
   if (saveTimeout) clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {
     try {
-      await fetch("/api/cart/sync", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      await fetch('/api/cart/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         }),
       });
     } catch (error) {
-      console.error("Failed to save cart to DB:", error);
+      console.error('Failed to save cart to DB:', error);
     }
   }, 1000);
 };
@@ -138,16 +138,16 @@ export const useCartStore = create<CartState>()(
         set({ isSyncing: true });
 
         try {
-          const res = await fetch("/api/cart/validate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+          const res = await fetch('/api/cart/validate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
             }),
           });
 
           if (!res.ok) {
-            throw new Error("Failed to validate cart");
+            throw new Error('Failed to validate cart');
           }
 
           const data = await res.json();
@@ -156,47 +156,48 @@ export const useCartStore = create<CartState>()(
           let outOfStockCount = 0;
 
           // Build new items array from validated data
-          const newItems: CartItem[] = data.items.map((item: {
-            product_id: number;
-            product_uuid: string;
-            name: string;
-            price: number;
-            original_price: number;
-            discount_percent: number;
-            stock: number;
-            image_url: string | null;
-            quantity: number;
-            quantity_adjusted: boolean;
-            out_of_stock: boolean;
-          }) => {
-            if (item.quantity_adjusted) adjustedCount++;
-            if (item.out_of_stock) outOfStockCount++;
+          const newItems: CartItem[] = data.items.map(
+            (item: {
+              product_id: number;
+              product_uuid: string;
+              name: string;
+              price: number;
+              original_price: number;
+              discount_percent: number;
+              stock: number;
+              image_url: string | null;
+              quantity: number;
+              quantity_adjusted: boolean;
+              out_of_stock: boolean;
+            }) => {
+              if (item.quantity_adjusted) adjustedCount++;
+              if (item.out_of_stock) outOfStockCount++;
 
-            return {
-              productId: item.product_id,
-              productUuid: item.product_uuid,
-              name: item.name,
-              price: item.price,
-              originalPrice: item.original_price,
-              discountPercent: item.discount_percent,
-              stock: item.stock,
-              imageUrl: item.image_url || undefined,
-              quantity: item.quantity,
-              outOfStock: item.out_of_stock,
-            };
-          });
+              return {
+                productId: item.product_id,
+                productUuid: item.product_uuid,
+                name: item.name,
+                price: item.price,
+                originalPrice: item.original_price,
+                discountPercent: item.discount_percent,
+                stock: item.stock,
+                imageUrl: item.image_url || undefined,
+                quantity: item.quantity,
+                outOfStock: item.out_of_stock,
+              };
+            }
+          );
 
           set({ items: newItems, isSyncing: false, lastSyncedAt: Date.now() });
 
           return { removedCount, adjustedCount, outOfStockCount };
         } catch (error) {
-          console.error("Cart sync error:", error);
+          console.error('Cart sync error:', error);
           set({ isSyncing: false });
           return { removedCount: 0, adjustedCount: 0, outOfStockCount: 0 };
         }
       },
     }),
-    { name: "cart-storage" }
+    { name: 'cart-storage' }
   )
 );
-

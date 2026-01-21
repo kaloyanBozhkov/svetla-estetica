@@ -1,14 +1,11 @@
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { isAdmin } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
 
-export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ userUuid: string }> }
-) {
+export async function GET(req: Request, { params }: { params: Promise<{ userUuid: string }> }) {
   const admin = await isAdmin();
   if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { userUuid } = await params;
@@ -37,14 +34,14 @@ export async function GET(
           },
         },
         orderBy: {
-          updated_at: "desc",
+          updated_at: 'desc',
         },
       },
     },
   });
 
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   const items = user.cart_items.map((item) => ({
@@ -62,10 +59,7 @@ export async function GET(
     },
   }));
 
-  const total = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   return NextResponse.json({
     user: {
@@ -80,4 +74,3 @@ export async function GET(
     item_count: items.reduce((sum, item) => sum + item.quantity, 0),
   });
 }
-

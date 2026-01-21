@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { verifyMagicLink, createSessionToken, setSessionCookie } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { verifyMagicLink, createSessionToken, setSessionCookie } from '@/lib/auth';
 
 const verifySchema = z.object({
   token: z.string().uuid(),
@@ -14,10 +14,7 @@ export async function POST(request: Request) {
     const userId = await verifyMagicLink(token);
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "Link non valido o scaduto" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Link non valido o scaduto' }, { status: 400 });
     }
 
     const sessionToken = await createSessionToken(userId);
@@ -26,16 +23,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Token non valido" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Token non valido' }, { status: 400 });
     }
-    console.error("Verify error:", error);
-    return NextResponse.json(
-      { error: "Errore durante la verifica" },
-      { status: 500 }
-    );
+    console.error('Verify error:', error);
+    return NextResponse.json({ error: 'Errore durante la verifica' }, { status: 500 });
   }
 }
-

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Button,
   Input,
@@ -10,20 +10,20 @@ import {
   Modal,
   RichTextEditor,
   ActionButton,
-} from "@/components/atoms";
-import { ImageUpload } from "@/components/molecules";
-import { SparkleIcon } from "@/components/atoms/icons";
-import { type product_category } from "@prisma/client";
-import { S3Service } from "@/lib/s3/service";
+} from '@/components/atoms';
+import { ImageUpload } from '@/components/molecules';
+import { SparkleIcon } from '@/components/atoms/icons';
+import { type product_category } from '@prisma/client';
+import { S3Service } from '@/lib/s3/service';
 
 const categoryOptions: { value: product_category; label: string }[] = [
-  { value: "viso", label: "Viso" },
-  { value: "corpo", label: "Corpo" },
-  { value: "solari", label: "Solari" },
-  { value: "tisane", label: "Tisane" },
-  { value: "make_up", label: "Make Up" },
-  { value: "profumi", label: "Profumi" },
-  { value: "mani_e_piedi", label: "Mani e Piedi" },
+  { value: 'viso', label: 'Viso' },
+  { value: 'corpo', label: 'Corpo' },
+  { value: 'solari', label: 'Solari' },
+  { value: 'tisane', label: 'Tisane' },
+  { value: 'make_up', label: 'Make Up' },
+  { value: 'profumi', label: 'Profumi' },
+  { value: 'mani_e_piedi', label: 'Mani e Piedi' },
 ];
 
 interface Brand {
@@ -57,7 +57,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [formatLoading, setFormatLoading] = useState(false);
   const [rewordModal, setRewordModal] = useState(false);
@@ -66,22 +66,22 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
   const [form, setForm] = useState<ProductFormData>(
     initialData || {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       price: 0,
       discountPercent: 0,
       stock: 0,
       priority: 0,
-      category: "viso",
+      category: 'viso',
       brandId: brands[0]?.id || 0,
-      imageUrl: "",
+      imageUrl: '',
       active: true,
     }
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
     setUploadProgress(0);
 
@@ -90,25 +90,19 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
       // Upload pending image first if exists
       if (pendingImageFile) {
-        imageUrl = await S3Service.uploadFile(
-          pendingImageFile,
-          "prodotti",
-          setUploadProgress
-        );
+        imageUrl = await S3Service.uploadFile(pendingImageFile, 'prodotti', setUploadProgress);
         // Revoke the blob URL
-        if (form.imageUrl?.startsWith("blob:")) {
+        if (form.imageUrl?.startsWith('blob:')) {
           URL.revokeObjectURL(form.imageUrl);
         }
       }
 
-      const url = isEdit
-        ? `/api/admin/products/${initialData?.uuid}`
-        : "/api/admin/products";
-      const method = isEdit ? "PUT" : "POST";
+      const url = isEdit ? `/api/admin/products/${initialData?.uuid}` : '/api/admin/products';
+      const method = isEdit ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.name,
           description: form.description || null,
@@ -125,13 +119,13 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
-      router.push("/admin/prodotti");
+      router.push('/admin/prodotti');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore");
+      setError(err instanceof Error ? err.message : 'Errore');
     } finally {
       setLoading(false);
       setUploadProgress(0);
@@ -142,18 +136,18 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
     setDeleting(true);
     try {
       const res = await fetch(`/api/admin/products/${initialData?.uuid}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
-      router.push("/admin/prodotti");
+      router.push('/admin/prodotti');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore");
+      setError(err instanceof Error ? err.message : 'Errore');
       setDeleteModal(false);
     } finally {
       setDeleting(false);
@@ -162,33 +156,33 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
   const handleAiReword = async () => {
     if (!form.name) {
-      setError("Inserisci almeno il nome del prodotto");
+      setError('Inserisci almeno il nome del prodotto');
       return;
     }
 
     const currentBrand = brands.find((b) => b.id === form.brandId);
     if (!currentBrand) {
-      setError("Seleziona un brand");
+      setError('Seleziona un brand');
       return;
     }
 
     setAiLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/admin/products/reword", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/products/reword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: form.name,
           brand: currentBrand.name,
-          description: form.description || "",
+          description: form.description || '',
         }),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore AI");
+        throw new Error(data.error || 'Errore AI');
       }
 
       const data = await res.json();
@@ -198,7 +192,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
         description: data.description,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore AI");
+      setError(err instanceof Error ? err.message : 'Errore AI');
     } finally {
       setAiLoading(false);
     }
@@ -206,26 +200,26 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
   const handleAiFormat = async () => {
     if (!form.name) {
-      setError("Inserisci almeno il nome del prodotto");
+      setError('Inserisci almeno il nome del prodotto');
       return;
     }
 
     setFormatLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/admin/products/format", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/products/format', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: form.name,
-          description: form.description || "",
+          description: form.description || '',
         }),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore AI");
+        throw new Error(data.error || 'Errore AI');
       }
 
       const data = await res.json();
@@ -235,7 +229,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
         description: data.description,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore AI");
+      setError(err instanceof Error ? err.message : 'Errore AI');
     } finally {
       setFormatLoading(false);
     }
@@ -259,9 +253,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
 
           <div className="space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Descrizione
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Descrizione</label>
               <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
                 <ActionButton
                   type="button"
@@ -300,9 +292,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               step="0.01"
               min="0"
               value={form.price}
-              onChange={(e) =>
-                setForm({ ...form, price: parseFloat(e.target.value) || 0 })
-              }
+              onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
               required
             />
 
@@ -313,7 +303,10 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               max="100"
               value={form.discountPercent}
               onChange={(e) =>
-                setForm({ ...form, discountPercent: Math.min(100, Math.max(0, parseInt(e.target.value) || 0)) })
+                setForm({
+                  ...form,
+                  discountPercent: Math.min(100, Math.max(0, parseInt(e.target.value) || 0)),
+                })
               }
               placeholder="0"
             />
@@ -323,9 +316,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               type="number"
               min="0"
               value={form.stock}
-              onChange={(e) =>
-                setForm({ ...form, stock: parseInt(e.target.value) || 0 })
-              }
+              onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
               required
             />
 
@@ -334,9 +325,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               type="number"
               min="0"
               value={form.priority}
-              onChange={(e) =>
-                setForm({ ...form, priority: parseInt(e.target.value) || 0 })
-              }
+              onChange={(e) => setForm({ ...form, priority: parseInt(e.target.value) || 0 })}
             />
           </div>
 
@@ -356,9 +345,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             <Select
               label="Brand"
               value={String(form.brandId)}
-              onChange={(e) =>
-                setForm({ ...form, brandId: parseInt(e.target.value) })
-              }
+              onChange={(e) => setForm({ ...form, brandId: parseInt(e.target.value) })}
               options={brandOptions}
             />
           </div>
@@ -366,7 +353,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
           <ImageUpload
             label="Immagine Prodotto"
             value={form.imageUrl || undefined}
-            onChange={(url) => setForm({ ...form, imageUrl: url || "" })}
+            onChange={(url) => setForm({ ...form, imageUrl: url || '' })}
             imageType="prodotti"
             deferUpload
             onPendingFileChange={setPendingImageFile}
@@ -376,9 +363,7 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
             <div>
               <p className="font-medium text-gray-900">Stato prodotto</p>
               <p className="text-sm text-gray-500">
-                {form.active
-                  ? "Visibile nel catalogo"
-                  : "Nascosto dal catalogo"}
+                {form.active ? 'Visibile nel catalogo' : 'Nascosto dal catalogo'}
               </p>
             </div>
             <button
@@ -387,12 +372,12 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               aria-checked={form.active}
               onClick={() => setForm({ ...form, active: !form.active })}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                form.active ? "bg-primary-600" : "bg-gray-300"
+                form.active ? 'bg-primary-600' : 'bg-gray-300'
               }`}
             >
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                  form.active ? "translate-x-5" : "translate-x-0"
+                  form.active ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
             </button>
@@ -422,16 +407,12 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
               >
                 Annulla
               </Button>
-              <Button
-                type="submit"
-                loading={loading}
-                className="w-full sm:w-auto"
-              >
+              <Button type="submit" loading={loading} className="w-full sm:w-auto">
                 {loading && uploadProgress > 0 && uploadProgress < 100
                   ? `Caricamento... ${uploadProgress}%`
                   : isEdit
-                    ? "Salva"
-                    : "Crea"}
+                    ? 'Salva'
+                    : 'Crea'}
               </Button>
             </div>
           </div>
@@ -439,12 +420,10 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
       </Card>
 
       <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
-        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
-          Conferma eliminazione
-        </h3>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">Conferma eliminazione</h3>
         <p className="text-gray-600 mb-6">
-          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione
-          non può essere annullata.
+          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione non può essere
+          annullata.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setDeleteModal(false)}>
@@ -457,13 +436,10 @@ export function ProductForm({ initialData, brands, isEdit }: ProductFormProps) {
       </Modal>
 
       <Modal open={rewordModal} onClose={() => setRewordModal(false)}>
-        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
-          Riformula con AI
-        </h3>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">Riformula con AI</h3>
         <p className="text-gray-600 mb-6">
-          Attenzione: il testo potrebbe essere modificato e arricchito
-          dall&apos;intelligenza artificiale. Verifica attentamente il
-          risultato prima di salvare.
+          Attenzione: il testo potrebbe essere modificato e arricchito dall&apos;intelligenza
+          artificiale. Verifica attentamente il risultato prima di salvare.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setRewordModal(false)}>

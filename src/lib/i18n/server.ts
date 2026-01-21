@@ -1,11 +1,11 @@
-import { createInstance } from "i18next";
-import { initReactI18next } from "react-i18next/initReactI18next";
-import { getOptions, fallbackLng, type Language } from "./settings";
-import itCommon from "./locales/it/common.json";
-import itProducts from "./locales/it/products.json";
-import itServices from "./locales/it/services.json";
-import itAuth from "./locales/it/auth.json";
-import itAdmin from "./locales/it/admin.json";
+import { createInstance } from 'i18next';
+import { initReactI18next } from 'react-i18next/initReactI18next';
+import { getOptions, fallbackLng, type Language } from './settings';
+import itCommon from './locales/it/common.json';
+import itProducts from './locales/it/products.json';
+import itServices from './locales/it/services.json';
+import itAuth from './locales/it/auth.json';
+import itAdmin from './locales/it/admin.json';
 
 const resources = {
   it: {
@@ -28,7 +28,7 @@ async function initI18next(lng: Language, ns: string | string[]) {
 
 export async function getTranslation(
   lng: Language = fallbackLng,
-  ns: string | string[] = "common"
+  ns: string | string[] = 'common'
 ) {
   const i18nextInstance = await initI18next(lng, ns);
   return {
@@ -36,4 +36,3 @@ export async function getTranslation(
     i18n: i18nextInstance,
   };
 }
-

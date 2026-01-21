@@ -1,15 +1,15 @@
-export { formatPrice, formatDate, formatDateTime, formatTime } from "./format";
-export { toSnakeCase, toCamelCase } from "./transform";
+export { formatPrice, formatDate, formatDateTime, formatTime } from './format';
+export { toSnakeCase, toCamelCase } from './transform';
 
 export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 export function stripHtml(html: string): string {
   return html
-    .replace(/<br\s*\/?>/gi, " ")
-    .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 
@@ -19,12 +19,12 @@ export function sleep(ms: number): Promise<void> {
 
 // Order status translations
 const orderStatusMap: Record<string, string> = {
-  pending: "In attesa",
-  confirmed: "Confermato",
-  processing: "In elaborazione",
-  shipped: "Spedito",
-  delivered: "Consegnato",
-  cancelled: "Annullato",
+  pending: 'In attesa',
+  confirmed: 'Confermato',
+  processing: 'In elaborazione',
+  shipped: 'Spedito',
+  delivered: 'Consegnato',
+  cancelled: 'Annullato',
 };
 
 export function translateOrderStatus(status: string): string {
@@ -33,11 +33,11 @@ export function translateOrderStatus(status: string): string {
 
 // Booking status translations
 const bookingStatusMap: Record<string, string> = {
-  pending: "In attesa",
-  approved: "Approvato",
-  rejected: "Rifiutato",
-  completed: "Completato",
-  cancelled: "Annullato",
+  pending: 'In attesa',
+  approved: 'Approvato',
+  rejected: 'Rifiutato',
+  completed: 'Completato',
+  cancelled: 'Annullato',
 };
 
 export function translateBookingStatus(status: string): string {
@@ -55,4 +55,3 @@ export function calculateSavings(priceInCents: number, discountPercent: number):
   if (discountPercent <= 0 || discountPercent > 100) return 0;
   return priceInCents - calculateDiscountedPrice(priceInCents, discountPercent);
 }
-

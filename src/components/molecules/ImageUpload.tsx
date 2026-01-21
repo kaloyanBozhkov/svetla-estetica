@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useRef, useCallback } from "react";
-import Image from "next/image";
-import ReactCrop, { type Crop, type PixelCrop } from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-import { Button, Modal } from "@/components/atoms";
-import { S3Service, type ImageType } from "@/lib/s3/service";
+import { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import { Button, Modal } from '@/components/atoms';
+import { S3Service, type ImageType } from '@/lib/s3/service';
 
 const TARGET_SIZE_KB = 150;
 const MAX_DIMENSION = 1200; // Max width/height for product images
@@ -22,15 +22,12 @@ interface ImageUploadProps {
 }
 
 // Compress image to target size
-async function compressImage(
-  canvas: HTMLCanvasElement,
-  targetSizeKB: number
-): Promise<Blob> {
+async function compressImage(canvas: HTMLCanvasElement, targetSizeKB: number): Promise<Blob> {
   let quality = 0.92;
   let blob: Blob | null = null;
 
   // Try WebP first (best compression), fallback to JPEG
-  const formats = ["image/webp", "image/jpeg"];
+  const formats = ['image/webp', 'image/jpeg'];
 
   for (const format of formats) {
     quality = 0.92;
@@ -57,21 +54,18 @@ async function compressImage(
   return (
     blob ||
     (await new Promise<Blob>((resolve) => {
-      canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.5);
+      canvas.toBlob((b) => resolve(b!), 'image/jpeg', 0.5);
     }))
   );
 }
 
 // Create cropped and compressed image from crop data
-async function getCroppedImage(
-  image: HTMLImageElement,
-  crop: PixelCrop
-): Promise<File> {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+async function getCroppedImage(image: HTMLImageElement, crop: PixelCrop): Promise<File> {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    throw new Error("No 2d context");
+    throw new Error('No 2d context');
   }
 
   // Calculate scale to fit within max dimensions
@@ -86,10 +80,7 @@ async function getCroppedImage(
   let outputHeight = cropHeight;
 
   if (outputWidth > MAX_DIMENSION || outputHeight > MAX_DIMENSION) {
-    const scale = Math.min(
-      MAX_DIMENSION / outputWidth,
-      MAX_DIMENSION / outputHeight
-    );
+    const scale = Math.min(MAX_DIMENSION / outputWidth, MAX_DIMENSION / outputHeight);
     outputWidth *= scale;
     outputHeight *= scale;
   }
@@ -114,7 +105,7 @@ async function getCroppedImage(
   const blob = await compressImage(canvas, TARGET_SIZE_KB);
 
   // Create file from blob
-  const extension = blob.type === "image/webp" ? "webp" : "jpg";
+  const extension = blob.type === 'image/webp' ? 'webp' : 'jpg';
   return new File([blob], `cropped-image.${extension}`, { type: blob.type });
 }
 
@@ -122,13 +113,13 @@ export function ImageUpload({
   value,
   onChange,
   imageType,
-  label = "Immagine",
+  label = 'Immagine',
   deferUpload = false,
   onPendingFileChange,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -142,7 +133,7 @@ export function ImageUpload({
 
   const uploadFile = useCallback(
     async (file: File) => {
-      setError("");
+      setError('');
       setUploading(true);
       setProgress(0);
 
@@ -157,7 +148,7 @@ export function ImageUpload({
         );
 
         if (!response.ok) {
-          throw new Error("Errore nel caricamento");
+          throw new Error('Errore nel caricamento');
         }
 
         const { uploadUrl, publicUrl } = await response.json();
@@ -172,12 +163,12 @@ export function ImageUpload({
 
         onChange(publicUrl);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Errore nel caricamento");
+        setError(err instanceof Error ? err.message : 'Errore nel caricamento');
       } finally {
         setUploading(false);
         setProgress(0);
         if (inputRef.current) {
-          inputRef.current.value = "";
+          inputRef.current.value = '';
         }
       }
     },
@@ -193,8 +184,8 @@ export function ImageUpload({
 
   const openCropModal = (file: File) => {
     // Validate file type
-    if (!file.type.startsWith("image/")) {
-      setError("Seleziona un file immagine valido");
+    if (!file.type.startsWith('image/')) {
+      setError('Seleziona un file immagine valido');
       return;
     }
 
@@ -235,7 +226,7 @@ export function ImageUpload({
         await uploadFile(croppedFile);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore nel ritaglio");
+      setError(err instanceof Error ? err.message : 'Errore nel ritaglio');
     }
   };
 
@@ -246,7 +237,7 @@ export function ImageUpload({
     setCompletedCrop(undefined);
     setOriginalFile(null);
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.value = '';
     }
   };
 
@@ -290,11 +281,11 @@ export function ImageUpload({
     if (!value) return;
 
     // Only delete from S3 if it's an actual S3 URL (not a blob URL)
-    if (!value.startsWith("blob:")) {
+    if (!value.startsWith('blob:')) {
       try {
-        await fetch("/api/s3/delete", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+        await fetch('/api/s3/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageUrl: value }),
         });
       } catch {
@@ -318,7 +309,7 @@ export function ImageUpload({
     const y = (height - cropSize) / 2;
 
     setCrop({
-      unit: "px",
+      unit: 'px',
       x,
       y,
       width: cropSize,
@@ -333,13 +324,7 @@ export function ImageUpload({
       {value ? (
         <div className="relative">
           <div className="relative aspect-video w-full max-w-sm rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-            <Image
-              src={value}
-              alt="Preview"
-              fill
-              unoptimized
-              className="object-contain"
-            />
+            <Image src={value} alt="Preview" fill unoptimized className="object-contain" />
           </div>
           <div className="mt-2 flex gap-2">
             <Button
@@ -375,20 +360,17 @@ export function ImageUpload({
             border-2 border-dashed rounded-lg cursor-pointer transition-colors
             ${
               uploading
-                ? "border-primary-400 bg-primary-50"
+                ? 'border-primary-400 bg-primary-50'
                 : isDragging
-                  ? "border-primary-500 bg-primary-50"
-                  : "border-gray-300 hover:border-primary-400 hover:bg-gray-50"
+                  ? 'border-primary-500 bg-primary-50'
+                  : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
             }
           `}
         >
           {uploading ? (
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-2">
-                <svg
-                  className="animate-spin h-full w-full text-primary-600"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="animate-spin h-full w-full text-primary-600" viewBox="0 0 24 24">
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -405,14 +387,12 @@ export function ImageUpload({
                   />
                 </svg>
               </div>
-              <p className="text-sm text-primary-600 font-medium">
-                Caricamento... {progress}%
-              </p>
+              <p className="text-sm text-primary-600 font-medium">Caricamento... {progress}%</p>
             </div>
           ) : (
             <>
               <svg
-                className={`w-10 h-10 mb-2 ${isDragging ? "text-primary-500" : "text-gray-400"}`}
+                className={`w-10 h-10 mb-2 ${isDragging ? 'text-primary-500' : 'text-gray-400'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -425,11 +405,9 @@ export function ImageUpload({
                 />
               </svg>
               <p className="text-sm text-gray-600">
-                {isDragging ? "Rilascia per caricare" : "Clicca o trascina"}
+                {isDragging ? 'Rilascia per caricare' : 'Clicca o trascina'}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
-                PNG, JPG, WEBP (max 10MB)
-              </p>
+              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP (max 10MB)</p>
             </>
           )}
         </div>
@@ -446,16 +424,10 @@ export function ImageUpload({
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       {/* Crop Modal */}
-      <Modal
-        open={cropModalOpen}
-        onClose={handleCropCancel}
-      >
-        <h3 className="font-display text-xl font-bold text-gray-900 mb-4">
-          Ritaglia immagine
-        </h3>
+      <Modal open={cropModalOpen} onClose={handleCropCancel}>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-4">Ritaglia immagine</h3>
         <p className="text-sm text-gray-600 mb-4">
-          Seleziona l&apos;area da mantenere. L&apos;immagine verrà ottimizzata
-          automaticamente.
+          Seleziona l&apos;area da mantenere. L&apos;immagine verrà ottimizzata automaticamente.
         </p>
 
         {imageSrc && (
@@ -472,7 +444,7 @@ export function ImageUpload({
                 src={imageSrc}
                 alt="Crop preview"
                 onLoad={onImageLoad}
-                style={{ maxWidth: "100%", maxHeight: "50vh" }}
+                style={{ maxWidth: '100%', maxHeight: '50vh' }}
               />
             </ReactCrop>
           </div>

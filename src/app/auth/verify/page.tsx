@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Card, Spinner } from "@/components/atoms";
-import { CheckIcon, XIcon } from "@/components/atoms/icons";
-import { Suspense } from "react";
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Card, Spinner } from '@/components/atoms';
+import { CheckIcon, XIcon } from '@/components/atoms/icons';
+import { Suspense } from 'react';
 
 function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get('token');
 
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!token) {
-      setStatus("error");
-      setMessage("Link non valido");
+      setStatus('error');
+      setMessage('Link non valido');
       return;
     }
 
     async function verify() {
       try {
-        const res = await fetch("/api/auth/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch('/api/auth/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
         });
 
@@ -34,16 +34,16 @@ function VerifyContent() {
           throw new Error(data.error);
         }
 
-        setStatus("success");
-        setMessage("Accesso effettuato! Reindirizzamento...");
+        setStatus('success');
+        setMessage('Accesso effettuato! Reindirizzamento...');
 
         setTimeout(() => {
-          router.push("/");
+          router.push('/');
           router.refresh();
         }, 1500);
       } catch (err) {
-        setStatus("error");
-        setMessage(err instanceof Error ? err.message : "Errore di verifica");
+        setStatus('error');
+        setMessage(err instanceof Error ? err.message : 'Errore di verifica');
       }
     }
 
@@ -53,38 +53,31 @@ function VerifyContent() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <Card className="max-w-md w-full text-center">
-        {status === "loading" && (
+        {status === 'loading' && (
           <>
             <Spinner size="lg" className="mx-auto" />
             <p className="mt-4 text-gray-600">Verifica in corso...</p>
           </>
         )}
 
-        {status === "success" && (
+        {status === 'success' && (
           <>
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <CheckIcon className="h-8 w-8 text-green-600" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-green-600">
-              Accesso Effettuato!
-            </h1>
+            <h1 className="font-display text-2xl font-bold text-green-600">Accesso Effettuato!</h1>
             <p className="mt-2 text-gray-600">{message}</p>
           </>
         )}
 
-        {status === "error" && (
+        {status === 'error' && (
           <>
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
               <XIcon className="h-8 w-8 text-red-600" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-red-600">
-              Errore
-            </h1>
+            <h1 className="font-display text-2xl font-bold text-red-600">Errore</h1>
             <p className="mt-2 text-gray-600">{message}</p>
-            <a
-              href="/accedi"
-              className="mt-4 inline-block text-primary-600 hover:underline"
-            >
+            <a href="/accedi" className="mt-4 inline-block text-primary-600 hover:underline">
               Torna al login
             </a>
           </>
@@ -107,4 +100,3 @@ export default function VerifyPage() {
     </Suspense>
   );
 }
-

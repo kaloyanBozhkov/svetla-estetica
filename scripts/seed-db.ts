@@ -3,38 +3,38 @@
  *
  * Run: npx tsx scripts/seed-services.ts
  */
-import fs from "fs";
-import { PrismaClient } from "@prisma/client";
-import { oldTreatments } from "./old-parsed/TREATMENTS";
-import { oldProducts } from "./old-parsed/PRODUCTS";
-import { images } from "./old-parsed/images";
-import path from "path";
+import fs from 'fs';
+import { PrismaClient } from '@prisma/client';
+import { oldTreatments } from './old-parsed/TREATMENTS';
+import { oldProducts } from './old-parsed/PRODUCTS';
+import { images } from './old-parsed/images';
+import path from 'path';
 
 const db = new PrismaClient();
 
 const HIGHLIGHTED_SERVICES = [
   {
-    name: "Pulizia della pelle",
+    name: 'Pulizia della pelle',
     priority: 10,
   },
 ];
 
 const HIGHLIGHTED_PRODUCTS = [
-  { name: "Tisana Cellulit Off", priority: 10 },
+  { name: 'Tisana Cellulit Off', priority: 10 },
   {
-    name: "Perlage Crema Viso Anti-Age",
+    name: 'Perlage Crema Viso Anti-Age',
     priority: 9,
   },
   {
-    name: "Gold Filler 24 Kt",
+    name: 'Gold Filler 24 Kt',
     priority: 8,
   },
   {
-    name: "No Age Siero Collagene Extreme",
+    name: 'No Age Siero Collagene Extreme',
     priority: 7,
   },
   {
-    name: "Crema Mani al Veleno Delle Api",
+    name: 'Crema Mani al Veleno Delle Api',
     priority: 6,
   },
 ];
@@ -45,27 +45,27 @@ function generateImageUrl(name: string): string {
     (i) =>
       i.name
         .toLowerCase()
-        .replaceAll(" ", "")
-        .replaceAll("`", "'")
-        .replaceAll("-", "")
-        .replaceAll(",", "")
-        .replaceAll("'", "") ===
+        .replaceAll(' ', '')
+        .replaceAll('`', "'")
+        .replaceAll('-', '')
+        .replaceAll(',', '')
+        .replaceAll("'", '') ===
       name
         .toLowerCase()
-        .replaceAll(" ", "")
-        .replaceAll("`", "'")
-        .replaceAll("-", "")
-        .replaceAll(",", "")
-        .replaceAll("'", "")
+        .replaceAll(' ', '')
+        .replaceAll('`', "'")
+        .replaceAll('-', '')
+        .replaceAll(',', '')
+        .replaceAll("'", '')
   );
   if (!found) {
-    return "";
+    return '';
   }
-  return found.img ?? "";
+  return found.img ?? '';
 }
 
 async function seed() {
-  console.log("Seeding services & products...\n");
+  console.log('Seeding services & products...\n');
 
   let createdServices = 0;
   let createdProducts = 0;
@@ -83,7 +83,7 @@ async function seed() {
   for (const service of oldTreatments) {
     const imgUrl = generateImageUrl(service.name);
     if (!imgUrl) {
-      console.info("no image found for service", service.name);
+      console.info('no image found for service', service.name);
       withoutImageServices.push(service);
     }
     try {
@@ -105,7 +105,7 @@ async function seed() {
     }
   }
 
-  const BRANDS = ["Accademia della Bellezza", "Rosa Bulgara", "-"];
+  const BRANDS = ['Accademia della Bellezza', 'Rosa Bulgara', '-'];
   for (const brand of BRANDS) {
     try {
       await db.brand.create({
@@ -119,22 +119,22 @@ async function seed() {
   }
 
   const brands = await db.brand.findMany();
-  const fallbackBrand = brands.find((b) => b.name === "-");
+  const fallbackBrand = brands.find((b) => b.name === '-');
 
   for (const product of oldProducts) {
     try {
       const productBrand = brands.find(
         (b) =>
-          b.name.toLowerCase().trim().replaceAll(" ", "") ===
-          product.brand?.toLowerCase().trim().replaceAll(" ", "")
+          b.name.toLowerCase().trim().replaceAll(' ', '') ===
+          product.brand?.toLowerCase().trim().replaceAll(' ', '')
       );
       if (!productBrand) {
-        console.info("no brnad for product", product.name);
+        console.info('no brnad for product', product.name);
       }
       const imgUrl = generateImageUrl(product.name);
 
       if (!imgUrl) {
-        console.info("no image found for product", product.name);
+        console.info('no image found for product', product.name);
         withoutImageProducts.push(product);
       }
       await db.product.create({
@@ -162,14 +162,14 @@ async function seed() {
   if (withoutImageServices.length > 0) {
     console.log(`✗ Without image services: ${withoutImageServices.length}`);
     fs.writeFileSync(
-      path.join(__dirname, "scripts", "withoutImageServices.json"),
+      path.join(__dirname, 'scripts', 'withoutImageServices.json'),
       JSON.stringify(withoutImageServices, null, 2)
     );
   }
   if (withoutImageProducts.length > 0) {
     console.log(`✗ Without image products: ${withoutImageProducts.length}`);
     fs.writeFileSync(
-      path.join(__dirname, "scripts", "withoutImageProducts.json"),
+      path.join(__dirname, 'scripts', 'withoutImageProducts.json'),
       JSON.stringify(withoutImageProducts, null, 2)
     );
   }
@@ -203,7 +203,7 @@ async function seed() {
 
 seed()
   .catch((e) => {
-    console.error("Seeding failed:", e);
+    console.error('Seeding failed:', e);
     process.exit(1);
   })
   .finally(async () => {

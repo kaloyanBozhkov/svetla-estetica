@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-core';
+import { z } from 'zod';
 
 export const env = createEnv({
   server: {
@@ -13,14 +13,14 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
     TG_BOT_KEY: z.string().min(1).optional(),
-    IS_PROD: z.boolean().default(process.env.NODE_ENV === "production"),
-    IS_DEV: z.boolean().default(process.env.NODE_ENV === "development"),
+    IS_PROD: z.boolean().default(process.env.NODE_ENV === 'production'),
+    IS_DEV: z.boolean().default(process.env.NODE_ENV === 'development'),
     OPEN_AI_API_KEY: z.string().min(1),
   },
-  clientPrefix: "NEXT_PUBLIC_",
+  clientPrefix: 'NEXT_PUBLIC_',
   client: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
-    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
+    NEXT_PUBLIC_BASE_URL: z.string().url().default('http://localhost:3000'),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -31,8 +31,7 @@ export const env = createEnv({
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     AUTH_SECRET: process.env.AUTH_SECRET,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     TG_BOT_KEY: process.env.TG_BOT_KEY,

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Card, Badge, Button, Select } from "@/components/atoms";
-import { formatPrice, formatDateTime } from "@/lib/utils";
-import { type order_status, type payment_status } from "@prisma/client";
-import { ArrowLeftIcon, MailIcon } from "@/components/atoms/icons";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Card, Badge, Button, Select } from '@/components/atoms';
+import { formatPrice, formatDateTime } from '@/lib/utils';
+import { type order_status, type payment_status } from '@prisma/client';
+import { ArrowLeftIcon, MailIcon } from '@/components/atoms/icons';
 
 interface OrderDetailProps {
   order: {
@@ -44,26 +44,26 @@ interface OrderDetailProps {
 }
 
 const statusOptions = [
-  { value: "pending", label: "In Attesa" },
-  { value: "confirmed", label: "Confermato" },
-  { value: "shipped", label: "Spedito" },
-  { value: "delivered", label: "Consegnato" },
-  { value: "cancelled", label: "Annullato" },
+  { value: 'pending', label: 'In Attesa' },
+  { value: 'confirmed', label: 'Confermato' },
+  { value: 'shipped', label: 'Spedito' },
+  { value: 'delivered', label: 'Consegnato' },
+  { value: 'cancelled', label: 'Annullato' },
 ];
 
 const statusLabels: Record<order_status, string> = {
-  pending: "In Attesa",
-  confirmed: "Confermato",
-  shipped: "Spedito",
-  delivered: "Consegnato",
-  cancelled: "Annullato",
+  pending: 'In Attesa',
+  confirmed: 'Confermato',
+  shipped: 'Spedito',
+  delivered: 'Consegnato',
+  cancelled: 'Annullato',
 };
 
 const paymentLabels: Record<payment_status, string> = {
-  pending: "In Attesa",
-  paid: "Pagato",
-  failed: "Fallito",
-  refunded: "Rimborsato",
+  pending: 'In Attesa',
+  paid: 'Pagato',
+  failed: 'Fallito',
+  refunded: 'Rimborsato',
 };
 
 export function OrderDetail({ order }: OrderDetailProps) {
@@ -77,8 +77,8 @@ export function OrderDetail({ order }: OrderDetailProps) {
     setUpdating(true);
     try {
       const res = await fetch(`/api/admin/orders/${order.uuid}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
 
@@ -92,30 +92,30 @@ export function OrderDetail({ order }: OrderDetailProps) {
 
   const getStatusVariant = (s: order_status) => {
     switch (s) {
-      case "pending":
-        return "warning";
-      case "confirmed":
-      case "shipped":
-        return "info";
-      case "delivered":
-        return "success";
-      case "cancelled":
-        return "danger";
+      case 'pending':
+        return 'warning';
+      case 'confirmed':
+      case 'shipped':
+        return 'info';
+      case 'delivered':
+        return 'success';
+      case 'cancelled':
+        return 'danger';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   const getPaymentVariant = (s: payment_status) => {
     switch (s) {
-      case "paid":
-        return "success";
-      case "pending":
-        return "warning";
-      case "failed":
-        return "danger";
+      case 'paid':
+        return 'success';
+      case 'pending':
+        return 'warning';
+      case 'failed':
+        return 'danger';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -133,12 +133,8 @@ export function OrderDetail({ order }: OrderDetailProps) {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold text-gray-900">
-            Ordine #{order.id}
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            UUID: {order.uuid}
-          </p>
+          <h1 className="font-display text-3xl font-bold text-gray-900">Ordine #{order.id}</h1>
+          <p className="text-sm text-gray-500 mt-1">UUID: {order.uuid}</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant={getStatusVariant(order.status)} className="text-base px-3 py-1">
@@ -160,7 +156,9 @@ export function OrderDetail({ order }: OrderDetailProps) {
             </h2>
             <div className="divide-y divide-gray-200">
               {order.items.map((item) => {
-                const hasDiscount = Boolean(item.discountPercent && item.discountPercent > 0 && item.originalPrice);
+                const hasDiscount = Boolean(
+                  item.discountPercent && item.discountPercent > 0 && item.originalPrice
+                );
                 return (
                   <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex gap-4">
                     <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
@@ -209,7 +207,9 @@ export function OrderDetail({ order }: OrderDetailProps) {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`font-semibold ${hasDiscount ? "text-red-600" : "text-gray-900"}`}>
+                      <p
+                        className={`font-semibold ${hasDiscount ? 'text-red-600' : 'text-gray-900'}`}
+                      >
                         {formatPrice(item.price * item.quantity)}
                       </p>
                     </div>
@@ -248,9 +248,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
           {/* Notes */}
           {order.notes && (
             <Card>
-              <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
-                Note
-              </h2>
+              <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">Note</h2>
               <p className="text-gray-600">{order.notes}</p>
             </Card>
           )}
@@ -260,24 +258,25 @@ export function OrderDetail({ order }: OrderDetailProps) {
         <div className="space-y-6">
           {/* Customer Info */}
           <Card>
-            <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
-              Cliente
-            </h2>
+            <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">Cliente</h2>
             {order.user ? (
               <div className="space-y-3">
                 <div>
                   <p className="text-sm text-gray-500">Nome</p>
-                  <p className="font-medium text-gray-900">{order.user.name || "—"}</p>
+                  <p className="font-medium text-gray-900">{order.user.name || '—'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Email</p>
-                  <a href={`mailto:${order.user.email}`} className="font-medium text-primary-600 hover:underline">
+                  <a
+                    href={`mailto:${order.user.email}`}
+                    className="font-medium text-primary-600 hover:underline"
+                  >
                     {order.user.email}
                   </a>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Telefono</p>
-                  <p className="font-medium text-gray-900">{order.user.phone || "—"}</p>
+                  <p className="font-medium text-gray-900">{order.user.phone || '—'}</p>
                 </div>
               </div>
             ) : (
@@ -293,11 +292,15 @@ export function OrderDetail({ order }: OrderDetailProps) {
             <div className="space-y-3">
               <div>
                 <p className="text-sm text-gray-500">Data Creazione</p>
-                <p className="font-medium text-gray-900">{formatDateTime(new Date(order.createdAt))}</p>
+                <p className="font-medium text-gray-900">
+                  {formatDateTime(new Date(order.createdAt))}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Ultimo Aggiornamento</p>
-                <p className="font-medium text-gray-900">{formatDateTime(new Date(order.updatedAt))}</p>
+                <p className="font-medium text-gray-900">
+                  {formatDateTime(new Date(order.updatedAt))}
+                </p>
               </div>
             </div>
           </Card>

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { ProductCard } from "@/components/molecules";
-import { Button, Badge, Card } from "@/components/atoms";
-import { useCartStore } from "@/stores";
-import { formatPrice, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
-import { type product_category } from "@prisma/client";
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ProductCard } from '@/components/molecules';
+import { Button, Badge, Card } from '@/components/atoms';
+import { useCartStore } from '@/stores';
+import { formatPrice, stripHtml, calculateDiscountedPrice } from '@/lib/utils';
+import { type product_category } from '@prisma/client';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -30,26 +30,22 @@ interface ProductsGridProps {
   categories: { value: product_category; label: string }[];
 }
 
-type SortOption = "default" | "price-asc" | "price-desc" | "discount";
-type ViewMode = "grid" | "list";
+type SortOption = 'default' | 'price-asc' | 'price-desc' | 'discount';
+type ViewMode = 'grid' | 'list';
 
-export function ProductsGrid({
-  products,
-  categories,
-}: ProductsGridProps) {
+export function ProductsGrid({ products, categories }: ProductsGridProps) {
   const searchParams = useSearchParams();
-  const [selectedCategory, setSelectedCategory] =
-    useState<product_category | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>("default");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedCategory, setSelectedCategory] = useState<product_category | null>(null);
+  const [sortBy, setSortBy] = useState<SortOption>('default');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
 
   // Check URL params for initial sort
   useEffect(() => {
-    const ordinamento = searchParams.get("ordinamento");
-    if (ordinamento === "sconto") {
-      setSortBy("discount");
+    const ordinamento = searchParams.get('ordinamento');
+    if (ordinamento === 'sconto') {
+      setSortBy('discount');
     }
   }, [searchParams]);
 
@@ -58,24 +54,22 @@ export function ProductsGrid({
       ? products.filter((p) => p.category === selectedCategory)
       : [...products];
 
-    if (sortBy === "price-asc") {
-      const getEffectivePrice = (p: Product) => 
+    if (sortBy === 'price-asc') {
+      const getEffectivePrice = (p: Product) =>
         p.discountPercent > 0 ? calculateDiscountedPrice(p.price, p.discountPercent) : p.price;
       result.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
-    } else if (sortBy === "price-desc") {
-      const getEffectivePrice = (p: Product) => 
+    } else if (sortBy === 'price-desc') {
+      const getEffectivePrice = (p: Product) =>
         p.discountPercent > 0 ? calculateDiscountedPrice(p.price, p.discountPercent) : p.price;
       result.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
-    } else if (sortBy === "discount") {
+    } else if (sortBy === 'discount') {
       result.sort((a, b) => b.discountPercent - a.discountPercent);
     }
 
     return result;
   }, [products, selectedCategory, sortBy]);
 
-  const totalPages = Math.ceil(
-    filteredAndSortedProducts.length / ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredAndSortedProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredAndSortedProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -87,9 +81,10 @@ export function ProductsGrid({
   };
 
   const handleAddToCart = (product: Product) => {
-    const effectivePrice = product.discountPercent > 0 
-      ? calculateDiscountedPrice(product.price, product.discountPercent) 
-      : product.price;
+    const effectivePrice =
+      product.discountPercent > 0
+        ? calculateDiscountedPrice(product.price, product.discountPercent)
+        : product.price;
     addItem({
       productId: product.id,
       productUuid: product.uuid,
@@ -107,7 +102,7 @@ export function ProductsGrid({
       {/* Category filters */}
       <div className="mb-6 flex flex-wrap gap-2 justify-center">
         <Button
-          variant={selectedCategory === null ? "primary" : "ghost"}
+          variant={selectedCategory === null ? 'primary' : 'ghost'}
           size="sm"
           onClick={() => handleCategoryChange(null)}
         >
@@ -116,7 +111,7 @@ export function ProductsGrid({
         {categories.map((cat) => (
           <Button
             key={cat.value}
-            variant={selectedCategory === cat.value ? "primary" : "ghost"}
+            variant={selectedCategory === cat.value ? 'primary' : 'ghost'}
             size="sm"
             onClick={() => handleCategoryChange(cat.value)}
           >
@@ -127,9 +122,7 @@ export function ProductsGrid({
 
       {/* Controls bar */}
       <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg">
-        <p className="text-sm text-gray-600">
-          {filteredAndSortedProducts.length} prodotti
-        </p>
+        <p className="text-sm text-gray-600">{filteredAndSortedProducts.length} prodotti</p>
 
         <div className="flex items-center gap-4">
           {/* Sort */}
@@ -150,20 +143,15 @@ export function ProductsGrid({
           {/* View toggle */}
           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
-              onClick={() => setViewMode("grid")}
+              onClick={() => setViewMode('grid')}
               className={`p-2 ${
-                viewMode === "grid"
-                  ? "bg-primary-600 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                viewMode === 'grid'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
               aria-label="Grid view"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -173,20 +161,15 @@ export function ProductsGrid({
               </svg>
             </button>
             <button
-              onClick={() => setViewMode("list")}
+              onClick={() => setViewMode('list')}
               className={`p-2 ${
-                viewMode === "list"
-                  ? "bg-primary-600 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                viewMode === 'list'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
               aria-label="List view"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -204,7 +187,7 @@ export function ProductsGrid({
         <div className="text-center py-12">
           <p className="text-gray-500">Nessun prodotto trovato</p>
         </div>
-      ) : viewMode === "grid" ? (
+      ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paginatedProducts.map((product) => (
             <ProductCard
@@ -258,8 +241,8 @@ export function ProductsGrid({
                     onClick={() => setCurrentPage(page)}
                     className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
                       currentPage === page
-                        ? "bg-primary-600 text-white"
-                        : "text-gray-600 hover:bg-gray-100"
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
                     {page}
@@ -290,17 +273,11 @@ export function ProductsGrid({
   );
 }
 
-function ProductListItem({
-  product,
-  onAddToCart,
-}: {
-  product: Product;
-  onAddToCart: () => void;
-}) {
+function ProductListItem({ product, onAddToCart }: { product: Product; onAddToCart: () => void }) {
   const isOutOfStock = product.stock <= 0;
   const hasDiscount = product.discountPercent > 0;
-  const finalPrice = hasDiscount 
-    ? calculateDiscountedPrice(product.price, product.discountPercent) 
+  const finalPrice = hasDiscount
+    ? calculateDiscountedPrice(product.price, product.discountPercent)
     : product.price;
 
   return (
@@ -366,7 +343,9 @@ function ProductListItem({
                 {formatPrice(product.price)}
               </span>
             )}
-            <span className={`font-display text-xl font-bold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+            <span
+              className={`font-display text-xl font-bold ${hasDiscount ? 'text-red-600' : 'text-primary-600'}`}
+            >
               {formatPrice(finalPrice)}
             </span>
           </div>

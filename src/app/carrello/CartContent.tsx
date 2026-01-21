@@ -1,21 +1,30 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useCartStore } from "@/stores";
-import { CartItem } from "@/components/molecules";
-import { ActionButton, Button, Card } from "@/components/atoms";
-import { CartIcon } from "@/components/atoms/icons";
-import { formatPrice } from "@/lib/utils";
-import { SHIPPING_COST } from "@/lib/constants";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import Link from 'next/link';
+import { useCartStore } from '@/stores';
+import { CartItem } from '@/components/molecules';
+import { ActionButton, Button, Card } from '@/components/atoms';
+import { CartIcon } from '@/components/atoms/icons';
+import { formatPrice } from '@/lib/utils';
+import { SHIPPING_COST } from '@/lib/constants';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 
 export function CartContent() {
-  const { items, updateQuantity, removeItem, getTotal, clearCart, syncWithDb, hasOutOfStockItems, isSyncing } = useCartStore();
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    getTotal,
+    clearCart,
+    syncWithDb,
+    hasOutOfStockItems,
+    isSyncing,
+  } = useCartStore();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [cancelMessage, setCancelMessage] = useState("");
-  const [syncMessage, setSyncMessage] = useState("");
+  const [error, setError] = useState('');
+  const [cancelMessage, setCancelMessage] = useState('');
+  const [syncMessage, setSyncMessage] = useState('');
   const hasSynced = useRef(false);
 
   const searchParams = useSearchParams();
@@ -36,7 +45,7 @@ export function CartContent() {
           messages.push(`${result.outOfStockCount} prodotto/i esaurito/i`);
         }
         if (messages.length > 0) {
-          setSyncMessage(messages.join(". ") + ".");
+          setSyncMessage(messages.join('. ') + '.');
         }
       });
     }
@@ -44,22 +53,22 @@ export function CartContent() {
 
   // Show message if user cancelled checkout
   useEffect(() => {
-    if (searchParams.get("cancelled") === "true") {
-      setCancelMessage("Checkout annullato. Il tuo carrello è ancora qui.");
+    if (searchParams.get('cancelled') === 'true') {
+      setCancelMessage('Checkout annullato. Il tuo carrello è ancora qui.');
       // Clear the URL param
-      window.history.replaceState({}, "", "/carrello");
+      window.history.replaceState({}, '', '/carrello');
     }
   }, [searchParams]);
 
   const handleCheckout = async () => {
-    setError("");
-    setCancelMessage("");
+    setError('');
+    setCancelMessage('');
     setCheckoutLoading(true);
 
     try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map((item) => ({
             productId: item.productId,
@@ -71,13 +80,13 @@ export function CartContent() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Errore checkout");
+        throw new Error(data.error || 'Errore checkout');
       }
 
       // Cart will be cleared on the success page after order is completed
       window.location.href = data.url;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore checkout");
+      setError(err instanceof Error ? err.message : 'Errore checkout');
       setCheckoutLoading(false);
     }
   };
@@ -91,12 +100,8 @@ export function CartContent() {
           <div className="mb-6 flex justify-center">
             <CartIcon className="h-20 w-20 text-gray-300" />
           </div>
-          <h1 className="font-display text-3xl font-bold text-gray-900">
-            Il tuo carrello è vuoto
-          </h1>
-          <p className="mt-4 text-gray-600">
-            Aggiungi qualche prodotto per iniziare!
-          </p>
+          <h1 className="font-display text-3xl font-bold text-gray-900">Il tuo carrello è vuoto</h1>
+          <p className="mt-4 text-gray-600">Aggiungi qualche prodotto per iniziare!</p>
           <Link href="/prodotti" className="mt-8 inline-block">
             <Button>Vai ai Prodotti</Button>
           </Link>
@@ -144,9 +149,7 @@ export function CartContent() {
 
           <div>
             <Card className="sticky top-24">
-              <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
-                Riepilogo
-              </h2>
+              <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Riepilogo</h2>
 
               <div className="space-y-3 border-b border-gray-100 pb-4">
                 <div className="flex justify-between text-gray-600">
@@ -172,9 +175,7 @@ export function CartContent() {
                 <p className="mb-3 text-sm text-amber-600 text-center">{cancelMessage}</p>
               )}
 
-              {error && (
-                <p className="mb-3 text-sm text-red-600 text-center">{error}</p>
-              )}
+              {error && <p className="mb-3 text-sm text-red-600 text-center">{error}</p>}
 
               {hasOutOfStockItems() && (
                 <p className="mb-3 text-sm text-red-600 text-center">
@@ -189,12 +190,10 @@ export function CartContent() {
                 loading={checkoutLoading || isSyncing}
                 disabled={hasOutOfStockItems()}
               >
-                {isSyncing ? "Verifica disponibilità..." : "Procedi al Checkout"}
+                {isSyncing ? 'Verifica disponibilità...' : 'Procedi al Checkout'}
               </ActionButton>
 
-              <p className="mt-4 text-xs text-center text-gray-500">
-                Pagamento sicuro con Stripe
-              </p>
+              <p className="mt-4 text-xs text-center text-gray-500">Pagamento sicuro con Stripe</p>
             </Card>
           </div>
         </div>
@@ -202,4 +201,3 @@ export function CartContent() {
     </div>
   );
 }
-

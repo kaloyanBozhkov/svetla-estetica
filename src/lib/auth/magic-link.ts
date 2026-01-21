@@ -1,8 +1,8 @@
-import { revalidatePath } from "next/cache";
-import { db } from "@/lib/db";
-import { resend } from "@/lib/email";
-import { env } from "@/env";
-import MagicLinkEmail from "@/components/emails/MagicLinkEmail";
+import { revalidatePath } from 'next/cache';
+import { db } from '@/lib/db';
+import { resend } from '@/lib/email';
+import { env } from '@/env';
+import MagicLinkEmail from '@/components/emails/MagicLinkEmail';
 
 const MAGIC_LINK_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
@@ -13,7 +13,7 @@ export async function createMagicLink(email: string): Promise<string> {
     user = await db.user.create({
       data: { email },
     });
-    revalidatePath("/admin/utenti");
+    revalidatePath('/admin/utenti');
   }
 
   const token = crypto.randomUUID();
@@ -30,20 +30,17 @@ export async function createMagicLink(email: string): Promise<string> {
   return token;
 }
 
-export async function sendMagicLinkEmail(
-  email: string,
-  token: string
-): Promise<void> {
+export async function sendMagicLinkEmail(email: string, token: string): Promise<void> {
   const magicLinkUrl = `${env.NEXT_PUBLIC_BASE_URL}/auth/verify?token=${token}`;
 
   const result = await resend.emails.send({
-    from: "Svetla Estetica <noreply@svetlaestetica.com>",
+    from: 'Svetla Estetica <noreply@svetlaestetica.com>',
     to: email,
-    subject: "Il tuo link di accesso - Svetla Estetica",
+    subject: 'Il tuo link di accesso - Svetla Estetica',
     react: MagicLinkEmail({ magicLinkUrl }),
   });
 
-  console.log("Magic link email result:", result);
+  console.log('Magic link email result:', result);
 }
 
 export async function verifyMagicLink(token: string): Promise<number | null> {

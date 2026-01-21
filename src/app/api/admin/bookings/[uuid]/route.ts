@@ -1,37 +1,34 @@
-import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
-import { requireAdmin } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { resend } from "@/lib/email";
-import { sendCelebration } from "@/lib/alerts";
-import BookingApprovedEmail from "@/components/emails/BookingApprovedEmail";
-import BookingRejectedEmail from "@/components/emails/BookingRejectedEmail";
+import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+import { requireAdmin } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { resend } from '@/lib/email';
+import { sendCelebration } from '@/lib/alerts';
+import BookingApprovedEmail from '@/components/emails/BookingApprovedEmail';
+import BookingRejectedEmail from '@/components/emails/BookingRejectedEmail';
 
 const updateBookingSchema = z.object({
-  status: z.enum(["pending", "approved", "rejected", "completed", "cancelled"]),
+  status: z.enum(['pending', 'approved', 'rejected', 'completed', 'cancelled']),
 });
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString("it-IT", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  return date.toLocaleDateString('it-IT', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 }
 
 function formatTime(date: Date): string {
-  return date.toLocaleTimeString("it-IT", {
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleTimeString('it-IT', {
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ uuid: string }> }
-) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ uuid: string }> }) {
   try {
     await requireAdmin();
     const { uuid } = await params;
@@ -48,10 +45,7 @@ export async function PATCH(
     });
 
     if (!existingBooking) {
-      return NextResponse.json(
-        { error: "Prenotazione non trovata" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Prenotazione non trovata' }, { status: 404 });
     }
 
     const previousStatus = existingBooking.status;
@@ -64,17 +58,17 @@ export async function PATCH(
 
     // Send email if status changed to approved or rejected
     if (status !== previousStatus && existingBooking.user.email) {
-      const customerName = existingBooking.user.name || "Cliente";
+      const customerName = existingBooking.user.name || 'Cliente';
       const serviceName = existingBooking.service.name;
       const bookingDate = formatDate(existingBooking.date);
       const bookingTime = formatTime(existingBooking.date);
 
       try {
-        if (status === "approved") {
+        if (status === 'approved') {
           await resend.emails.send({
-            from: "Svetla Estetica <noreply@svetlaestetica.com>",
+            from: 'Svetla Estetica <noreply@svetlaestetica.com>',
             to: existingBooking.user.email,
-            subject: "Appuntamento Confermato - Svetla Estetica",
+            subject: 'Appuntamento Confermato - Svetla Estetica',
             react: BookingApprovedEmail({
               customerName,
               serviceName,
@@ -86,16 +80,16 @@ export async function PATCH(
 
           // Celebrate confirmed appointment
           await sendCelebration({
-            event: "Appuntamento Confermato",
+            event: 'Appuntamento Confermato',
             servizio: serviceName,
             data: `${bookingDate} ${bookingTime}`,
             cliente: existingBooking.user.email,
           });
-        } else if (status === "rejected") {
+        } else if (status === 'rejected') {
           await resend.emails.send({
-            from: "Svetla Estetica <noreply@svetlaestetica.com>",
+            from: 'Svetla Estetica <noreply@svetlaestetica.com>',
             to: existingBooking.user.email,
-            subject: "Aggiornamento Appuntamento - Svetla Estetica",
+            subject: 'Aggiornamento Appuntamento - Svetla Estetica',
             react: BookingRejectedEmail({
               customerName,
               serviceName,
@@ -106,26 +100,23 @@ export async function PATCH(
           });
         }
       } catch (emailError) {
-        console.error("Failed to send booking status email:", emailError);
+        console.error('Failed to send booking status email:', emailError);
         // Don't fail the request if email fails
       }
     }
 
     // Revalidate admin pages
-    revalidatePath("/admin/prenotazioni");
+    revalidatePath('/admin/prenotazioni');
 
     return NextResponse.json({ booking });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dati non validi" }, { status: 400 });
+      return NextResponse.json({ error: 'Dati non validi' }, { status: 400 });
     }
-    if (error instanceof Error && error.message === "Forbidden") {
-      return NextResponse.json({ error: "Non autorizzato" }, { status: 403 });
+    if (error instanceof Error && error.message === 'Forbidden') {
+      return NextResponse.json({ error: 'Non autorizzato' }, { status: 403 });
     }
-    console.error("Update booking error:", error);
-    return NextResponse.json(
-      { error: "Errore durante l'aggiornamento" },
-      { status: 500 }
-    );
+    console.error('Update booking error:', error);
+    return NextResponse.json({ error: "Errore durante l'aggiornamento" }, { status: 500 });
   }
 }

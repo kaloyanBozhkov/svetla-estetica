@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button, Badge, HtmlContent } from "@/components/atoms";
-import { useAuthStore } from "@/stores";
-import { formatPrice } from "@/lib/utils";
-import { SERVICE_CATEGORY_LABELS } from "@/lib/constants";
-import type { service } from "@prisma/client";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button, Badge, HtmlContent } from '@/components/atoms';
+import { useAuthStore } from '@/stores';
+import { formatPrice } from '@/lib/utils';
+import { SERVICE_CATEGORY_LABELS } from '@/lib/constants';
+import type { service } from '@prisma/client';
 
 interface Props {
   service: service;
@@ -19,7 +19,7 @@ export function ServiceDetail({ service }: Props) {
 
   const handleBook = () => {
     if (!isAuth) {
-      router.push("/accedi");
+      router.push('/accedi');
       return;
     }
     router.push(`/prenota/${service.uuid}`);
@@ -38,11 +38,15 @@ export function ServiceDetail({ service }: Props) {
       <nav className="mb-8">
         <ol className="flex items-center gap-2 text-sm text-gray-500">
           <li>
-            <Link href="/" className="hover:text-primary-600">Home</Link>
+            <Link href="/" className="hover:text-primary-600">
+              Home
+            </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href="/trattamenti" className="hover:text-primary-600">Trattamenti</Link>
+            <Link href="/trattamenti" className="hover:text-primary-600">
+              Trattamenti
+            </Link>
           </li>
           <li>/</li>
           <li className="text-gray-900 font-medium truncate">{service.name}</li>
@@ -62,11 +66,23 @@ export function ServiceDetail({ service }: Props) {
             <div className="flex h-full items-center justify-center">
               <div className="text-center">
                 <div className="mx-auto h-24 w-24 rounded-full bg-primary-200 flex items-center justify-center mb-4">
-                  <svg className="h-12 w-12 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" />
+                  <svg
+                    className="h-12 w-12 text-primary-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"
+                    />
                   </svg>
                 </div>
-                <span className="text-primary-600 font-medium">{SERVICE_CATEGORY_LABELS[service.category] || service.category}</span>
+                <span className="text-primary-600 font-medium">
+                  {SERVICE_CATEGORY_LABELS[service.category] || service.category}
+                </span>
               </div>
             </div>
           )}
@@ -95,17 +111,25 @@ export function ServiceDetail({ service }: Props) {
               <div>
                 <p className="text-gray-500 text-sm mb-1">Durata</p>
                 <p className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                  <svg className="h-6 w-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="h-6 w-6 text-primary-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   {formatDuration(service.duration_min)}
                 </p>
               </div>
               <div>
                 <p className="text-gray-500 text-sm mb-1">Prezzo</p>
-                <p className="text-2xl font-bold text-primary-600">
-                  {formatPrice(service.price)}
-                </p>
+                <p className="text-2xl font-bold text-primary-600">{formatPrice(service.price)}</p>
               </div>
             </div>
           </div>
@@ -115,15 +139,18 @@ export function ServiceDetail({ service }: Props) {
             {isAuth ? (
               <Button size="lg" className="w-full" onClick={handleBook}>
                 <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
                 Prenota Ora
               </Button>
             ) : (
               <div className="space-y-4">
-                <p className="text-gray-600 text-center">
-                  Accedi per prenotare questo trattamento
-                </p>
+                <p className="text-gray-600 text-center">Accedi per prenotare questo trattamento</p>
                 <Link href="/accedi" className="block">
                   <Button size="lg" className="w-full">
                     Accedi per Prenotare
@@ -135,15 +162,18 @@ export function ServiceDetail({ service }: Props) {
 
           {/* Quick Contact */}
           <div className="mt-8 p-6 rounded-2xl bg-gray-50 ring-1 ring-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-3">
-              Preferisci prenotare al telefono?
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-3">Preferisci prenotare al telefono?</h3>
             <a
               href="tel:+393935026350"
               className="inline-flex items-center gap-2 text-primary-600 font-medium hover:underline"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
               </svg>
               (+39) 393 5026 350
             </a>
@@ -152,20 +182,50 @@ export function ServiceDetail({ service }: Props) {
           {/* Info */}
           <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
             <div className="flex items-center gap-3 text-gray-600">
-              <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-5 w-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <span>Personale qualificato</span>
             </div>
             <div className="flex items-center gap-3 text-gray-600">
-              <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-5 w-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <span>Prodotti professionali</span>
             </div>
             <div className="flex items-center gap-3 text-gray-600">
-              <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-5 w-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <span>Ambiente rilassante</span>
             </div>
@@ -175,4 +235,3 @@ export function ServiceDetail({ service }: Props) {
     </>
   );
 }
-

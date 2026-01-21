@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useRef, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import { useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
   label?: string;
@@ -45,25 +45,21 @@ export function RichTextEditor({
   };
 
   const insertLineBreak = () => {
-    document.execCommand("insertHTML", false, "<br/><br/>");
+    document.execCommand('insertHTML', false, '<br/><br/>');
     editorRef.current?.focus();
     handleInput();
   };
 
   return (
-    <div className={cn("space-y-2", className)}>
-      {label && (
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-        </label>
-      )}
-      
+    <div className={cn('space-y-2', className)}>
+      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+
       <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b border-gray-200">
           <button
             type="button"
-            onClick={() => execCommand("bold")}
+            onClick={() => execCommand('bold')}
             className="p-1.5 rounded hover:bg-gray-200 text-gray-700 font-bold text-sm min-w-[28px]"
             title="Grassetto (Ctrl+B)"
           >
@@ -71,7 +67,7 @@ export function RichTextEditor({
           </button>
           <button
             type="button"
-            onClick={() => execCommand("italic")}
+            onClick={() => execCommand('italic')}
             className="p-1.5 rounded hover:bg-gray-200 text-gray-700 italic text-sm min-w-[28px]"
             title="Corsivo (Ctrl+I)"
           >
@@ -79,7 +75,7 @@ export function RichTextEditor({
           </button>
           <button
             type="button"
-            onClick={() => execCommand("underline")}
+            onClick={() => execCommand('underline')}
             className="p-1.5 rounded hover:bg-gray-200 text-gray-700 underline text-sm min-w-[28px]"
             title="Sottolineato (Ctrl+U)"
           >
@@ -96,7 +92,7 @@ export function RichTextEditor({
           </button>
           <button
             type="button"
-            onClick={() => execCommand("insertUnorderedList")}
+            onClick={() => execCommand('insertUnorderedList')}
             className="px-2 py-1 rounded hover:bg-gray-200 text-gray-700 text-xs"
             title="Lista puntata"
           >
@@ -111,13 +107,12 @@ export function RichTextEditor({
           onInput={handleInput}
           data-placeholder={placeholder}
           className={cn(
-            "w-full px-4 py-3 text-gray-900 focus:outline-none min-h-[150px] max-h-[400px] overflow-y-auto",
-            "[&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400",
-            "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_li]:my-1"
+            'w-full px-4 py-3 text-gray-900 focus:outline-none min-h-[150px] max-h-[400px] overflow-y-auto',
+            '[&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400',
+            '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_li]:my-1'
           )}
         />
       </div>
     </div>
   );
 }
-

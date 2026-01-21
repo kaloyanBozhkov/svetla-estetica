@@ -1,24 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button, Input, Select, Card, Modal, RichTextEditor, ActionButton } from "@/components/atoms";
-import { ImageUpload } from "@/components/molecules";
-import { SparkleIcon } from "@/components/atoms/icons";
-import { type service_category } from "@prisma/client";
-import { S3Service } from "@/lib/s3/service";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  Button,
+  Input,
+  Select,
+  Card,
+  Modal,
+  RichTextEditor,
+  ActionButton,
+} from '@/components/atoms';
+import { ImageUpload } from '@/components/molecules';
+import { SparkleIcon } from '@/components/atoms/icons';
+import { type service_category } from '@prisma/client';
+import { S3Service } from '@/lib/s3/service';
 
 const categoryOptions: { value: service_category; label: string }[] = [
-  { value: "viso", label: "Viso" },
-  { value: "corpo", label: "Corpo" },
-  { value: "make_up", label: "Make Up" },
-  { value: "ceretta", label: "Ceretta" },
-  { value: "solarium", label: "Solarium" },
-  { value: "pedicure", label: "Pedicure" },
-  { value: "manicure", label: "Manicure" },
-  { value: "luce_pulsata", label: "Luce Pulsata" },
-  { value: "appuntamento", label: "Appuntamento" },
-  { value: "grotta_di_sale", label: "Grotta di Sale" },
+  { value: 'viso', label: 'Viso' },
+  { value: 'corpo', label: 'Corpo' },
+  { value: 'make_up', label: 'Make Up' },
+  { value: 'ceretta', label: 'Ceretta' },
+  { value: 'solarium', label: 'Solarium' },
+  { value: 'pedicure', label: 'Pedicure' },
+  { value: 'manicure', label: 'Manicure' },
+  { value: 'luce_pulsata', label: 'Luce Pulsata' },
+  { value: 'appuntamento', label: 'Appuntamento' },
+  { value: 'grotta_di_sale', label: 'Grotta di Sale' },
 ];
 
 interface ServiceFormData {
@@ -43,7 +51,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [formatLoading, setFormatLoading] = useState(false);
   const [rewordModal, setRewordModal] = useState(false);
@@ -52,20 +60,20 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
   const [form, setForm] = useState<ServiceFormData>(
     initialData || {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       price: 0,
       durationMin: 30,
       priority: 0,
-      category: "viso",
-      imageUrl: "",
+      category: 'viso',
+      imageUrl: '',
       active: true,
     }
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
     setUploadProgress(0);
 
@@ -74,25 +82,19 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
       // Upload pending image first if exists
       if (pendingImageFile) {
-        imageUrl = await S3Service.uploadFile(
-          pendingImageFile,
-          "trattamenti",
-          setUploadProgress
-        );
+        imageUrl = await S3Service.uploadFile(pendingImageFile, 'trattamenti', setUploadProgress);
         // Revoke the blob URL
-        if (form.imageUrl?.startsWith("blob:")) {
+        if (form.imageUrl?.startsWith('blob:')) {
           URL.revokeObjectURL(form.imageUrl);
         }
       }
 
-      const url = isEdit
-        ? `/api/admin/services/${initialData?.uuid}`
-        : "/api/admin/services";
-      const method = isEdit ? "PUT" : "POST";
+      const url = isEdit ? `/api/admin/services/${initialData?.uuid}` : '/api/admin/services';
+      const method = isEdit ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.name,
           description: form.description || null,
@@ -107,13 +109,13 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
-      router.push("/admin/servizi");
+      router.push('/admin/servizi');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore");
+      setError(err instanceof Error ? err.message : 'Errore');
     } finally {
       setLoading(false);
       setUploadProgress(0);
@@ -122,26 +124,26 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
   const handleAiReword = async () => {
     if (!form.name) {
-      setError("Inserisci almeno il nome del trattamento");
+      setError('Inserisci almeno il nome del trattamento');
       return;
     }
 
     setAiLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/admin/services/reword", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/services/reword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: form.name,
-          description: form.description || "",
+          description: form.description || '',
         }),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore AI");
+        throw new Error(data.error || 'Errore AI');
       }
 
       const data = await res.json();
@@ -151,7 +153,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
         description: data.description,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore AI");
+      setError(err instanceof Error ? err.message : 'Errore AI');
     } finally {
       setAiLoading(false);
     }
@@ -159,26 +161,26 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
   const handleAiFormat = async () => {
     if (!form.name) {
-      setError("Inserisci almeno il nome del trattamento");
+      setError('Inserisci almeno il nome del trattamento');
       return;
     }
 
     setFormatLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/admin/services/format", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/services/format', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: form.name,
-          description: form.description || "",
+          description: form.description || '',
         }),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore AI");
+        throw new Error(data.error || 'Errore AI');
       }
 
       const data = await res.json();
@@ -188,7 +190,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
         description: data.description,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore AI");
+      setError(err instanceof Error ? err.message : 'Errore AI');
     } finally {
       setFormatLoading(false);
     }
@@ -198,18 +200,18 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
     setDeleting(true);
     try {
       const res = await fetch(`/api/admin/services/${initialData?.uuid}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
-      router.push("/admin/servizi");
+      router.push('/admin/servizi');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore");
+      setError(err instanceof Error ? err.message : 'Errore');
       setDeleteModal(false);
     } finally {
       setDeleting(false);
@@ -229,9 +231,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
 
           <div className="space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Descrizione
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Descrizione</label>
               <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
                 <ActionButton
                   type="button"
@@ -303,7 +303,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
           <ImageUpload
             label="Immagine Trattamento"
             value={form.imageUrl || undefined}
-            onChange={(url) => setForm({ ...form, imageUrl: url || "" })}
+            onChange={(url) => setForm({ ...form, imageUrl: url || '' })}
             imageType="trattamenti"
             deferUpload
             onPendingFileChange={setPendingImageFile}
@@ -313,7 +313,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
             <div>
               <p className="font-medium text-gray-900">Stato servizio</p>
               <p className="text-sm text-gray-500">
-                {form.active ? "Visibile nel catalogo" : "Nascosto dal catalogo"}
+                {form.active ? 'Visibile nel catalogo' : 'Nascosto dal catalogo'}
               </p>
             </div>
             <button
@@ -322,12 +322,12 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
               aria-checked={form.active}
               onClick={() => setForm({ ...form, active: !form.active })}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                form.active ? "bg-primary-600" : "bg-gray-300"
+                form.active ? 'bg-primary-600' : 'bg-gray-300'
               }`}
             >
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                  form.active ? "translate-x-5" : "translate-x-0"
+                  form.active ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
             </button>
@@ -361,8 +361,8 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
                 {loading && uploadProgress > 0 && uploadProgress < 100
                   ? `Caricamento... ${uploadProgress}%`
                   : isEdit
-                    ? "Salva"
-                    : "Crea"}
+                    ? 'Salva'
+                    : 'Crea'}
               </Button>
             </div>
           </div>
@@ -370,11 +370,10 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
       </Card>
 
       <Modal open={deleteModal} onClose={() => setDeleteModal(false)}>
-        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
-          Conferma eliminazione
-        </h3>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">Conferma eliminazione</h3>
         <p className="text-gray-600 mb-6">
-          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione non può essere annullata.
+          Sei sicuro di voler eliminare &quot;{form.name}&quot;? Questa azione non può essere
+          annullata.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setDeleteModal(false)}>
@@ -387,13 +386,10 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
       </Modal>
 
       <Modal open={rewordModal} onClose={() => setRewordModal(false)}>
-        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">
-          Riformula con AI
-        </h3>
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-2">Riformula con AI</h3>
         <p className="text-gray-600 mb-6">
-          Attenzione: il testo potrebbe essere modificato e arricchito
-          dall&apos;intelligenza artificiale. Verifica attentamente il
-          risultato prima di salvare.
+          Attenzione: il testo potrebbe essere modificato e arricchito dall&apos;intelligenza
+          artificiale. Verifica attentamente il risultato prima di salvare.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setRewordModal(false)}>
@@ -412,4 +408,3 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
     </>
   );
 }
-

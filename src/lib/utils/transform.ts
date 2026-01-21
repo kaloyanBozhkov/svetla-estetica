@@ -1,5 +1,5 @@
 type CamelToSnakeCase<S extends string> = S extends `${infer T}${infer U}`
-  ? `${T extends Capitalize<T> ? "_" : ""}${Lowercase<T>}${CamelToSnakeCase<U>}`
+  ? `${T extends Capitalize<T> ? '_' : ''}${Lowercase<T>}${CamelToSnakeCase<U>}`
   : S;
 
 type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
@@ -18,33 +18,28 @@ type KeysToCamelCase<T> = {
     : T[K];
 };
 
-export function toSnakeCase<T extends Record<string, unknown>>(
-  obj: T
-): KeysToSnakeCase<T> {
+export function toSnakeCase<T extends Record<string, unknown>>(obj: T): KeysToSnakeCase<T> {
   const result: Record<string, unknown> = {};
   for (const key in obj) {
     const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
     const value = obj[key];
     result[snakeKey] =
-      value && typeof value === "object" && !Array.isArray(value)
+      value && typeof value === 'object' && !Array.isArray(value)
         ? toSnakeCase(value as Record<string, unknown>)
         : value;
   }
   return result as KeysToSnakeCase<T>;
 }
 
-export function toCamelCase<T extends Record<string, unknown>>(
-  obj: T
-): KeysToCamelCase<T> {
+export function toCamelCase<T extends Record<string, unknown>>(obj: T): KeysToCamelCase<T> {
   const result: Record<string, unknown> = {};
   for (const key in obj) {
     const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
     const value = obj[key];
     result[camelKey] =
-      value && typeof value === "object" && !Array.isArray(value)
+      value && typeof value === 'object' && !Array.isArray(value)
         ? toCamelCase(value as Record<string, unknown>)
         : value;
   }
   return result as KeysToCamelCase<T>;
 }
-

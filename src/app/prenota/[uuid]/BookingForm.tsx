@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Card, CardTitle, Button, Input } from "@/components/atoms";
-import { CheckIcon } from "@/components/atoms/icons";
-import { formatPrice } from "@/lib/utils";
-import { OPENING_HOUR, CLOSING_HOUR_WEEKDAY } from "@/lib/constants";
-import { z } from "zod";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Card, CardTitle, Button, Input } from '@/components/atoms';
+import { CheckIcon } from '@/components/atoms/icons';
+import { formatPrice } from '@/lib/utils';
+import { OPENING_HOUR, CLOSING_HOUR_WEEKDAY } from '@/lib/constants';
+import { z } from 'zod';
 
 interface BookingFormProps {
   service: {
@@ -23,35 +23,35 @@ interface BookingFormProps {
 }
 
 const bookingSchema = z.object({
-  name: z.string().min(2, "Nome richiesto"),
-  date: z.string().min(1, "Data richiesta"),
-  time: z.string().min(1, "Ora richiesta"),
-  phone: z.string().min(6, "Numero di telefono richiesto"),
+  name: z.string().min(2, 'Nome richiesto'),
+  date: z.string().min(1, 'Data richiesta'),
+  time: z.string().min(1, 'Ora richiesta'),
+  phone: z.string().min(6, 'Numero di telefono richiesto'),
   notes: z.string().optional(),
 });
 
 export function BookingForm({ service, user }: BookingFormProps) {
   const router = useRouter();
   const [name, setName] = useState(user.name);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState('');
   const [time, setTime] = useState(OPENING_HOUR);
   const [phone, setPhone] = useState(user.phone);
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       bookingSchema.parse({ name, date, time, phone, notes });
 
-      const res = await fetch("/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           serviceUuid: service.uuid,
           name,
@@ -64,7 +64,7 @@ export function BookingForm({ service, user }: BookingFormProps) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Errore");
+        throw new Error(data.error || 'Errore');
       }
 
       setSuccess(true);
@@ -87,17 +87,17 @@ export function BookingForm({ service, user }: BookingFormProps) {
         </div>
         <CardTitle>Prenotazione Inviata!</CardTitle>
         <p className="mt-4 text-gray-600">
-          La tua richiesta di prenotazione per <strong>{service.name}</strong> è
-          stata inviata. Ti contatteremo per confermare l&apos;appuntamento.
+          La tua richiesta di prenotazione per <strong>{service.name}</strong> è stata inviata. Ti
+          contatteremo per confermare l&apos;appuntamento.
         </p>
-        <Button className="mt-6" onClick={() => router.push("/account")}>
+        <Button className="mt-6" onClick={() => router.push('/account')}>
           Vai al tuo Account
         </Button>
       </Card>
     );
   }
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <Card>
@@ -110,9 +110,7 @@ export function BookingForm({ service, user }: BookingFormProps) {
         </div>
         <div className="flex justify-between mt-2">
           <span className="text-gray-600">Prezzo</span>
-          <span className="font-medium text-primary-600">
-            {formatPrice(service.price)}
-          </span>
+          <span className="font-medium text-primary-600">{formatPrice(service.price)}</span>
         </div>
       </div>
 
@@ -155,9 +153,7 @@ export function BookingForm({ service, user }: BookingFormProps) {
         />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Note (opzionale)
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Note (opzionale)</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -174,8 +170,7 @@ export function BookingForm({ service, user }: BookingFormProps) {
         </Button>
 
         <p className="text-xs text-center text-gray-500">
-          La prenotazione è soggetta a conferma. Ti contatteremo per confermare
-          l&apos;appuntamento.
+          La prenotazione è soggetta a conferma. Ti contatteremo per confermare l&apos;appuntamento.
         </p>
       </form>
     </Card>

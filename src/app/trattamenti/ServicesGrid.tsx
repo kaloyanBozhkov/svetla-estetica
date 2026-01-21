@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { ServiceCard } from "@/components/molecules";
-import { Button, Badge, Card } from "@/components/atoms";
-import { formatPrice, stripHtml } from "@/lib/utils";
-import { type service_category } from "@prisma/client";
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { ServiceCard } from '@/components/molecules';
+import { Button, Badge, Card } from '@/components/atoms';
+import { formatPrice, stripHtml } from '@/lib/utils';
+import { type service_category } from '@prisma/client';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -29,19 +29,14 @@ interface ServicesGridProps {
   categories: { value: service_category; label: string }[];
 }
 
-type SortOption = "default" | "price-asc" | "price-desc";
-type ViewMode = "grid" | "list";
+type SortOption = 'default' | 'price-asc' | 'price-desc';
+type ViewMode = 'grid' | 'list';
 
-export function ServicesGrid({
-  services,
-  isAuthenticated = false,
-  categories,
-}: ServicesGridProps) {
+export function ServicesGrid({ services, isAuthenticated = false, categories }: ServicesGridProps) {
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] =
-    useState<service_category | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>("default");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedCategory, setSelectedCategory] = useState<service_category | null>(null);
+  const [sortBy, setSortBy] = useState<SortOption>('default');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAndSortedServices = useMemo(() => {
@@ -49,18 +44,16 @@ export function ServicesGrid({
       ? services.filter((s) => s.category === selectedCategory)
       : [...services];
 
-    if (sortBy === "price-asc") {
+    if (sortBy === 'price-asc') {
       result.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "price-desc") {
+    } else if (sortBy === 'price-desc') {
       result.sort((a, b) => b.price - a.price);
     }
 
     return result;
   }, [services, selectedCategory, sortBy]);
 
-  const totalPages = Math.ceil(
-    filteredAndSortedServices.length / ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredAndSortedServices.length / ITEMS_PER_PAGE);
   const paginatedServices = filteredAndSortedServices.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -80,7 +73,7 @@ export function ServicesGrid({
       {/* Category filters */}
       <div className="mb-6 flex flex-wrap gap-2 justify-center">
         <Button
-          variant={selectedCategory === null ? "primary" : "ghost"}
+          variant={selectedCategory === null ? 'primary' : 'ghost'}
           size="sm"
           onClick={() => handleCategoryChange(null)}
         >
@@ -89,7 +82,7 @@ export function ServicesGrid({
         {categories.map((cat) => (
           <Button
             key={cat.value}
-            variant={selectedCategory === cat.value ? "primary" : "ghost"}
+            variant={selectedCategory === cat.value ? 'primary' : 'ghost'}
             size="sm"
             onClick={() => handleCategoryChange(cat.value)}
           >
@@ -100,9 +93,7 @@ export function ServicesGrid({
 
       {/* Controls bar */}
       <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg">
-        <p className="text-sm text-gray-600">
-          {filteredAndSortedServices.length} trattamenti
-        </p>
+        <p className="text-sm text-gray-600">{filteredAndSortedServices.length} trattamenti</p>
 
         <div className="flex items-center gap-4">
           {/* Sort */}
@@ -122,20 +113,15 @@ export function ServicesGrid({
           {/* View toggle */}
           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
-              onClick={() => setViewMode("grid")}
+              onClick={() => setViewMode('grid')}
               className={`p-2 ${
-                viewMode === "grid"
-                  ? "bg-primary-600 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                viewMode === 'grid'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
               aria-label="Grid view"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -145,20 +131,15 @@ export function ServicesGrid({
               </svg>
             </button>
             <button
-              onClick={() => setViewMode("list")}
+              onClick={() => setViewMode('list')}
               className={`p-2 ${
-                viewMode === "list"
-                  ? "bg-primary-600 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                viewMode === 'list'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
               aria-label="List view"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -176,7 +157,7 @@ export function ServicesGrid({
         <div className="text-center py-12">
           <p className="text-gray-500">Nessun trattamento trovato</p>
         </div>
-      ) : viewMode === "grid" ? (
+      ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {paginatedServices.map((service) => (
             <ServiceCard
@@ -231,8 +212,8 @@ export function ServicesGrid({
                     onClick={() => setCurrentPage(page)}
                     className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
                       currentPage === page
-                        ? "bg-primary-600 text-white"
-                        : "text-gray-600 hover:bg-gray-100"
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
                     {page}
@@ -288,12 +269,7 @@ function ServiceListItem({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-primary-300">
-            <svg
-              className="w-16 h-16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -309,9 +285,7 @@ function ServiceListItem({
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="default">{service.categoryLabel}</Badge>
-            <span className="text-sm text-gray-500">
-              {service.durationMin} min
-            </span>
+            <span className="text-sm text-gray-500">{service.durationMin} min</span>
           </div>
           <Link href={`/trattamenti/${service.uuid}`}>
             <h3 className="font-display text-lg font-semibold text-gray-900 hover:text-primary-600 transition-colors">
@@ -335,7 +309,10 @@ function ServiceListItem({
               Prenota
             </Button>
           ) : (
-            <Link href="/accedi" className="text-sm text-primary-600 hover:text-primary-700 hover:underline">
+            <Link
+              href="/accedi"
+              className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+            >
               Accedi per prenotare
             </Link>
           )}

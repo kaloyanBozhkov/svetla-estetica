@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { db } from "@/lib/db";
-import { isAdmin } from "@/lib/auth";
-import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { db } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
+import { z } from 'zod';
 
 const serviceSchema = z.object({
   name: z.string().min(1),
@@ -11,16 +11,16 @@ const serviceSchema = z.object({
   duration_min: z.number().int().min(5),
   priority: z.number().int().min(0).default(0),
   category: z.enum([
-    "viso",
-    "corpo",
-    "make_up",
-    "ceretta",
-    "solarium",
-    "pedicure",
-    "manicure",
-    "luce_pulsata",
-    "appuntamento",
-    "grotta_di_sale",
+    'viso',
+    'corpo',
+    'make_up',
+    'ceretta',
+    'solarium',
+    'pedicure',
+    'manicure',
+    'luce_pulsata',
+    'appuntamento',
+    'grotta_di_sale',
   ]),
   image_url: z.string().nullable(),
   active: z.boolean(),
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   try {
     const admin = await isAdmin();
     if (!admin) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -50,20 +50,16 @@ export async function POST(req: Request) {
     });
 
     // Revalidate service pages cache
-    revalidatePath("/trattamenti");
-    revalidatePath("/");
-    revalidatePath("/admin/servizi");
+    revalidatePath('/trattamenti');
+    revalidatePath('/');
+    revalidatePath('/admin/servizi');
 
     return NextResponse.json({ uuid: service.uuid });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: z.prettifyError(error) },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: z.prettifyError(error) }, { status: 400 });
     }
-    console.error("Create service error:", error);
-    return NextResponse.json({ error: "Errore interno" }, { status: 500 });
+    console.error('Create service error:', error);
+    return NextResponse.json({ error: 'Errore interno' }, { status: 500 });
   }
 }
-

@@ -1,32 +1,29 @@
-import Link from "next/link";
-import { Button } from "@/components/atoms";
-import type { Metadata } from "next";
-import { generateLocalBusinessSchema } from "@/lib/seo";
+import Link from 'next/link';
+import { Button } from '@/components/atoms';
+import type { Metadata } from 'next';
+import { generateLocalBusinessSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: "Chi Siamo",
-  description: "Svetla Estetica: oltre 15 anni di esperienza nel settore estetico a Dalmine, Bergamo. Scopri la nostra storia, i nostri valori e i trattamenti che offriamo.",
+  title: 'Chi Siamo',
+  description:
+    'Svetla Estetica: oltre 15 anni di esperienza nel settore estetico a Dalmine, Bergamo. Scopri la nostra storia, i nostri valori e i trattamenti che offriamo.',
   openGraph: {
-    title: "Chi Siamo | Svetla Estetica",
-    description: "La tua destinazione di bellezza e benessere a Dalmine. Scopri chi siamo e la nostra passione per l'estetica.",
+    title: 'Chi Siamo | Svetla Estetica',
+    description:
+      "La tua destinazione di bellezza e benessere a Dalmine. Scopri chi siamo e la nostra passione per l'estetica.",
   },
   alternates: {
-    canonical: "/chi-siamo",
+    canonical: '/chi-siamo',
   },
 };
 
 const values = [
   {
-    title: "Professionalità",
+    title: 'Professionalità',
     description:
-      "Oltre 15 anni di esperienza nel settore estetico, formazione continua e attenzione ai dettagli.",
+      'Oltre 15 anni di esperienza nel settore estetico, formazione continua e attenzione ai dettagli.',
     icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -37,16 +34,11 @@ const values = [
     ),
   },
   {
-    title: "Qualità",
+    title: 'Qualità',
     description:
       "Solo prodotti certificati e tecnologie all'avanguardia per risultati visibili e duraturi.",
     icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -57,16 +49,11 @@ const values = [
     ),
   },
   {
-    title: "Benessere",
+    title: 'Benessere',
     description:
       "Un'oasi di relax dove prenderti cura di te stessa, lontano dallo stress quotidiano.",
     icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -79,21 +66,21 @@ const values = [
 ];
 
 const services = [
-  { name: "Trattamenti Viso", icon: "✨" },
-  { name: "Trattamenti Corpo", icon: "🌸" },
-  { name: "Manicure & Pedicure", icon: "💅" },
-  { name: "Ceretta & Epilazione", icon: "🌿" },
-  { name: "Luce Pulsata", icon: "⚡" },
-  { name: "Solarium", icon: "☀️" },
-  { name: "Make Up", icon: "💄" },
-  { name: "Grotta di Sale", icon: "🧂" },
+  { name: 'Trattamenti Viso', icon: '✨' },
+  { name: 'Trattamenti Corpo', icon: '🌸' },
+  { name: 'Manicure & Pedicure', icon: '💅' },
+  { name: 'Ceretta & Epilazione', icon: '🌿' },
+  { name: 'Luce Pulsata', icon: '⚡' },
+  { name: 'Solarium', icon: '☀️' },
+  { name: 'Make Up', icon: '💄' },
+  { name: 'Grotta di Sale', icon: '🧂' },
 ];
 
 const stats = [
-  { value: "15+", label: "Anni di esperienza" },
-  { value: "1000+", label: "Clienti soddisfatte" },
-  { value: "50+", label: "Trattamenti disponibili" },
-  { value: "100%", label: "Prodotti di qualità" },
+  { value: '15+', label: 'Anni di esperienza' },
+  { value: '1000+', label: 'Clienti soddisfatte' },
+  { value: '50+', label: 'Trattamenti disponibili' },
+  { value: '100%', label: 'Prodotti di qualità' },
 ];
 
 export default function AboutPage() {
@@ -124,10 +111,9 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-primary-100 max-w-2xl leading-relaxed">
-              Da oltre 15 anni, Svetla Estetica è il punto di riferimento per
-              chi cerca trattamenti estetici di qualità a Dalmine. Un luogo dove
-              professionalità, passione e attenzione al cliente si fondono per
-              regalarti momenti di puro relax.
+              Da oltre 15 anni, Svetla Estetica è il punto di riferimento per chi cerca trattamenti
+              estetici di qualità a Dalmine. Un luogo dove professionalità, passione e attenzione al
+              cliente si fondono per regalarti momenti di puro relax.
             </p>
           </div>
         </div>
@@ -149,21 +135,19 @@ export default function AboutPage() {
               </h2>
               <div className="mt-6 space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  <strong className="text-gray-900">Svetla Estetica</strong>{" "}
-                  nasce dalla passione per la bellezza e il benessere. Situato
-                  nel cuore di Dalmine, il nostro centro è diventato negli anni
-                  un punto di riferimento per chi cerca trattamenti estetici di
+                  <strong className="text-gray-900">Svetla Estetica</strong> nasce dalla passione
+                  per la bellezza e il benessere. Situato nel cuore di Dalmine, il nostro centro è
+                  diventato negli anni un punto di riferimento per chi cerca trattamenti estetici di
                   qualità in un ambiente familiare e professionale.
                 </p>
                 <p>
-                  Crediamo che ogni persona sia unica e meriti cure
-                  personalizzate. Per questo, ascoltiamo attentamente le
-                  esigenze di ogni cliente, creando percorsi di bellezza su
-                  misura che valorizzano la tua unicità naturale.
+                  Crediamo che ogni persona sia unica e meriti cure personalizzate. Per questo,
+                  ascoltiamo attentamente le esigenze di ogni cliente, creando percorsi di bellezza
+                  su misura che valorizzano la tua unicità naturale.
                 </p>
                 <p>
-                  La nostra filosofia è semplice: farti sentire speciale,
-                  rilassata e più bella, ogni volta che varchi la nostra porta.
+                  La nostra filosofia è semplice: farti sentire speciale, rilassata e più bella,
+                  ogni volta che varchi la nostra porta.
                 </p>
               </div>
             </div>
@@ -173,16 +157,10 @@ export default function AboutPage() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center p-8">
                     <div className="mx-auto h-32 w-32 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-lg mb-6">
-                      <span className="font-display text-5xl font-bold text-primary-600">
-                        SE
-                      </span>
+                      <span className="font-display text-5xl font-bold text-primary-600">SE</span>
                     </div>
-                    <p className="font-display text-2xl font-bold text-gray-800">
-                      Svetla Estetica
-                    </p>
-                    <p className="text-gray-600 mt-2">
-                      Dal cuore, per la tua bellezza
-                    </p>
+                    <p className="font-display text-2xl font-bold text-gray-800">Svetla Estetica</p>
+                    <p className="text-gray-600 mt-2">Dal cuore, per la tua bellezza</p>
                   </div>
                 </div>
               </div>
@@ -202,8 +180,8 @@ export default function AboutPage() {
               I Nostri Valori
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Ogni giorno ci impegniamo per offrirti un&apos;esperienza unica,
-              guidati dai principi che definiscono chi siamo
+              Ogni giorno ci impegniamo per offrirti un&apos;esperienza unica, guidati dai principi
+              che definiscono chi siamo
             </p>
           </div>
 
@@ -221,9 +199,7 @@ export default function AboutPage() {
                   <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {value.description}
-                  </p>
+                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
                 </div>
               </div>
             ))}
@@ -255,8 +231,7 @@ export default function AboutPage() {
               I Nostri Trattamenti
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Una gamma completa di servizi estetici per prenderti cura di te
-              dalla testa ai piedi
+              Una gamma completa di servizi estetici per prenderti cura di te dalla testa ai piedi
             </p>
           </div>
 
@@ -280,12 +255,7 @@ export default function AboutPage() {
             <Link href="/trattamenti">
               <Button size="lg">
                 Scopri Tutti i Trattamenti
-                <svg
-                  className="ml-2 h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -305,24 +275,21 @@ export default function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div className="order-2 lg:order-1">
               <div className="grid grid-cols-2 gap-4">
-                {["Viso", "Corpo", "Solari", "Profumi"].map((cat, i) => (
+                {['Viso', 'Corpo', 'Solari', 'Profumi'].map((cat, i) => (
                   <div
                     key={cat}
-                    className={`rounded-2xl p-6 ${
-                      i % 2 === 0 ? "bg-white" : "bg-primary-600 text-white"
-                    } shadow-lg`}
+                    className={`rounded-2xl p-6 ${i % 2 === 0 ? 'bg-white' : 'bg-primary-600 text-white'
+                      } shadow-lg`}
                   >
                     <p
-                      className={`font-display text-lg font-bold ${
-                        i % 2 === 0 ? "text-gray-900" : ""
-                      }`}
+                      className={`font-display text-lg font-bold ${i % 2 === 0 ? 'text-gray-900' : ''
+                        }`}
                     >
                       {cat}
                     </p>
                     <p
-                      className={`mt-1 text-sm ${
-                        i % 2 === 0 ? "text-gray-500" : "text-primary-100"
-                      }`}
+                      className={`mt-1 text-sm ${i % 2 === 0 ? 'text-gray-500' : 'text-primary-100'
+                        }`}
                     >
                       Prodotti selezionati
                     </p>
@@ -342,10 +309,9 @@ export default function AboutPage() {
                 <span className="text-primary-600">Alta Qualità</span>
               </h2>
               <p className="mt-6 text-gray-600 leading-relaxed">
-                Oltre ai trattamenti in cabina, offriamo una selezione curata di
-                prodotti per la cura quotidiana della pelle e del corpo. Creme,
-                solari, tisane, profumi e molto altro - tutti scelti per
-                garantirti risultati professionali anche a casa.
+                Oltre ai trattamenti in cabina, offriamo una selezione curata di prodotti per la
+                cura quotidiana della pelle e del corpo. Creme, solari, tisane, profumi e molto
+                altro - tutti scelti per garantirti risultati professionali anche a casa.
               </p>
               <div className="mt-8">
                 <Link href="/prodotti">
@@ -368,12 +334,10 @@ export default function AboutPage() {
             <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-accent-400/20"></div>
 
             <div className="relative">
-              <h2 className="font-display text-3xl font-bold sm:text-4xl">
-                Vieni a Trovarci
-              </h2>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl">Vieni a Trovarci</h2>
               <p className="mt-4 text-lg text-primary-100 max-w-xl mx-auto">
-                Ti aspettiamo nel nostro centro per un&apos;esperienza di
-                benessere unica. Prenota il tuo appuntamento o passa a trovarci!
+                Ti aspettiamo nel nostro centro per un&apos;esperienza di benessere unica. Prenota
+                il tuo appuntamento o passa a trovarci!
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -381,12 +345,7 @@ export default function AboutPage() {
                   href="tel:+393935026350"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-primary-600 shadow-lg transition-all hover:bg-gray-50 hover:scale-[1.02]"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -401,12 +360,7 @@ export default function AboutPage() {
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/20 backdrop-blur-sm px-8 py-4 font-semibold text-white transition-all hover:bg-white/30 hover:scale-[1.02]"
                 >
                   Vedi Contatti
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"

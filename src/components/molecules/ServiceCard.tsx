@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Card, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice, stripHtml } from "@/lib/utils";
-import Image from "next/image";
+import Link from 'next/link';
+import { Card, CardFooter, Button, Badge } from '@/components/atoms';
+import { formatPrice, stripHtml } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ServiceCardProps {
   uuid: string;
@@ -57,16 +57,23 @@ export function ServiceCard({
         ) : (
           <div className="flex h-full items-center justify-center">
             <div className="h-16 w-16 rounded-full bg-primary-200 flex items-center justify-center">
-              <svg className="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" />
+              <svg
+                className="h-8 w-8 text-primary-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"
+                />
               </svg>
             </div>
           </div>
         )}
-        <Badge
-          variant="default"
-          className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm"
-        >
+        <Badge variant="default" className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm">
           {category}
         </Badge>
       </div>

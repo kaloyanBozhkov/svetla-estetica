@@ -1,4 +1,4 @@
-import { service_category } from "@prisma/client";
+import { service_category } from '@prisma/client';
 export const oldTreatments = [
   {
     name: `Trattamento viso al veleno d'Api`,

@@ -1,4 +1,4 @@
-import { ServiceGridSkeleton } from "@/components/atoms";
+import { ServiceGridSkeleton } from '@/components/atoms';
 
 export default function Loading() {
   return (
@@ -9,9 +9,7 @@ export default function Loading() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="font-display text-4xl font-bold text-gray-900">
-            I Nostri Trattamenti
-          </h1>
+          <h1 className="font-display text-4xl font-bold text-gray-900">I Nostri Trattamenti</h1>
           <p className="mt-4 text-lg text-gray-600">
             Scopri i nostri trattamenti estetici professionali
           </p>
@@ -38,4 +36,3 @@ export default function Loading() {
     </div>
   );
 }
-

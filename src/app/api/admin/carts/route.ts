@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { isAdmin } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
 
 export async function GET(req: Request) {
   const admin = await isAdmin();
   if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '20');
   const skip = (page - 1) * limit;
 
   // Get users with cart items, aggregated
@@ -37,7 +37,7 @@ export async function GET(req: Request) {
       },
     },
     orderBy: {
-      updated_at: "desc",
+      updated_at: 'desc',
     },
     skip,
     take: limit,
@@ -86,4 +86,3 @@ export async function GET(req: Request) {
     },
   });
 }
-

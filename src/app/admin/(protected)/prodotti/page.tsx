@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
-import { ProductsTable } from "./ProductsTable";
-import { Button } from "@/components/atoms";
-import Link from "next/link";
-import { type product_category } from "@prisma/client";
-import { Pagination } from "@/components/atoms/Pagination";
-import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants";
+import { db } from '@/lib/db';
+import { ProductsTable } from './ProductsTable';
+import { Button } from '@/components/atoms';
+import Link from 'next/link';
+import { type product_category } from '@prisma/client';
+import { Pagination } from '@/components/atoms/Pagination';
+import { PRODUCT_CATEGORY_LABELS } from '@/lib/constants';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -16,14 +16,14 @@ export default async function AdminProductsPage({
   searchParams: Promise<{ page?: string; q?: string }>;
 }) {
   const { page: pageParam, q: searchQuery } = await searchParams;
-  const page = parseInt(pageParam || "1");
+  const page = parseInt(pageParam || '1');
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const whereClause = searchQuery
     ? {
         OR: [
-          { name: { contains: searchQuery, mode: "insensitive" as const } },
-          { brand: { name: { contains: searchQuery, mode: "insensitive" as const } } },
+          { name: { contains: searchQuery, mode: 'insensitive' as const } },
+          { brand: { name: { contains: searchQuery, mode: 'insensitive' as const } } },
         ],
       }
     : {};
@@ -31,7 +31,7 @@ export default async function AdminProductsPage({
   const [products, totalCount] = await Promise.all([
     db.product.findMany({
       where: whereClause,
-      orderBy: [{ priority: "desc" }, { name: "asc" }],
+      orderBy: [{ priority: 'desc' }, { name: 'asc' }],
       include: { brand: true },
       skip,
       take: ITEMS_PER_PAGE,
@@ -62,7 +62,9 @@ export default async function AdminProductsPage({
             Gestione Prodotti
           </h1>
           <p className="mt-1 text-gray-500">
-            {searchQuery ? `${totalCount} risultati per "${searchQuery}"` : `${totalCount} prodotti totali`}
+            {searchQuery
+              ? `${totalCount} risultati per "${searchQuery}"`
+              : `${totalCount} prodotti totali`}
           </p>
         </div>
         <Link href="/admin/prodotti/nuovo" className="shrink-0">
@@ -70,7 +72,7 @@ export default async function AdminProductsPage({
         </Link>
       </div>
 
-      <ProductsTable products={productsWithLabels} initialSearch={searchQuery || ""} />
+      <ProductsTable products={productsWithLabels} initialSearch={searchQuery || ''} />
 
       <Pagination
         currentPage={page}

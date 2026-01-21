@@ -1,4 +1,4 @@
-import { ServiceDetailSkeleton } from "@/components/atoms";
+import { ServiceDetailSkeleton } from '@/components/atoms';
 
 export default function Loading() {
   return (
@@ -20,4 +20,3 @@ export default function Loading() {
     </div>
   );
 }
-

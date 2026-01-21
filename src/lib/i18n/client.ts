@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import i18next from "i18next";
-import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next";
-import { getOptions, fallbackLng, type Language } from "./settings";
-import itCommon from "./locales/it/common.json";
-import itProducts from "./locales/it/products.json";
-import itServices from "./locales/it/services.json";
-import itAuth from "./locales/it/auth.json";
-import itAdmin from "./locales/it/admin.json";
+import i18next from 'i18next';
+import { initReactI18next, useTranslation as useTranslationOrg } from 'react-i18next';
+import { getOptions, fallbackLng, type Language } from './settings';
+import itCommon from './locales/it/common.json';
+import itProducts from './locales/it/products.json';
+import itServices from './locales/it/services.json';
+import itAuth from './locales/it/auth.json';
+import itAdmin from './locales/it/admin.json';
 
 const resources = {
   it: {
@@ -31,4 +31,3 @@ export function useTranslation(lng: Language = fallbackLng, ns?: string) {
   }
   return ret;
 }
-

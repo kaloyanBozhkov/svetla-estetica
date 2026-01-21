@@ -1,4 +1,4 @@
-import { product_category } from "@prisma/client";
+import { product_category } from '@prisma/client';
 export const oldProducts = [
   {
     stock: 4,

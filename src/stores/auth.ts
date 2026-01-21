@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface User {
   id: number;
   uuid: string;
   email: string;
   name?: string;
-  role: "customer" | "admin";
+  role: 'customer' | 'admin';
 }
 
 interface AuthState {
@@ -27,6 +27,5 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   setLoading: (isLoading) => set({ isLoading }),
 
   isAuthenticated: () => get().user !== null,
-  isAdmin: () => get().user?.role === "admin",
+  isAdmin: () => get().user?.role === 'admin',
 }));
-

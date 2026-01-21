@@ -1,7 +1,7 @@
-import { notFound, redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { BookingForm } from "./BookingForm";
+import { notFound, redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { BookingForm } from './BookingForm';
 
 interface BookingPageProps {
   params: Promise<{ uuid: string }>;
@@ -12,7 +12,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
   const user = await getSession();
 
   if (!user) {
-    redirect("/accedi");
+    redirect('/accedi');
   }
 
   const service = await db.service.findUnique({
@@ -35,8 +35,8 @@ export default async function BookingPage({ params }: BookingPageProps) {
             durationMin: service.duration_min,
           }}
           user={{
-            name: user.name || "",
-            phone: user.phone || "",
+            name: user.name || '',
+            phone: user.phone || '',
           }}
         />
       </div>

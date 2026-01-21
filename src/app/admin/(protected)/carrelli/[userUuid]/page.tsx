@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { CartDetail } from "./CartDetail";
+import { notFound } from 'next/navigation';
+import { db } from '@/lib/db';
+import { CartDetail } from './CartDetail';
 
 async function getCartDetails(userUuid: string) {
   const user = await db.user.findUnique({
@@ -28,7 +28,7 @@ async function getCartDetails(userUuid: string) {
           },
         },
         orderBy: {
-          updated_at: "desc",
+          updated_at: 'desc',
         },
       },
     },
@@ -58,10 +58,7 @@ async function getCartDetails(userUuid: string) {
         active: item.product.active,
       },
     })),
-    total: user.cart_items.reduce(
-      (sum, item) => sum + item.product.price * item.quantity,
-      0
-    ),
+    total: user.cart_items.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
     itemCount: user.cart_items.reduce((sum, item) => sum + item.quantity, 0),
   };
 }
@@ -80,4 +77,3 @@ export default async function AdminCartDetailPage({
 
   return <CartDetail data={data} />;
 }
-

@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { requireAuth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { requireAuth } from '@/lib/auth';
+import { db } from '@/lib/db';
 
 const updateProfileSchema = z.object({
   phone: z.string().min(6).optional().nullable(),
@@ -31,16 +31,12 @@ export async function PATCH(request: Request) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dati non validi" }, { status: 400 });
+      return NextResponse.json({ error: 'Dati non validi' }, { status: 400 });
     }
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 });
     }
-    console.error("Update profile error:", error);
-    return NextResponse.json(
-      { error: "Errore durante l'aggiornamento" },
-      { status: 500 }
-    );
+    console.error('Update profile error:', error);
+    return NextResponse.json({ error: "Errore durante l'aggiornamento" }, { status: 500 });
   }
 }
-

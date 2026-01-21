@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { generateImageUrl } from "./parse-sql-products";
+import fs from 'fs';
+import path from 'path';
+import { generateImageUrl } from './parse-sql-products';
 /**
  * Parses SQL INSERT statements for treatments (trattamenti) and extracts all columns
  *
@@ -15,10 +15,7 @@ import { generateImageUrl } from "./parse-sql-products";
  */
 
 // Paste your SQL INSERT statement here
-const sqlInput = fs.readFileSync(
-  path.join(__dirname, "./ALL_TREATMENTS.txt"),
-  "utf8"
-);
+const sqlInput = fs.readFileSync(path.join(__dirname, './ALL_TREATMENTS.txt'), 'utf8');
 
 interface ParsedTreatment {
   id: number;
@@ -35,14 +32,14 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
   const treatments: ParsedTreatment[] = [];
 
   // Remove the INSERT INTO header
-  let content = sql.replace(/INSERT INTO.*?VALUES\s*/, "").trim();
+  let content = sql.replace(/INSERT INTO.*?VALUES\s*/, '').trim();
 
   // Remove trailing semicolon
-  content = content.replace(/;\s*$/, "");
+  content = content.replace(/;\s*$/, '');
 
   // Split by rows - each row starts with ( and ends with )
   const rows: string[] = [];
-  let currentRow = "";
+  let currentRow = '';
   let depth = 0;
   let inString = false;
   let escapeNext = false;
@@ -56,7 +53,7 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
       continue;
     }
 
-    if (char === "\\") {
+    if (char === '\\') {
       currentRow += char;
       escapeNext = true;
       continue;
@@ -69,9 +66,9 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
     }
 
     if (!inString) {
-      if (char === "(") {
+      if (char === '(') {
         if (depth === 0) {
-          currentRow = "";
+          currentRow = '';
         } else {
           currentRow += char;
         }
@@ -79,11 +76,11 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
         continue;
       }
 
-      if (char === ")") {
+      if (char === ')') {
         depth--;
         if (depth === 0) {
           rows.push(currentRow.trim());
-          currentRow = "";
+          currentRow = '';
         } else {
           currentRow += char;
         }
@@ -109,7 +106,7 @@ function parseSqlInsert(sql: string): ParsedTreatment[] {
 
 function parseRow(row: string): ParsedTreatment | null {
   const values: (string | number | null)[] = [];
-  let current = "";
+  let current = '';
   let inString = false;
   let escapeNext = false;
 
@@ -118,14 +115,14 @@ function parseRow(row: string): ParsedTreatment | null {
 
     if (escapeNext) {
       // Handle escaped characters
-      if (char === "r") {
-        current += "\r";
-      } else if (char === "n") {
-        current += "\n";
+      if (char === 'r') {
+        current += '\r';
+      } else if (char === 'n') {
+        current += '\n';
       } else if (char === "'") {
         current += "'";
-      } else if (char === "\\") {
-        current += "\\";
+      } else if (char === '\\') {
+        current += '\\';
       } else {
         current += char;
       }
@@ -133,7 +130,7 @@ function parseRow(row: string): ParsedTreatment | null {
       continue;
     }
 
-    if (char === "\\") {
+    if (char === '\\') {
       escapeNext = true;
       continue;
     }
@@ -141,7 +138,7 @@ function parseRow(row: string): ParsedTreatment | null {
     if (char === "'" && !escapeNext) {
       if (!inString) {
         inString = true;
-        current = "";
+        current = '';
       } else {
         inString = false;
         // Don't add yet, wait for comma
@@ -149,17 +146,17 @@ function parseRow(row: string): ParsedTreatment | null {
       continue;
     }
 
-    if (char === "," && !inString) {
+    if (char === ',' && !inString) {
       // End of value
       const trimmed = current.trim();
-      if (trimmed === "NULL" || trimmed === "") {
+      if (trimmed === 'NULL' || trimmed === '') {
         values.push(null);
-      } else if (!isNaN(Number(trimmed)) && trimmed !== "") {
+      } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
         values.push(Number(trimmed));
       } else {
         values.push(trimmed);
       }
-      current = "";
+      current = '';
       continue;
     }
 
@@ -168,16 +165,16 @@ function parseRow(row: string): ParsedTreatment | null {
 
   // Don't forget the last value
   const trimmed = current.trim();
-  if (trimmed === "NULL" || trimmed === "") {
+  if (trimmed === 'NULL' || trimmed === '') {
     values.push(null);
-  } else if (!isNaN(Number(trimmed)) && trimmed !== "") {
+  } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
     values.push(Number(trimmed));
   } else {
     values.push(trimmed);
   }
 
   if (values.length < 8) {
-    console.error("Invalid row, not enough values:", row.substring(0, 50));
+    console.error('Invalid row, not enough values:', row.substring(0, 50));
     return null;
   }
 
@@ -194,12 +191,12 @@ function parseRow(row: string): ParsedTreatment | null {
 }
 
 function escapeString(str: string | null): string {
-  if (str === null) return "null";
+  if (str === null) return 'null';
   return `\`${str
-    .replace(/\\/g, "\\\\")
-    .replace(/`/g, "\\`")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "")}\``;
+    .replace(/\\/g, '\\\\')
+    .replace(/`/g, '\\`')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '')}\``;
 }
 
 function generateTypeScriptArray(treatments: ParsedTreatment[]): string {
@@ -209,29 +206,29 @@ function generateTypeScriptArray(treatments: ParsedTreatment[]): string {
     description: ${escapeString(t.description_it)},
     price: ${t.price},
     img: ${escapeString(generateImageUrl(t.name_it))},
-    category: service_category.${t.category.toLowerCase().split(" ").join("_")},
+    category: service_category.${t.category.toLowerCase().split(' ').join('_')},
   },`;
   });
 
-  return `const oldTreatments = [\n${lines.join("\n")}\n];`;
+  return `const oldTreatments = [\n${lines.join('\n')}\n];`;
 }
 
 // Run the parser
 const treatments = parseSqlInsert(sqlInput);
 
-console.log("=== Parsed Treatments ===\n");
+console.log('=== Parsed Treatments ===\n');
 console.log(`Found ${treatments.length} treatments\n`);
 
-fs.writeFileSync("TREATMENTS.ts", generateTypeScriptArray(treatments));
+fs.writeFileSync('TREATMENTS.ts', generateTypeScriptArray(treatments));
 // Output interface
-console.log("=== TypeScript Interface ===\n");
+console.log('=== TypeScript Interface ===\n');
 
 // Output as TypeScript
-console.log("\n\n=== TypeScript Array (copy to seed-services.ts) ===\n");
+console.log('\n\n=== TypeScript Array (copy to seed-services.ts) ===\n');
 console.log();
 
 // Summary by category
-console.log("\n\n=== Summary by Category ===\n");
+console.log('\n\n=== Summary by Category ===\n');
 const byCategory = new Map<string, number>();
 treatments.forEach((t) => {
   byCategory.set(t.category, (byCategory.get(t.category) || 0) + 1);
@@ -241,7 +238,7 @@ byCategory.forEach((count, cat) => {
 });
 
 // List all treatments
-console.log("\n\n=== All Treatments ===\n");
+console.log('\n\n=== All Treatments ===\n');
 treatments.forEach((t) => {
   console.log(`[${t.id}] ${t.name_it} (${t.category}) - €${t.price}`);
 });

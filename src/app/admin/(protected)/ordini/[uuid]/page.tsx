@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
-import { OrderDetail } from "./OrderDetail";
+import { db } from '@/lib/db';
+import { notFound } from 'next/navigation';
+import { OrderDetail } from './OrderDetail';
 
 export default async function AdminOrderDetailPage({
   params,
@@ -65,4 +65,3 @@ export default async function AdminOrderDetailPage({
     />
   );
 }
-

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { Card, Badge, Input } from "@/components/atoms";
-import Link from "next/link";
-import { type user_role } from "@prisma/client";
+import { useState, useMemo } from 'react';
+import { Card, Badge, Input } from '@/components/atoms';
+import Link from 'next/link';
+import { type user_role } from '@prisma/client';
 
 interface User {
   id: number;
@@ -23,7 +23,7 @@ interface UsersTableProps {
 }
 
 export function UsersTable({ users }: UsersTableProps) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
     if (!search.trim()) return users;
@@ -37,10 +37,10 @@ export function UsersTable({ users }: UsersTableProps) {
   }, [users, search]);
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("it-IT", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+    return new Intl.DateTimeFormat('it-IT', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
     }).format(new Date(date));
   };
 
@@ -69,9 +69,7 @@ export function UsersTable({ users }: UsersTableProps) {
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                     Telefono
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                    Ruolo
-                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Ruolo</th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                     Ordini
                   </th>
@@ -91,26 +89,18 @@ export function UsersTable({ users }: UsersTableProps) {
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {user.name || "—"}
-                        </p>
+                        <p className="text-sm font-medium text-gray-900">{user.name || '—'}</p>
                         <p className="text-sm text-gray-500">{user.email}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {user.phone || "—"}
-                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{user.phone || '—'}</td>
                     <td className="px-6 py-4">
-                      <Badge variant={user.role === "admin" ? "warning" : "default"}>
-                        {user.role === "admin" ? "Admin" : "Cliente"}
+                      <Badge variant={user.role === 'admin' ? 'warning' : 'default'}>
+                        {user.role === 'admin' ? 'Admin' : 'Cliente'}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {user.ordersCount}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {user.bookingsCount}
-                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{user.ordersCount}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{user.bookingsCount}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {formatDate(user.createdAt)}
                     </td>
@@ -132,4 +122,3 @@ export function UsersTable({ users }: UsersTableProps) {
     </div>
   );
 }
-

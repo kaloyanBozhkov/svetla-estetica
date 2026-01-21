@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useCartStore } from "@/stores";
-import { Card, Badge, Button } from "@/components/atoms";
-import { formatPrice, formatDateTime } from "@/lib/utils";
-import { CheckIcon } from "@/components/atoms/icons";
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useCartStore } from '@/stores';
+import { Card, Badge, Button } from '@/components/atoms';
+import { formatPrice, formatDateTime } from '@/lib/utils';
+import { CheckIcon } from '@/components/atoms/icons';
 
 interface OrderItem {
   id: number;
@@ -48,15 +48,15 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "confirmed":
+      case 'confirmed':
         return <Badge variant="success">Confermato</Badge>;
-      case "processing":
+      case 'processing':
         return <Badge variant="warning">In elaborazione</Badge>;
-      case "shipped":
+      case 'shipped':
         return <Badge variant="default">Spedito</Badge>;
-      case "delivered":
+      case 'delivered':
         return <Badge variant="success">Consegnato</Badge>;
-      case "cancelled":
+      case 'cancelled':
         return <Badge variant="danger">Annullato</Badge>;
       default:
         return <Badge variant="default">In attesa</Badge>;
@@ -71,9 +71,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
               <CheckIcon className="w-8 h-8 text-green-600" />
             </div>
-            <h1 className="font-display text-3xl font-bold text-gray-900">
-              Ordine Completato!
-            </h1>
+            <h1 className="font-display text-3xl font-bold text-gray-900">Ordine Completato!</h1>
             <p className="mt-2 text-gray-600">
               Grazie per il tuo acquisto. Riceverai una email di conferma.
             </p>
@@ -81,9 +79,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
         )}
 
         {!isNewOrder && (
-          <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
-            Dettagli Ordine
-          </h1>
+          <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">Dettagli Ordine</h1>
         )}
 
         <Card className="mb-6">
@@ -94,9 +90,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             </div>
             <div>
               <p className="text-sm text-gray-500">Data</p>
-              <p className="font-medium">
-                {formatDateTime(new Date(order.createdAt))}
-              </p>
+              <p className="font-medium">{formatDateTime(new Date(order.createdAt))}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-1">Stato</p>
@@ -104,16 +98,12 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             </div>
           </div>
 
-          <h2 className="font-display text-lg font-bold text-gray-900 mb-4">
-            Prodotti
-          </h2>
+          <h2 className="font-display text-lg font-bold text-gray-900 mb-4">Prodotti</h2>
 
           <div className="space-y-4">
             {order.items.map((item) => {
               const hasDiscount = Boolean(
-                item.discountPercent &&
-                item.discountPercent > 0 &&
-                item.originalPrice
+                item.discountPercent && item.discountPercent > 0 && item.originalPrice
               );
               return (
                 <div
@@ -136,13 +126,9 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">
-                      {item.product.name}
-                    </p>
+                    <p className="font-medium text-gray-900 truncate">{item.product.name}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <p className="text-sm text-gray-500">
-                        Quantità: {item.quantity}
-                      </p>
+                      <p className="text-sm text-gray-500">Quantità: {item.quantity}</p>
                       {hasDiscount && (
                         <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
                           -{item.discountPercent}%
@@ -155,10 +141,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
                       </p>
                     )}
                   </div>
-                  <p
-                    className={`font-medium ${hasDiscount ? "text-red-600" : "text-gray-900"
-                      }`}
-                  >
+                  <p className={`font-medium ${hasDiscount ? 'text-red-600' : 'text-gray-900'}`}>
                     {formatPrice(item.price * item.quantity)}
                   </p>
                 </div>
@@ -177,9 +160,7 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
             </div>
             <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-gray-100">
               <span>Totale</span>
-              <span className="text-primary-600">
-                {formatPrice(order.total)}
-              </span>
+              <span className="text-primary-600">{formatPrice(order.total)}</span>
             </div>
           </div>
         </Card>

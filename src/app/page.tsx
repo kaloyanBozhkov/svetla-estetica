@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Button } from "@/components/atoms";
+import Link from 'next/link';
+import { Button } from '@/components/atoms';
 import {
   FaceIcon,
   BodyIcon,
@@ -13,79 +13,79 @@ import {
   SaltCaveIcon,
   TagIcon,
   PercentIcon,
-} from "@/components/atoms/icons";
-import { db } from "@/lib/db";
-import { formatPrice, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
-import { PRODUCT_CATEGORY_LABELS, SERVICE_CATEGORY_LABELS } from "@/lib/constants";
-import Image from "next/image";
+} from '@/components/atoms/icons';
+import { db } from '@/lib/db';
+import { formatPrice, stripHtml, calculateDiscountedPrice } from '@/lib/utils';
+import { PRODUCT_CATEGORY_LABELS, SERVICE_CATEGORY_LABELS } from '@/lib/constants';
+import Image from 'next/image';
 
 const services = [
   {
-    name: "Viso",
-    slug: "viso",
+    name: 'Viso',
+    slug: 'viso',
     Icon: FaceIcon,
-    color: "from-purple-400 to-fuchsia-500",
+    color: 'from-purple-400 to-fuchsia-500',
   },
   {
-    name: "Corpo",
-    slug: "corpo",
+    name: 'Corpo',
+    slug: 'corpo',
     Icon: BodyIcon,
-    color: "from-violet-400 to-purple-500",
+    color: 'from-violet-400 to-purple-500',
   },
   {
-    name: "Make Up",
-    slug: "make_up",
+    name: 'Make Up',
+    slug: 'make_up',
     Icon: MakeupIcon,
-    color: "from-fuchsia-400 to-pink-500",
+    color: 'from-fuchsia-400 to-pink-500',
   },
   {
-    name: "Manicure",
-    slug: "manicure",
+    name: 'Manicure',
+    slug: 'manicure',
     Icon: ManicureIcon,
-    color: "from-pink-400 to-rose-500",
+    color: 'from-pink-400 to-rose-500',
   },
   {
-    name: "Pedicure",
-    slug: "pedicure",
+    name: 'Pedicure',
+    slug: 'pedicure',
     Icon: PedicureIcon,
-    color: "from-indigo-400 to-violet-500",
+    color: 'from-indigo-400 to-violet-500',
   },
   {
-    name: "Ceretta",
-    slug: "ceretta",
+    name: 'Ceretta',
+    slug: 'ceretta',
     Icon: WaxIcon,
-    color: "from-amber-400 to-orange-400",
+    color: 'from-amber-400 to-orange-400',
   },
   {
-    name: "Solarium",
-    slug: "solarium",
+    name: 'Solarium',
+    slug: 'solarium',
     Icon: SolariumIcon,
-    color: "from-yellow-400 to-amber-400",
+    color: 'from-yellow-400 to-amber-400',
   },
   {
-    name: "Luce Pulsata",
-    slug: "luce_pulsata",
+    name: 'Luce Pulsata',
+    slug: 'luce_pulsata',
     Icon: LaserIcon,
-    color: "from-violet-500 to-purple-600",
+    color: 'from-violet-500 to-purple-600',
   },
   {
-    name: "Appuntamento",
-    slug: "appuntamento",
+    name: 'Appuntamento',
+    slug: 'appuntamento',
     Icon: AppointmentIcon,
-    color: "from-purple-500 to-indigo-500",
+    color: 'from-purple-500 to-indigo-500',
   },
   {
-    name: "Grotta di Sale",
-    slug: "grotta_di_sale",
+    name: 'Grotta di Sale',
+    slug: 'grotta_di_sale',
     Icon: SaltCaveIcon,
-    color: "from-slate-400 to-slate-500",
+    color: 'from-slate-400 to-slate-500',
   },
 ];
 
 async function getFeaturedProducts() {
   return db.product.findMany({
     where: { active: true },
-    orderBy: [{ priority: "desc" }, { created_at: "asc" }],
+    orderBy: [{ priority: 'desc' }, { created_at: 'asc' }],
     take: 4,
   });
 }
@@ -93,18 +93,18 @@ async function getFeaturedProducts() {
 async function getFeaturedTreatments() {
   return db.service.findMany({
     where: { active: true },
-    orderBy: [{ priority: "desc" }, { created_at: "asc" }],
+    orderBy: [{ priority: 'desc' }, { created_at: 'asc' }],
     take: 4,
   });
 }
 
 async function getOffersProducts() {
   return db.product.findMany({
-    where: { 
+    where: {
       active: true,
       discount_percent: { gt: 0 },
     },
-    orderBy: [{ discount_percent: "desc" }],
+    orderBy: [{ discount_percent: 'desc' }],
     take: 4,
   });
 }
@@ -132,13 +132,7 @@ export default async function HomePage() {
                 height="40"
                 patternUnits="userSpaceOnUse"
               >
-                <circle
-                  cx="20"
-                  cy="20"
-                  r="1.5"
-                  fill="currentColor"
-                  className="text-primary-900"
-                />
+                <circle cx="20" cy="20" r="1.5" fill="currentColor" className="text-primary-900" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#hero-pattern)" />
@@ -170,17 +164,14 @@ export default async function HomePage() {
               </h1>
 
               <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-                Da oltre 15 anni ci prendiamo cura della tua bellezza con
-                trattamenti personalizzati, prodotti di qualità e un ambiente
-                accogliente dove sentirti coccolata.
+                Da oltre 15 anni ci prendiamo cura della tua bellezza con trattamenti
+                personalizzati, prodotti di qualità e un ambiente accogliente dove sentirti
+                coccolata.
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link href="/trattamenti">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto shadow-lg shadow-primary-200"
-                  >
+                  <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-primary-200">
                     Scopri i Trattamenti
                     <svg
                       className="ml-2 h-5 w-5"
@@ -198,11 +189,7 @@ export default async function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/prodotti">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full sm:w-auto"
-                  >
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Vedi i Prodotti
                   </Button>
                 </Link>
@@ -217,13 +204,11 @@ export default async function HomePage() {
                         key={i}
                         className="h-8 w-8 rounded-full bg-gradient-to-br from-primary-300 to-primary-400 ring-2 ring-white flex items-center justify-center text-xs font-bold text-white"
                       >
-                        {["S", "E", "💄", "✨"][i - 1]}
+                        {['S', 'E', '💄', '✨'][i - 1]}
                       </div>
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600">
-                    1000+ clienti soddisfatte
-                  </span>
+                  <span className="text-sm text-gray-600">1000+ clienti soddisfatte</span>
                 </div>
               </div>
             </div>
@@ -238,11 +223,11 @@ export default async function HomePage() {
                   <div
                     className="absolute bottom-[94px] right-[10px] w-40 h-40 opacity-[0.08] pointer-events-none"
                     style={{
-                      backgroundImage: "url(/rose.svg)",
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      transform: "rotate(-15deg)",
+                      backgroundImage: 'url(/rose.svg)',
+                      backgroundSize: 'contain',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center',
+                      transform: 'rotate(-15deg)',
                     }}
                   />
                   <div className="relative text-white">
@@ -290,10 +275,7 @@ export default async function HomePage() {
                     </div>
 
                     <div className="mt-8 pt-6 border-t border-white/20 pl-10">
-                      <a
-                        href="tel:+393935026350"
-                        className="flex items-center gap-3 group"
-                      >
+                      <a href="tel:+393935026350" className="flex items-center gap-3 group">
                         <div className="h-12 w-12 rounded-xl bg-accent-500 flex items-center justify-center group-hover:scale-105 transition-transform">
                           <svg
                             className="h-6 w-6"
@@ -310,9 +292,7 @@ export default async function HomePage() {
                           </svg>
                         </div>
                         <div>
-                          <p className="text-primary-200 text-sm">
-                            Prenota Ora
-                          </p>
+                          <p className="text-primary-200 text-sm">Prenota Ora</p>
                           <p className="font-bold text-lg">393 502 6350</p>
                         </div>
                       </a>
@@ -355,7 +335,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-
       {/* Featured Products Section */}
       {products.length > 0 && (
         <section className="py-20 bg-gradient-to-b from-white via-gray-50/70 to-white">
@@ -364,9 +343,7 @@ export default async function HomePage() {
               <div>
                 <div className="flex items-center gap-2 text-primary-600 mb-2">
                   <TagIcon className="h-5 w-5" />
-                  <span className="text-sm font-semibold uppercase tracking-wider">
-                    Novità
-                  </span>
+                  <span className="text-sm font-semibold uppercase tracking-wider">Novità</span>
                 </div>
                 <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
                   I Nostri Prodotti
@@ -428,7 +405,9 @@ export default async function HomePage() {
                       {product.name}
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                      {product.description ? stripHtml(product.description) : "Prodotto di alta qualità"}
+                      {product.description
+                        ? stripHtml(product.description)
+                        : 'Prodotto di alta qualità'}
                     </p>
                     <div className="mt-4 flex items-center justify-between">
                       <span className="font-display text-lg font-bold text-primary-600">
@@ -484,7 +463,10 @@ export default async function HomePage() {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {offers.map((product) => {
-                const discountedPrice = calculateDiscountedPrice(product.price, product.discount_percent);
+                const discountedPrice = calculateDiscountedPrice(
+                  product.price,
+                  product.discount_percent
+                );
                 return (
                   <Link
                     key={product.id}
@@ -525,7 +507,9 @@ export default async function HomePage() {
                         {product.name}
                       </h3>
                       <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                        {product.description ? stripHtml(product.description) : "Prodotto in offerta"}
+                        {product.description
+                          ? stripHtml(product.description)
+                          : 'Prodotto in offerta'}
                       </p>
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex flex-col">
@@ -619,7 +603,9 @@ export default async function HomePage() {
                       {treatment.name}
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                      {treatment.description ? stripHtml(treatment.description) : "Trattamento professionale"}
+                      {treatment.description
+                        ? stripHtml(treatment.description)
+                        : 'Trattamento professionale'}
                     </p>
                     <div className="mt-4 flex items-center justify-between">
                       <span className="font-display text-lg font-bold text-primary-600">
@@ -645,7 +631,8 @@ export default async function HomePage() {
               Esplora per Categoria
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Trova il trattamento perfetto per le tue esigenze. Scopri la nostra gamma completa di servizi professionali.
+              Trova il trattamento perfetto per le tue esigenze. Scopri la nostra gamma completa di
+              servizi professionali.
             </p>
           </div>
 
@@ -675,19 +662,17 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <h2 className="font-display text-3xl font-bold sm:text-4xl">
-                Perché Sceglierci
-              </h2>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl">Perché Sceglierci</h2>
               <ul className="mt-8 space-y-5">
                 {[
                   {
-                    text: "Oltre 15 anni di esperienza nel settore",
-                    icon: "⭐",
+                    text: 'Oltre 15 anni di esperienza nel settore',
+                    icon: '⭐',
                   },
-                  { text: "Prodotti di alta qualità selezionati", icon: "✓" },
-                  { text: "Ambiente accogliente e rilassante", icon: "✓" },
-                  { text: "Trattamenti personalizzati", icon: "✓" },
-                  { text: "Prezzi competitivi", icon: "✓" },
+                  { text: 'Prodotti di alta qualità selezionati', icon: '✓' },
+                  { text: 'Ambiente accogliente e rilassante', icon: '✓' },
+                  { text: 'Trattamenti personalizzati', icon: '✓' },
+                  { text: 'Prezzi competitivi', icon: '✓' },
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
@@ -711,9 +696,7 @@ export default async function HomePage() {
               </ul>
             </div>
             <div className="rounded-2xl bg-white/10 p-8 backdrop-blur-sm ring-1 ring-white/20">
-              <h3 className="font-display text-2xl font-bold">
-                Orario di Apertura
-              </h3>
+              <h3 className="font-display text-2xl font-bold">Orario di Apertura</h3>
               <ul className="mt-6 space-y-3">
                 <li className="flex justify-between py-2 border-b border-white/10">
                   <span>Lunedì - Venerdì</span>
@@ -730,12 +713,7 @@ export default async function HomePage() {
                   href="tel:+393935026350"
                   className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-primary-600 transition-all hover:bg-gray-100 hover:scale-[1.02]"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -758,9 +736,7 @@ export default async function HomePage() {
             <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl">
               Pronta a Prenderti Cura di Te?
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Accedi per prenotare il tuo appuntamento
-            </p>
+            <p className="mt-4 text-lg text-gray-600">Accedi per prenotare il tuo appuntamento</p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/accedi">
                 <Button size="lg">

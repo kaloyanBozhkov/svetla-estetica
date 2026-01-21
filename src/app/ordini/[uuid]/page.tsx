@@ -1,8 +1,8 @@
-import { notFound, redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { OrderSuccess } from "./OrderSuccess";
-import { env } from "@/env";
+import { notFound, redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { OrderSuccess } from './OrderSuccess';
+import { env } from '@/env';
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -25,7 +25,7 @@ async function getOrderWithRetry(uuid: string, maxRetries = 5) {
     });
 
     // If order has user or it's not a new order, return it
-    if (order?.user || order?.payment_status === "paid") {
+    if (order?.user || order?.payment_status === 'paid') {
       return order;
     }
 
@@ -42,7 +42,7 @@ async function getOrderWithRetry(uuid: string, maxRetries = 5) {
 export default async function OrderPage({ params, searchParams }: Props) {
   const { uuid } = await params;
   const { success } = await searchParams;
-  const isNewOrder = success === "true";
+  const isNewOrder = success === 'true';
   const user = await getSession();
 
   // Find the order by UUID, with retry for webhook processing
@@ -67,9 +67,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   // If this is a new order (just completed checkout) and user is not logged in
   // but the order has a user, redirect to auto-sign-in API route
   if (isNewOrder && !user && order.user) {
-    const token = Buffer.from(`${order.uuid}:${order.user.id}`).toString(
-      "base64"
-    );
+    const token = Buffer.from(`${order.uuid}:${order.user.id}`).toString('base64');
     redirect(
       `${env.NEXT_PUBLIC_BASE_URL}/api/auth/auto-sign-in?order=${order.uuid}&token=${token}`
     );
@@ -78,7 +76,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   // Security check: only the order owner can view the order
   // For new orders (from checkout redirect), we allow viewing even without user
   if (!isNewOrder && (!user || order.user_id !== user.id)) {
-    redirect("/accedi");
+    redirect('/accedi');
   }
 
   return (

@@ -1,16 +1,16 @@
-import { db } from "@/lib/db";
-import { BookingsTable } from "./BookingsTable";
-import { type booking_status } from "@prisma/client";
-import { Pagination } from "@/components/atoms/Pagination";
+import { db } from '@/lib/db';
+import { BookingsTable } from './BookingsTable';
+import { type booking_status } from '@prisma/client';
+import { Pagination } from '@/components/atoms/Pagination';
 
 const ITEMS_PER_PAGE = 30;
 
 const statusLabels: Record<booking_status, string> = {
-  pending: "In Attesa",
-  approved: "Approvato",
-  rejected: "Rifiutato",
-  completed: "Completato",
-  cancelled: "Annullato",
+  pending: 'In Attesa',
+  approved: 'Approvato',
+  rejected: 'Rifiutato',
+  completed: 'Completato',
+  cancelled: 'Annullato',
 };
 
 export default async function AdminBookingsPage({
@@ -19,12 +19,12 @@ export default async function AdminBookingsPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const page = parseInt(pageParam || "1");
+  const page = parseInt(pageParam || '1');
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const [bookings, totalCount] = await Promise.all([
     db.booking.findMany({
-      orderBy: { created_at: "desc" },
+      orderBy: { created_at: 'desc' },
       include: { user: true, service: true },
       skip,
       take: ITEMS_PER_PAGE,
@@ -58,11 +58,7 @@ export default async function AdminBookingsPage({
 
       <BookingsTable bookings={bookingsWithLabels} />
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        baseUrl="/admin/prenotazioni"
-      />
+      <Pagination currentPage={page} totalPages={totalPages} baseUrl="/admin/prenotazioni" />
     </div>
   );
 }

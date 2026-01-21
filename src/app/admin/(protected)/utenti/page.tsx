@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
-import { UsersTable } from "./UsersTable";
-import { Pagination } from "@/components/atoms/Pagination";
+import { db } from '@/lib/db';
+import { UsersTable } from './UsersTable';
+import { Pagination } from '@/components/atoms/Pagination';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -10,12 +10,12 @@ export default async function AdminUsersPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const page = parseInt(pageParam || "1");
+  const page = parseInt(pageParam || '1');
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const [users, totalCount] = await Promise.all([
     db.user.findMany({
-      orderBy: { created_at: "desc" },
+      orderBy: { created_at: 'desc' },
       include: {
         _count: {
           select: {
@@ -56,11 +56,7 @@ export default async function AdminUsersPage({
 
       <UsersTable users={usersData} />
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        baseUrl="/admin/utenti"
-      />
+      <Pagination currentPage={page} totalPages={totalPages} baseUrl="/admin/utenti" />
     </div>
   );
 }

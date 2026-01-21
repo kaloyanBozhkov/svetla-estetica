@@ -9,8 +9,8 @@ import {
   Button,
   Hr,
   Img,
-} from "@react-email/components";
-import { BASE_URL } from "@/lib/constants";
+} from '@react-email/components';
+import { BASE_URL } from '@/lib/constants';
 
 interface BookingApprovedEmailProps {
   customerName: string;
@@ -50,8 +50,7 @@ export default function BookingApprovedEmail({
 
             <Text style={paragraph}>Ciao {customerName}!</Text>
             <Text style={paragraph}>
-              Siamo lieti di confermarti che il tuo appuntamento è stato approvato.
-              Ti aspettiamo!
+              Siamo lieti di confermarti che il tuo appuntamento è stato approvato. Ti aspettiamo!
             </Text>
 
             <Section style={detailsBox}>
@@ -78,8 +77,8 @@ export default function BookingApprovedEmail({
             </Section>
 
             <Text style={smallText}>
-              Se hai bisogno di modificare o cancellare l&apos;appuntamento,
-              contattaci il prima possibile.
+              Se hai bisogno di modificare o cancellare l&apos;appuntamento, contattaci il prima
+              possibile.
             </Text>
 
             <Button style={button} href="tel:+393935026350">
@@ -100,136 +99,136 @@ export default function BookingApprovedEmail({
 }
 
 const main = {
-  backgroundColor: "#f5f0f6",
+  backgroundColor: '#f5f0f6',
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
 };
 
 const container = {
-  backgroundColor: "#ffffff",
-  margin: "0 auto",
-  padding: "0",
-  maxWidth: "600px",
-  borderRadius: "12px",
-  marginTop: "40px",
-  marginBottom: "40px",
-  boxShadow: "0 4px 6px rgba(125, 85, 128, 0.1)",
+  backgroundColor: '#ffffff',
+  margin: '0 auto',
+  padding: '0',
+  maxWidth: '600px',
+  borderRadius: '12px',
+  marginTop: '40px',
+  marginBottom: '40px',
+  boxShadow: '0 4px 6px rgba(125, 85, 128, 0.1)',
 };
 
 const logoSection = {
-  backgroundColor: "#7d5580",
-  padding: "32px 48px",
-  textAlign: "center" as const,
-  borderRadius: "12px 12px 0 0",
+  backgroundColor: '#7d5580',
+  padding: '32px 48px',
+  textAlign: 'center' as const,
+  borderRadius: '12px 12px 0 0',
 };
 
 const logo = {
-  margin: "0 auto",
-  borderRadius: "12px",
+  margin: '0 auto',
+  borderRadius: '12px',
 };
 
 const brandName = {
-  color: "#ffffff",
-  fontSize: "24px",
-  fontWeight: "bold",
-  margin: "16px 0 0 0",
+  color: '#ffffff',
+  fontSize: '24px',
+  fontWeight: 'bold',
+  margin: '16px 0 0 0',
 };
 
 const box = {
-  padding: "32px 48px",
+  padding: '32px 48px',
 };
 
 const successBanner = {
-  backgroundColor: "#ecfdf5",
-  borderRadius: "10px",
-  padding: "20px",
-  textAlign: "center" as const,
-  marginBottom: "24px",
-  border: "1px solid #a7f3d0",
+  backgroundColor: '#ecfdf5',
+  borderRadius: '10px',
+  padding: '20px',
+  textAlign: 'center' as const,
+  marginBottom: '24px',
+  border: '1px solid #a7f3d0',
 };
 
 const successText = {
-  color: "#047857",
-  fontSize: "18px",
-  fontWeight: "bold",
-  margin: "12px 0 0 0",
+  color: '#047857',
+  fontSize: '18px',
+  fontWeight: 'bold',
+  margin: '12px 0 0 0',
 };
 
 const hr = {
-  borderColor: "#e9d5ec",
-  margin: "24px 0",
+  borderColor: '#e9d5ec',
+  margin: '24px 0',
 };
 
 const paragraph = {
-  color: "#4a4a4a",
-  fontSize: "16px",
-  lineHeight: "26px",
-  textAlign: "left" as const,
-  margin: "16px 0",
+  color: '#4a4a4a',
+  fontSize: '16px',
+  lineHeight: '26px',
+  textAlign: 'left' as const,
+  margin: '16px 0',
 };
 
 const smallText = {
-  color: "#6b7280",
-  fontSize: "14px",
-  lineHeight: "22px",
-  textAlign: "left" as const,
-  margin: "16px 0",
+  color: '#6b7280',
+  fontSize: '14px',
+  lineHeight: '22px',
+  textAlign: 'left' as const,
+  margin: '16px 0',
 };
 
 const detailsBox = {
-  backgroundColor: "#faf5fb",
-  borderRadius: "10px",
-  padding: "20px 24px",
-  margin: "24px 0",
-  border: "1px solid #e9d5ec",
+  backgroundColor: '#faf5fb',
+  borderRadius: '10px',
+  padding: '20px 24px',
+  margin: '24px 0',
+  border: '1px solid #e9d5ec',
 };
 
 const detailsHeading = {
-  color: "#7d5580",
-  fontSize: "16px",
-  fontWeight: "bold",
-  margin: "0 0 12px 0",
+  color: '#7d5580',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  margin: '0 0 12px 0',
 };
 
 const detailsHr = {
-  borderColor: "#e9d5ec",
-  margin: "12px 0",
+  borderColor: '#e9d5ec',
+  margin: '12px 0',
 };
 
 const detailsTable = {
-  width: "100%",
+  width: '100%',
 };
 
 const detailsLabel = {
-  color: "#6b7280",
-  fontSize: "14px",
-  padding: "6px 0",
-  width: "40%",
+  color: '#6b7280',
+  fontSize: '14px',
+  padding: '6px 0',
+  width: '40%',
 };
 
 const detailsValue = {
-  color: "#374151",
-  fontSize: "14px",
-  fontWeight: "600" as const,
-  padding: "6px 0",
+  color: '#374151',
+  fontSize: '14px',
+  fontWeight: '600' as const,
+  padding: '6px 0',
 };
 
 const button = {
-  backgroundColor: "#7d5580",
-  borderRadius: "10px",
-  color: "#fff",
-  fontSize: "16px",
-  fontWeight: "bold",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "block",
-  padding: "14px 28px",
-  margin: "28px 0",
+  backgroundColor: '#7d5580',
+  borderRadius: '10px',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  textDecoration: 'none',
+  textAlign: 'center' as const,
+  display: 'block',
+  padding: '14px 28px',
+  margin: '28px 0',
 };
 
 const footer = {
-  color: "#9ca3af",
-  fontSize: "12px",
-  lineHeight: "20px",
-  textAlign: "center" as const,
+  color: '#9ca3af',
+  fontSize: '12px',
+  lineHeight: '20px',
+  textAlign: 'center' as const,
 };

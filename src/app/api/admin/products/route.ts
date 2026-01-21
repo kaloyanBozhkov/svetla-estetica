@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { db } from "@/lib/db";
-import { isAdmin } from "@/lib/auth";
-import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { db } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
+import { z } from 'zod';
 
 const productSchema = z.object({
   name: z.string().min(1),
@@ -11,15 +11,7 @@ const productSchema = z.object({
   discount_percent: z.number().int().min(0).max(100).default(0),
   stock: z.number().int().min(0),
   priority: z.number().int().min(0).default(0),
-  category: z.enum([
-    "viso",
-    "corpo",
-    "solari",
-    "tisane",
-    "make_up",
-    "profumi",
-    "mani_e_piedi",
-  ]),
+  category: z.enum(['viso', 'corpo', 'solari', 'tisane', 'make_up', 'profumi', 'mani_e_piedi']),
   brand_id: z.number().int(),
   image_url: z.string().nullable(),
   active: z.boolean(),
@@ -29,7 +21,7 @@ export async function POST(req: Request) {
   try {
     const admin = await isAdmin();
     if (!admin) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -51,20 +43,16 @@ export async function POST(req: Request) {
     });
 
     // Revalidate product pages cache
-    revalidatePath("/prodotti");
-    revalidatePath("/");
-    revalidatePath("/admin/prodotti");
+    revalidatePath('/prodotti');
+    revalidatePath('/');
+    revalidatePath('/admin/prodotti');
 
     return NextResponse.json({ uuid: product.uuid });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: z.prettifyError(error) },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: z.prettifyError(error) }, { status: 400 });
     }
-    console.error("Create product error:", error);
-    return NextResponse.json({ error: "Errore interno" }, { status: 500 });
+    console.error('Create product error:', error);
+    return NextResponse.json({ error: 'Errore interno' }, { status: 500 });
   }
 }
-

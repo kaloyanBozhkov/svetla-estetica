@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Input } from "@/components/atoms";
-import { ActionButton } from "@/components/atoms/ActionButton";
+import { useState } from 'react';
+import { Input } from '@/components/atoms';
+import { ActionButton } from '@/components/atoms/ActionButton';
 
 interface ProfileFormProps {
   initialPhone: string | null;
@@ -10,11 +10,11 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
-  const [phone, setPhone] = useState(initialPhone ?? "");
-  const [name, setName] = useState(initialName ?? "");
+  const [phone, setPhone] = useState(initialPhone ?? '');
+  const [name, setName] = useState(initialName ?? '');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{
-    type: "success" | "error";
+    type: 'success' | 'error';
     text: string;
   } | null>(null);
 
@@ -24,9 +24,9 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
     setMessage(null);
 
     try {
-      const res = await fetch("/api/account", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/account', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phone: phone || null,
           name: name || null,
@@ -34,12 +34,12 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to update");
+        throw new Error('Failed to update');
       }
 
-      setMessage({ type: "success", text: "Profilo aggiornato!" });
+      setMessage({ type: 'success', text: 'Profilo aggiornato!' });
     } catch {
-      setMessage({ type: "error", text: "Errore durante l'aggiornamento" });
+      setMessage({ type: 'error', text: "Errore durante l'aggiornamento" });
     } finally {
       setIsLoading(false);
     }
@@ -66,11 +66,7 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
         />
       </div>
       {message && (
-        <p
-          className={`text-sm ${
-            message.type === "success" ? "text-green-600" : "text-red-600"
-          }`}
-        >
+        <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
           {message.text}
         </p>
       )}
@@ -80,4 +76,3 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
     </form>
   );
 }
-

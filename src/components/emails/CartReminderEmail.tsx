@@ -11,8 +11,8 @@ import {
   Img,
   Row,
   Column,
-} from "@react-email/components";
-import { BASE_URL } from "@/lib/constants";
+} from '@react-email/components';
+import { BASE_URL } from '@/lib/constants';
 
 interface CartItem {
   name: string;
@@ -35,9 +35,9 @@ export default function CartReminderEmail({
   customMessage,
 }: CartReminderEmailProps) {
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("it-IT", {
-      style: "currency",
-      currency: "EUR",
+    return new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'EUR',
     }).format(price / 100);
   };
 
@@ -59,16 +59,14 @@ export default function CartReminderEmail({
           </Section>
           <Section style={box}>
             <Hr style={hr} />
-            <Text style={paragraph}>
-              Ciao{userName ? ` ${userName}` : ""}!
-            </Text>
-            
+            <Text style={paragraph}>Ciao{userName ? ` ${userName}` : ''}!</Text>
+
             <Text style={paragraph}>{customMessage}</Text>
 
             <Hr style={hr} />
-            
+
             <Text style={sectionTitle}>I tuoi prodotti:</Text>
-            
+
             {items.map((item, index) => (
               <Row key={index} style={itemRow}>
                 <Column style={itemImageCol}>
@@ -95,7 +93,7 @@ export default function CartReminderEmail({
             ))}
 
             <Hr style={hr} />
-            
+
             <Row style={totalRow}>
               <Column>
                 <Text style={totalLabel}>Totale carrello:</Text>
@@ -123,154 +121,153 @@ export default function CartReminderEmail({
 }
 
 const main = {
-  backgroundColor: "#f5f0f6",
+  backgroundColor: '#f5f0f6',
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
 };
 
 const container = {
-  backgroundColor: "#ffffff",
-  margin: "0 auto",
-  padding: "0",
-  maxWidth: "600px",
-  borderRadius: "12px",
-  marginTop: "40px",
-  marginBottom: "40px",
-  boxShadow: "0 4px 6px rgba(125, 85, 128, 0.1)",
+  backgroundColor: '#ffffff',
+  margin: '0 auto',
+  padding: '0',
+  maxWidth: '600px',
+  borderRadius: '12px',
+  marginTop: '40px',
+  marginBottom: '40px',
+  boxShadow: '0 4px 6px rgba(125, 85, 128, 0.1)',
 };
 
 const logoSection = {
-  backgroundColor: "#7d5580",
-  padding: "32px 48px",
-  textAlign: "center" as const,
-  borderRadius: "12px 12px 0 0",
+  backgroundColor: '#7d5580',
+  padding: '32px 48px',
+  textAlign: 'center' as const,
+  borderRadius: '12px 12px 0 0',
 };
 
 const logo = {
-  margin: "0 auto",
-  borderRadius: "12px",
+  margin: '0 auto',
+  borderRadius: '12px',
 };
 
 const brandName = {
-  color: "#ffffff",
-  fontSize: "24px",
-  fontWeight: "bold",
-  margin: "16px 0 0 0",
+  color: '#ffffff',
+  fontSize: '24px',
+  fontWeight: 'bold',
+  margin: '16px 0 0 0',
 };
 
 const box = {
-  padding: "32px 48px",
+  padding: '32px 48px',
 };
 
 const hr = {
-  borderColor: "#e9d5ec",
-  margin: "24px 0",
+  borderColor: '#e9d5ec',
+  margin: '24px 0',
 };
 
 const paragraph = {
-  color: "#4a4a4a",
-  fontSize: "16px",
-  lineHeight: "26px",
-  textAlign: "left" as const,
-  margin: "16px 0",
+  color: '#4a4a4a',
+  fontSize: '16px',
+  lineHeight: '26px',
+  textAlign: 'left' as const,
+  margin: '16px 0',
 };
 
 const sectionTitle = {
-  color: "#7d5580",
-  fontSize: "18px",
-  fontWeight: "bold",
-  margin: "16px 0",
+  color: '#7d5580',
+  fontSize: '18px',
+  fontWeight: 'bold',
+  margin: '16px 0',
 };
 
 const itemRow = {
-  marginBottom: "16px",
+  marginBottom: '16px',
 };
 
 const itemImageCol = {
-  width: "70px",
-  verticalAlign: "top" as const,
+  width: '70px',
+  verticalAlign: 'top' as const,
 };
 
 const itemImage = {
-  borderRadius: "8px",
-  backgroundColor: "#f5f0f6",
-  objectFit: "contain" as const,
+  borderRadius: '8px',
+  backgroundColor: '#f5f0f6',
+  objectFit: 'contain' as const,
 };
 
 const itemImagePlaceholder = {
-  width: "60px",
-  height: "60px",
-  borderRadius: "8px",
-  backgroundColor: "#f5f0f6",
+  width: '60px',
+  height: '60px',
+  borderRadius: '8px',
+  backgroundColor: '#f5f0f6',
 };
 
 const itemDetailsCol = {
-  verticalAlign: "middle" as const,
-  paddingLeft: "12px",
+  verticalAlign: 'middle' as const,
+  paddingLeft: '12px',
 };
 
 const itemName = {
-  color: "#4a4a4a",
-  fontSize: "14px",
-  fontWeight: "600",
-  margin: "0 0 4px 0",
+  color: '#4a4a4a',
+  fontSize: '14px',
+  fontWeight: '600',
+  margin: '0 0 4px 0',
 };
 
 const itemQty = {
-  color: "#6b7280",
-  fontSize: "12px",
-  margin: "0",
+  color: '#6b7280',
+  fontSize: '12px',
+  margin: '0',
 };
 
 const itemPriceCol = {
-  width: "100px",
-  verticalAlign: "middle" as const,
-  textAlign: "right" as const,
+  width: '100px',
+  verticalAlign: 'middle' as const,
+  textAlign: 'right' as const,
 };
 
 const itemPrice = {
-  color: "#7d5580",
-  fontSize: "14px",
-  fontWeight: "bold",
-  margin: "0",
+  color: '#7d5580',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  margin: '0',
 };
 
 const totalRow = {
-  marginTop: "16px",
+  marginTop: '16px',
 };
 
 const totalLabel = {
-  color: "#4a4a4a",
-  fontSize: "16px",
-  fontWeight: "bold",
-  margin: "0",
+  color: '#4a4a4a',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  margin: '0',
 };
 
 const totalPrice = {
-  color: "#7d5580",
-  fontSize: "20px",
-  fontWeight: "bold",
-  margin: "0",
-  textAlign: "right" as const,
+  color: '#7d5580',
+  fontSize: '20px',
+  fontWeight: 'bold',
+  margin: '0',
+  textAlign: 'right' as const,
 };
 
 const button = {
-  backgroundColor: "#7d5580",
-  borderRadius: "10px",
-  color: "#fff",
-  fontSize: "16px",
-  fontWeight: "bold",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "block",
-  padding: "14px 28px",
-  margin: "28px 0",
+  backgroundColor: '#7d5580',
+  borderRadius: '10px',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  textDecoration: 'none',
+  textAlign: 'center' as const,
+  display: 'block',
+  padding: '14px 28px',
+  margin: '28px 0',
 };
 
 const footer = {
-  color: "#9ca3af",
-  fontSize: "12px",
-  lineHeight: "20px",
-  textAlign: "center" as const,
+  color: '#9ca3af',
+  fontSize: '12px',
+  lineHeight: '20px',
+  textAlign: 'center' as const,
 };
-

@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/s3/s3";
-import { BUCKET_NAME, S3Service } from "@/lib/s3/service";
-import { requireAdmin } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client } from '@/lib/s3/s3';
+import { BUCKET_NAME, S3Service } from '@/lib/s3/service';
+import { requireAdmin } from '@/lib/auth';
 
 const bodySchema = z.object({
   imageUrl: z.string().url(),
@@ -20,10 +20,7 @@ export async function DELETE(request: Request) {
     const imageType = S3Service.extractImageType(imageUrl);
 
     if (!fileName || !imageType) {
-      return NextResponse.json(
-        { error: "URL immagine non valido" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'URL immagine non valido' }, { status: 400 });
     }
 
     const key = S3Service.getImageKey(imageType, fileName);
@@ -39,17 +36,14 @@ export async function DELETE(request: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Parametri non validi", details: z.prettifyError(error) },
+        { error: 'Parametri non validi', details: z.prettifyError(error) },
         { status: 400 }
       );
     }
-    if (error instanceof Error && error.message === "Forbidden") {
-      return NextResponse.json({ error: "Non autorizzato" }, { status: 403 });
+    if (error instanceof Error && error.message === 'Forbidden') {
+      return NextResponse.json({ error: 'Non autorizzato' }, { status: 403 });
     }
-    console.error("Error deleting image:", error);
-    return NextResponse.json(
-      { error: "Errore nella cancellazione" },
-      { status: 500 }
-    );
+    console.error('Error deleting image:', error);
+    return NextResponse.json({ error: 'Errore nella cancellazione' }, { status: 500 });
   }
 }

@@ -7,11 +7,6 @@ export {
   createSessionToken,
   setSessionCookie,
   verifyAdminCredentials,
-} from "./session";
+} from './session';
 
-export {
-  createMagicLink,
-  sendMagicLinkEmail,
-  verifyMagicLink,
-} from "./magic-link";
-
+export { createMagicLink, sendMagicLinkEmail, verifyMagicLink } from './magic-link';

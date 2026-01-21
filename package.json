@@ -17,7 +17,8 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "stripe:webhook": "stripe listen --forward-to http://localhost:3000/api/stripe/webhook"
+    "stripe:webhook": "stripe listen --forward-to http://localhost:3000/api/stripe/webhook",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.970.0",
@@ -58,6 +59,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "postcss": "^8.4.49",
+    "prettier": "^3.8.1",
     "prisma": "^6.2.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",

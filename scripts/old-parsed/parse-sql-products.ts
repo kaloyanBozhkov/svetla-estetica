@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { images } from "./images";
+import fs from 'fs';
+import path from 'path';
+import { images } from './images';
 
 /**
  * Parses SQL INSERT statements for products and extracts all columns
@@ -15,10 +15,7 @@ import { images } from "./images";
  * 3. Copy the output to update migrate-old-db.ts
  */
 
-const sqlInput = fs.readFileSync(
-  path.join(__dirname, "./ALL_PRODUCTS.txt"),
-  "utf8"
-);
+const sqlInput = fs.readFileSync(path.join(__dirname, './ALL_PRODUCTS.txt'), 'utf8');
 
 interface ParsedProduct {
   id: number;
@@ -37,14 +34,14 @@ function parseSqlInsert(sql: string): ParsedProduct[] {
   const products: ParsedProduct[] = [];
 
   // Remove the INSERT INTO header
-  let content = sql.replace(/INSERT INTO[\s\S]*?VALUES\s*/i, "").trim();
+  let content = sql.replace(/INSERT INTO[\s\S]*?VALUES\s*/i, '').trim();
 
   // Remove trailing semicolon
-  content = content.replace(/;\s*$/, "");
+  content = content.replace(/;\s*$/, '');
 
   // Split by rows - each row starts with ( and ends with )
   const rows: string[] = [];
-  let currentRow = "";
+  let currentRow = '';
   let depth = 0;
   let inString = false;
   let escapeNext = false;
@@ -58,7 +55,7 @@ function parseSqlInsert(sql: string): ParsedProduct[] {
       continue;
     }
 
-    if (char === "\\") {
+    if (char === '\\') {
       currentRow += char;
       escapeNext = true;
       continue;
@@ -71,9 +68,9 @@ function parseSqlInsert(sql: string): ParsedProduct[] {
     }
 
     if (!inString) {
-      if (char === "(") {
+      if (char === '(') {
         if (depth === 0) {
-          currentRow = "";
+          currentRow = '';
         } else {
           currentRow += char;
         }
@@ -81,11 +78,11 @@ function parseSqlInsert(sql: string): ParsedProduct[] {
         continue;
       }
 
-      if (char === ")") {
+      if (char === ')') {
         depth--;
         if (depth === 0) {
           rows.push(currentRow.trim());
-          currentRow = "";
+          currentRow = '';
         } else {
           currentRow += char;
         }
@@ -111,7 +108,7 @@ function parseSqlInsert(sql: string): ParsedProduct[] {
 
 function parseRow(row: string): ParsedProduct | null {
   const values: (string | number | null)[] = [];
-  let current = "";
+  let current = '';
   let inString = false;
   let escapeNext = false;
 
@@ -119,14 +116,14 @@ function parseRow(row: string): ParsedProduct | null {
     const char = row[i];
 
     if (escapeNext) {
-      if (char === "r") {
-        current += "\r";
-      } else if (char === "n") {
-        current += "\n";
+      if (char === 'r') {
+        current += '\r';
+      } else if (char === 'n') {
+        current += '\n';
       } else if (char === "'") {
         current += "'";
-      } else if (char === "\\") {
-        current += "\\";
+      } else if (char === '\\') {
+        current += '\\';
       } else {
         current += char;
       }
@@ -134,7 +131,7 @@ function parseRow(row: string): ParsedProduct | null {
       continue;
     }
 
-    if (char === "\\") {
+    if (char === '\\') {
       escapeNext = true;
       continue;
     }
@@ -142,23 +139,23 @@ function parseRow(row: string): ParsedProduct | null {
     if (char === "'" && !escapeNext) {
       if (!inString) {
         inString = true;
-        current = "";
+        current = '';
       } else {
         inString = false;
       }
       continue;
     }
 
-    if (char === "," && !inString) {
+    if (char === ',' && !inString) {
       const trimmed = current.trim();
-      if (trimmed === "NULL" || trimmed === "") {
+      if (trimmed === 'NULL' || trimmed === '') {
         values.push(null);
-      } else if (!isNaN(Number(trimmed)) && trimmed !== "") {
+      } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
         values.push(Number(trimmed));
       } else {
         values.push(trimmed);
       }
-      current = "";
+      current = '';
       continue;
     }
 
@@ -167,9 +164,9 @@ function parseRow(row: string): ParsedProduct | null {
 
   // Last value
   const trimmed = current.trim();
-  if (trimmed === "NULL" || trimmed === "") {
+  if (trimmed === 'NULL' || trimmed === '') {
     values.push(null);
-  } else if (!isNaN(Number(trimmed)) && trimmed !== "") {
+  } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
     values.push(Number(trimmed));
   } else {
     values.push(trimmed);
@@ -202,25 +199,25 @@ function parseRow(row: string): ParsedProduct | null {
 }
 
 function escapeForTs(value: string | number | null): string {
-  if (value === null || value === undefined) return "null";
+  if (value === null || value === undefined) return 'null';
   const str = String(value);
   return `\`${str
-    .replace(/\\/g, "\\\\")
-    .replace(/`/g, "\\`")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "")}\``;
+    .replace(/\\/g, '\\\\')
+    .replace(/`/g, '\\`')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '')}\``;
 }
 
 export function generateImageUrl(name: string): string {
   const found = images.find(
     (i) =>
-      i.name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'") ===
-      name.toLowerCase().replaceAll(" ", "").replaceAll("`", "'")
+      i.name.toLowerCase().replaceAll(' ', '').replaceAll('`', "'") ===
+      name.toLowerCase().replaceAll(' ', '').replaceAll('`', "'")
   );
   if (!found) {
-    console.log("no image found for", name);
+    console.log('no image found for', name);
   }
-  return found?.img ?? "";
+  return found?.img ?? '';
 }
 
 function generateTypeScriptArray(products: ParsedProduct[]): string {
@@ -231,32 +228,32 @@ function generateTypeScriptArray(products: ParsedProduct[]): string {
     description: ${escapeForTs(p.description_it)},
     price: ${p.price},
     img: ${escapeForTs(generateImageUrl(p.name_it))},
-    category: product_category.${p.category.toLowerCase().split(" ").join("_")},
+    category: product_category.${p.category.toLowerCase().split(' ').join('_')},
     brand: ${escapeForTs(p.brand)},
   },`;
   });
 
-  return `const oldProducts = [\n${lines.join("\n")}\n];`;
+  return `const oldProducts = [\n${lines.join('\n')}\n];`;
 }
 
 (() => {
   const products = parseSqlInsert(sqlInput);
 
-  console.log("=== Parsed Products ===\n");
+  console.log('=== Parsed Products ===\n');
   console.log(`Found ${products.length} products\n`);
 
   // Output interface
   // Output array
-  console.log("\n\n=== TypeScript Array ===\n");
+  console.log('\n\n=== TypeScript Array ===\n');
   const tsOutput = generateTypeScriptArray(products);
   console.log(tsOutput);
 
   // Write to file
-  fs.writeFileSync("PRODUCTS_PARSED.ts", tsOutput);
-  console.log("\n\nWritten to PRODUCTS_PARSED.ts");
+  fs.writeFileSync('PRODUCTS_PARSED.ts', tsOutput);
+  console.log('\n\nWritten to PRODUCTS_PARSED.ts');
 
   // Summary by category
-  console.log("\n\n=== Summary by Category ===\n");
+  console.log('\n\n=== Summary by Category ===\n');
   const byCategory = new Map<string, number>();
   products.forEach((p) => {
     byCategory.set(p.category, (byCategory.get(p.category) || 0) + 1);

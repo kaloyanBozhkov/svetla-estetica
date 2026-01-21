@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/atoms";
-import { formatPrice } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
+import { Button } from '@/components/atoms';
+import { formatPrice } from '@/lib/utils';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface CartItemProps {
   name: string;
@@ -37,9 +37,11 @@ export function CartItem({
   const isAtMax = stock > 0 && quantity >= stock;
   const isOutOfStock = outOfStock || stock <= 0;
   const hasDiscount = Boolean(discountPercent && discountPercent > 0 && originalPrice);
-  
+
   return (
-    <div className={`py-4 border-b border-gray-100 last:border-0 ${isOutOfStock ? "bg-red-50" : ""}`}>
+    <div
+      className={`py-4 border-b border-gray-100 last:border-0 ${isOutOfStock ? 'bg-red-50' : ''}`}
+    >
       <div className="flex gap-3 sm:gap-4">
         <Link
           href={`/prodotti/${productUuid}`}
@@ -49,7 +51,12 @@ export function CartItem({
             <Image src={imageUrl} alt={name} fill unoptimized className="object-contain p-1" />
           ) : (
             <div className="flex h-full items-center justify-center text-gray-400">
-              <svg className="h-6 w-6 sm:h-8 sm:w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-6 w-6 sm:h-8 sm:w-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -79,7 +86,9 @@ export function CartItem({
                 </span>
               </>
             )}
-            <span className={`text-sm font-semibold ${hasDiscount ? "text-red-600" : "text-primary-600"}`}>
+            <span
+              className={`text-sm font-semibold ${hasDiscount ? 'text-red-600' : 'text-primary-600'}`}
+            >
               {formatPrice(price)}
             </span>
           </div>
@@ -93,12 +102,7 @@ export function CartItem({
 
       <div className="flex items-center justify-between mt-3 pl-[76px] sm:pl-[96px]">
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onDecrease}
-            className="h-8 w-8 p-0"
-          >
+          <Button variant="outline" size="sm" onClick={onDecrease} className="h-8 w-8 p-0">
             −
           </Button>
           <span className="w-6 sm:w-8 text-center font-medium text-sm">{quantity}</span>
@@ -111,9 +115,7 @@ export function CartItem({
           >
             +
           </Button>
-          {isAtMax && (
-            <span className="text-xs text-amber-600 ml-1">Max</span>
-          )}
+          {isAtMax && <span className="text-xs text-amber-600 ml-1">Max</span>}
         </div>
         <button
           onClick={onRemove}
@@ -125,4 +127,3 @@ export function CartItem({
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
-import { Suspense } from "react";
-import { CartContent } from "./CartContent";
-import { Card } from "@/components/atoms";
+import { Suspense } from 'react';
+import { CartContent } from './CartContent';
+import { Card } from '@/components/atoms';
 
 function CartSkeleton() {
   return (
@@ -34,7 +34,7 @@ function CartSkeleton() {
           <div>
             <Card className="sticky top-24">
               <div className="h-7 w-28 bg-gray-200 rounded animate-pulse mb-4" />
-              
+
               <div className="space-y-3 border-b border-gray-100 pb-4">
                 <div className="flex justify-between">
                   <div className="h-5 w-20 bg-gray-200 rounded animate-pulse" />
@@ -52,7 +52,7 @@ function CartSkeleton() {
               </div>
 
               <div className="h-12 w-full bg-gray-200 rounded-lg animate-pulse" />
-              
+
               <div className="h-4 w-40 bg-gray-200 rounded animate-pulse mx-auto mt-4" />
             </Card>
           </div>

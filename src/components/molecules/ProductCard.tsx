@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { Card, CardFooter, Button, Badge } from "@/components/atoms";
-import { formatPrice, cn, stripHtml, calculateDiscountedPrice } from "@/lib/utils";
-import Image from "next/image";
-import { CheckIcon } from "@/components/atoms/icons";
+import { useState } from 'react';
+import Link from 'next/link';
+import { Card, CardFooter, Button, Badge } from '@/components/atoms';
+import { formatPrice, cn, stripHtml, calculateDiscountedPrice } from '@/lib/utils';
+import Image from 'next/image';
+import { CheckIcon } from '@/components/atoms/icons';
 
 interface ProductCardProps {
   uuid: string;
@@ -72,10 +72,7 @@ export function ProductCard({
             </div>
           </div>
         )}
-        <Badge
-          variant="default"
-          className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm"
-        >
+        <Badge variant="default" className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm">
           {category}
         </Badge>
         {hasDiscount && (
@@ -107,14 +104,14 @@ export function ProductCard({
       <CardFooter className="relative z-10 flex items-center justify-between p-4 pt-0 mt-auto border-0">
         <div className="flex flex-col">
           {hasDiscount && (
-            <span className="text-sm text-gray-400 line-through">
-              {formatPrice(price)}
-            </span>
+            <span className="text-sm text-gray-400 line-through">{formatPrice(price)}</span>
           )}
-          <span className={cn(
-            "font-display text-xl font-bold",
-            hasDiscount ? "text-red-600" : "text-primary-600"
-          )}>
+          <span
+            className={cn(
+              'font-display text-xl font-bold',
+              hasDiscount ? 'text-red-600' : 'text-primary-600'
+            )}
+          >
             {formatPrice(finalPrice)}
           </span>
         </div>
@@ -124,8 +121,8 @@ export function ProductCard({
             size="sm"
             onClick={handleAddToCart}
             className={cn(
-              "min-w-[100px] transition-all duration-300",
-              isAdded && "!bg-green-600 hover:!bg-green-700"
+              'min-w-[100px] transition-all duration-300',
+              isAdded && '!bg-green-600 hover:!bg-green-700'
             )}
           >
             {isAdded ? (
@@ -134,7 +131,7 @@ export function ProductCard({
                 Aggiunto
               </span>
             ) : (
-              "Aggiungi"
+              'Aggiungi'
             )}
           </Button>
         )}

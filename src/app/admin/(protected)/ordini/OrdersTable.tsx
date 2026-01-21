@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Card, Badge, Button } from "@/components/atoms";
-import { formatPrice, formatDateTime } from "@/lib/utils";
-import { type order_status, type payment_status } from "@prisma/client";
-import { EyeIcon } from "@/components/atoms/icons";
+import Link from 'next/link';
+import { Card, Badge, Button } from '@/components/atoms';
+import { formatPrice, formatDateTime } from '@/lib/utils';
+import { type order_status, type payment_status } from '@prisma/client';
+import { EyeIcon } from '@/components/atoms/icons';
 
 interface Order {
   id: number;
@@ -27,31 +27,31 @@ interface OrdersTableProps {
 export function OrdersTable({ orders }: OrdersTableProps) {
   const getStatusVariant = (status: order_status) => {
     switch (status) {
-      case "pending":
-        return "warning";
-      case "confirmed":
-        return "info";
-      case "shipped":
-        return "info";
-      case "delivered":
-        return "success";
-      case "cancelled":
-        return "danger";
+      case 'pending':
+        return 'warning';
+      case 'confirmed':
+        return 'info';
+      case 'shipped':
+        return 'info';
+      case 'delivered':
+        return 'success';
+      case 'cancelled':
+        return 'danger';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   const getPaymentVariant = (status: payment_status) => {
     switch (status) {
-      case "paid":
-        return "success";
-      case "pending":
-        return "warning";
-      case "failed":
-        return "danger";
+      case 'paid':
+        return 'success';
+      case 'pending':
+        return 'warning';
+      case 'failed':
+        return 'danger';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -69,38 +69,20 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Cliente
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Totale
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Prodotti
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Pagamento
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Stato
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                Data
-              </th>
-              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">
-                Azioni
-              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">ID</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Cliente</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Totale</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Prodotti</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Pagamento</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Stato</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Data</th>
+              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">Azioni</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {orders.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-mono text-gray-900">
-                  #{order.id}
-                </td>
+                <td className="px-6 py-4 text-sm font-mono text-gray-900">#{order.id}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">
                   <div className="font-medium">{order.userName}</div>
                   <div className="text-xs text-gray-400">{order.userEmail}</div>
@@ -109,7 +91,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                   {formatPrice(order.total)}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {order.itemCount} {order.itemCount === 1 ? "prodotto" : "prodotti"}
+                  {order.itemCount} {order.itemCount === 1 ? 'prodotto' : 'prodotti'}
                 </td>
                 <td className="px-6 py-4">
                   <Badge variant={getPaymentVariant(order.paymentStatus)}>
@@ -117,9 +99,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                   </Badge>
                 </td>
                 <td className="px-6 py-4">
-                  <Badge variant={getStatusVariant(order.status)}>
-                    {order.statusLabel}
-                  </Badge>
+                  <Badge variant={getStatusVariant(order.status)}>{order.statusLabel}</Badge>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
                   {formatDateTime(new Date(order.createdAt))}

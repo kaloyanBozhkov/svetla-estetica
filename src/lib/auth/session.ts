@@ -1,9 +1,9 @@
-import { cookies } from "next/headers";
-import { db } from "@/lib/db";
-import { env } from "@/env";
-import { type user } from "@prisma/client";
+import { cookies } from 'next/headers';
+import { db } from '@/lib/db';
+import { env } from '@/env';
+import { type user } from '@prisma/client';
 
-const SESSION_COOKIE_NAME = "session_token";
+const SESSION_COOKIE_NAME = 'session_token';
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export async function createSessionToken(userId: number): Promise<string> {
@@ -26,10 +26,10 @@ export async function setSessionCookie(token: string): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: SESSION_DURATION_MS / 1000,
-    path: "/",
+    path: '/',
   });
 }
 
@@ -40,7 +40,7 @@ export async function createSessionForUser(userId: number): Promise<{
   options: {
     httpOnly: boolean;
     secure: boolean;
-    sameSite: "lax";
+    sameSite: 'lax';
     maxAge: number;
     path: string;
   };
@@ -51,10 +51,10 @@ export async function createSessionForUser(userId: number): Promise<{
     value: token,
     options: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: SESSION_DURATION_MS / 1000,
-      path: "/",
+      path: '/',
     },
   };
 }
@@ -84,21 +84,21 @@ export async function clearSession(): Promise<void> {
 
 export async function isAdmin(): Promise<boolean> {
   const user = await getSession();
-  return user?.role === "admin";
+  return user?.role === 'admin';
 }
 
 export async function requireAuth(): Promise<user> {
   const user = await getSession();
   if (!user) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
   return user;
 }
 
 export async function requireAdmin(): Promise<user> {
   const user = await requireAuth();
-  if (user.role !== "admin") {
-    throw new Error("Forbidden");
+  if (user.role !== 'admin') {
+    throw new Error('Forbidden');
   }
   return user;
 }
@@ -106,4 +106,3 @@ export async function requireAdmin(): Promise<user> {
 export function verifyAdminCredentials(email: string, password: string): boolean {
   return email === env.ADMIN_EMAIL && password === env.ADMIN_PASSWORD;
 }
-

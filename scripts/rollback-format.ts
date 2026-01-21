@@ -1,9 +1,9 @@
-import { db } from "../src/lib/db";
-import { readFileSync } from "fs";
-import { join } from "path";
+import { db } from '../src/lib/db';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
-const PRODUCTS_BACKUP_FILE = ".backup-products.json";
-const SERVICES_BACKUP_FILE = ".backup-services.json";
+const PRODUCTS_BACKUP_FILE = '.backup-products.json';
+const SERVICES_BACKUP_FILE = '.backup-services.json';
 
 interface BackupEntry {
   id: number;
@@ -20,12 +20,10 @@ interface BackupEntry {
 }
 
 async function rollbackProducts() {
-  console.log("📦 Rolling back products...");
-  
+  console.log('📦 Rolling back products...');
+
   const backupPath = join(process.cwd(), PRODUCTS_BACKUP_FILE);
-  const backup: Record<number, BackupEntry> = JSON.parse(
-    readFileSync(backupPath, "utf-8")
-  );
+  const backup: Record<number, BackupEntry> = JSON.parse(readFileSync(backupPath, 'utf-8'));
 
   const entries = Object.values(backup);
   console.log(`Found ${entries.length} products to restore\n`);
@@ -51,12 +49,10 @@ async function rollbackProducts() {
 }
 
 async function rollbackServices() {
-  console.log("💆 Rolling back services...");
-  
+  console.log('💆 Rolling back services...');
+
   const backupPath = join(process.cwd(), SERVICES_BACKUP_FILE);
-  const backup: Record<number, BackupEntry> = JSON.parse(
-    readFileSync(backupPath, "utf-8")
-  );
+  const backup: Record<number, BackupEntry> = JSON.parse(readFileSync(backupPath, 'utf-8'));
 
   const entries = Object.values(backup);
   console.log(`Found ${entries.length} services to restore\n`);
@@ -82,19 +78,19 @@ async function rollbackServices() {
 }
 
 async function main() {
-  console.log("🔄 Starting rollback script...\n");
+  console.log('🔄 Starting rollback script...\n');
 
   try {
-    console.log("=== Rolling Back Products ===\n");
+    console.log('=== Rolling Back Products ===\n');
     await rollbackProducts();
 
-    console.log("\n=== Rolling Back Services ===\n");
+    console.log('\n=== Rolling Back Services ===\n');
     await rollbackServices();
 
-    console.log("\n✅ Rollback complete!");
-    console.log("📝 All titles and descriptions restored to original values");
+    console.log('\n✅ Rollback complete!');
+    console.log('📝 All titles and descriptions restored to original values');
   } catch (error) {
-    console.error("\n❌ Rollback failed:", error);
+    console.error('\n❌ Rollback failed:', error);
     process.exit(1);
   } finally {
     await db.$disconnect();
@@ -102,4 +98,3 @@ async function main() {
 }
 
 main();
-

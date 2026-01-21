@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
-import { createMagicLink, sendMagicLinkEmail } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { createMagicLink, sendMagicLinkEmail } from '@/lib/auth';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -17,16 +17,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Email non valida" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email non valida' }, { status: 400 });
     }
-    console.error("Login error:", error);
-    return NextResponse.json(
-      { error: "Errore durante l'invio dell'email" },
-      { status: 500 }
-    );
+    console.error('Login error:', error);
+    return NextResponse.json({ error: "Errore durante l'invio dell'email" }, { status: 500 });
   }
 }
-

@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
-import { ServicesTable } from "./ServicesTable";
-import { Button } from "@/components/atoms";
-import Link from "next/link";
-import { type service_category } from "@prisma/client";
-import { Pagination } from "@/components/atoms/Pagination";
-import { SERVICE_CATEGORY_LABELS } from "@/lib/constants";
+import { db } from '@/lib/db';
+import { ServicesTable } from './ServicesTable';
+import { Button } from '@/components/atoms';
+import Link from 'next/link';
+import { type service_category } from '@prisma/client';
+import { Pagination } from '@/components/atoms/Pagination';
+import { SERVICE_CATEGORY_LABELS } from '@/lib/constants';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -16,21 +16,19 @@ export default async function AdminServicesPage({
   searchParams: Promise<{ page?: string; q?: string }>;
 }) {
   const { page: pageParam, q: searchQuery } = await searchParams;
-  const page = parseInt(pageParam || "1");
+  const page = parseInt(pageParam || '1');
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const whereClause = searchQuery
     ? {
-        OR: [
-          { name: { contains: searchQuery, mode: "insensitive" as const } },
-        ],
+        OR: [{ name: { contains: searchQuery, mode: 'insensitive' as const } }],
       }
     : {};
 
   const [services, totalCount] = await Promise.all([
     db.service.findMany({
       where: whereClause,
-      orderBy: [{ priority: "desc" }, { name: "asc" }],
+      orderBy: [{ priority: 'desc' }, { name: 'asc' }],
       skip,
       take: ITEMS_PER_PAGE,
     }),
@@ -58,7 +56,9 @@ export default async function AdminServicesPage({
             Gestione Servizi
           </h1>
           <p className="mt-1 text-gray-500">
-            {searchQuery ? `${totalCount} risultati per "${searchQuery}"` : `${totalCount} servizi totali`}
+            {searchQuery
+              ? `${totalCount} risultati per "${searchQuery}"`
+              : `${totalCount} servizi totali`}
           </p>
         </div>
         <Link href="/admin/servizi/nuovo" className="shrink-0">
@@ -66,7 +66,7 @@ export default async function AdminServicesPage({
         </Link>
       </div>
 
-      <ServicesTable services={servicesWithLabels} initialSearch={searchQuery || ""} />
+      <ServicesTable services={servicesWithLabels} initialSearch={searchQuery || ''} />
 
       <Pagination
         currentPage={page}

@@ -1,57 +1,45 @@
-import { CONTACTS_EMAIL } from "@/lib/constants";
-import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
-import { stripe } from "@/lib/stripe";
-import { db } from "@/lib/db";
-import { env } from "@/env";
-import { resend } from "@/lib/email";
-import { sendCelebration, sendErrorLog } from "@/lib/alerts";
-import type Stripe from "stripe";
+import { CONTACTS_EMAIL } from '@/lib/constants';
+import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
+import { stripe } from '@/lib/stripe';
+import { db } from '@/lib/db';
+import { env } from '@/env';
+import { resend } from '@/lib/email';
+import { sendCelebration, sendErrorLog } from '@/lib/alerts';
+import type Stripe from 'stripe';
 
 export async function POST(request: Request) {
   const body = await request.text();
   const headersList = await headers();
-  const signature = headersList.get("stripe-signature");
+  const signature = headersList.get('stripe-signature');
 
   if (!signature) {
-    return NextResponse.json(
-      { error: "Missing stripe-signature header" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
   }
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
-    return NextResponse.json(
-      { error: "Webhook signature verification failed" },
-      { status: 400 }
-    );
+    console.error('Webhook signature verification failed:', err);
+    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 });
   }
 
   switch (event.type) {
-    case "checkout.session.completed": {
+    case 'checkout.session.completed': {
       const eventSession = event.data.object as Stripe.Checkout.Session;
 
       // Retrieve full session with expanded customer_details
       // Note: shipping_details is already on the session object, no need to expand
       const session = await stripe.checkout.sessions.retrieve(eventSession.id, {
-        expand: ["customer_details"],
+        expand: ['customer_details'],
       });
 
       const orderUuid = session.metadata?.order_uuid;
-      const isGuest = session.metadata?.is_guest === "true";
-      let userId = session.metadata?.user_id
-        ? parseInt(session.metadata.user_id)
-        : null;
+      const isGuest = session.metadata?.is_guest === 'true';
+      let userId = session.metadata?.user_id ? parseInt(session.metadata.user_id) : null;
 
       // For guest checkout, create or find user by email
       if (isGuest || !userId) {
@@ -65,13 +53,9 @@ export async function POST(request: Request) {
           // If no user exists, create one with verified email (Stripe validates it)
           if (!user) {
             const customerName =
-              session.shipping_details?.name ||
-              session.customer_details?.name ||
-              null;
+              session.shipping_details?.name || session.customer_details?.name || null;
             const customerPhone =
-              session.shipping_details?.phone ||
-              session.customer_details?.phone ||
-              null;
+              session.shipping_details?.phone || session.customer_details?.phone || null;
 
             user = await db.user.create({
               data: {
@@ -81,8 +65,8 @@ export async function POST(request: Request) {
                 phone: customerPhone,
               },
             });
-            console.log("Created new user from guest checkout:", user.id);
-            revalidatePath("/admin/utenti");
+            console.log('Created new user from guest checkout:', user.id);
+            revalidatePath('/admin/utenti');
           } else if (!user.email_verified) {
             // If user exists but email not verified, verify it now
             await db.user.update({
@@ -106,38 +90,36 @@ export async function POST(request: Request) {
           where: { uuid: orderUuid },
           data: {
             external_stripe_payment_intent_id: session.payment_intent as string,
-            payment_status: "paid",
-            status: "confirmed",
+            payment_status: 'paid',
+            status: 'confirmed',
             ...(userId && !order?.user_id ? { user_id: userId } : {}),
           },
         });
 
         // Celebrate the sale and notify admin
         if (order) {
-          const totalFormatted = new Intl.NumberFormat("it-IT", {
-            style: "currency",
-            currency: "EUR",
+          const totalFormatted = new Intl.NumberFormat('it-IT', {
+            style: 'currency',
+            currency: 'EUR',
           }).format(order.total / 100);
 
           await sendCelebration({
-            event: "Nuovo Ordine",
+            event: 'Nuovo Ordine',
             total: totalFormatted,
             items: `${order.items.length} prodotti`,
-            customer: session.customer_details?.email || "N/A",
+            customer: session.customer_details?.email || 'N/A',
           });
 
           // Send email notification to admin
           try {
             const customerName =
-              session.shipping_details?.name ||
-              session.customer_details?.name ||
-              "Cliente";
-            const customerEmail = session.customer_details?.email || "N/A";
+              session.shipping_details?.name || session.customer_details?.name || 'Cliente';
+            const customerEmail = session.customer_details?.email || 'N/A';
 
             await resend.emails.send({
-              from: "Svetla Estetica <noreply@svetlaestetica.com>",
+              from: 'Svetla Estetica <noreply@svetlaestetica.com>',
               to: CONTACTS_EMAIL,
-              subject: "Ordine | SvetlaEstetica",
+              subject: 'Ordine | SvetlaEstetica',
               html: `
                 <h2>Nuovo Ordine Ricevuto!</h2>
                 <p><strong>Ordine #${order.id}</strong></p>
@@ -148,10 +130,7 @@ export async function POST(request: Request) {
               `,
             });
           } catch (emailError) {
-            console.error(
-              "Failed to send admin order notification:",
-              emailError
-            );
+            console.error('Failed to send admin order notification:', emailError);
           }
         }
       }
@@ -168,21 +147,18 @@ export async function POST(request: Request) {
 
           // Get name from shipping or customer details
           if (!user.name) {
-            const name =
-              session.shipping_details?.name || session.customer_details?.name;
+            const name = session.shipping_details?.name || session.customer_details?.name;
             if (name) updates.name = name;
           }
 
           // Get phone from shipping or customer details
           if (!user.phone) {
-            const phone =
-              session.shipping_details?.phone ||
-              session.customer_details?.phone;
+            const phone = session.shipping_details?.phone || session.customer_details?.phone;
             if (phone) updates.phone = phone;
           }
 
           if (Object.keys(updates).length > 0) {
-            console.log("Updating user with:", updates);
+            console.log('Updating user with:', updates);
             await db.user.update({
               where: { id: userId },
               data: updates,
@@ -205,40 +181,40 @@ export async function POST(request: Request) {
       break;
     }
 
-    case "payment_intent.succeeded": {
+    case 'payment_intent.succeeded': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
       await db.order.updateMany({
         where: { external_stripe_payment_intent_id: paymentIntent.id },
-        data: { payment_status: "paid", status: "confirmed" },
+        data: { payment_status: 'paid', status: 'confirmed' },
       });
 
       await db.booking.updateMany({
         where: { external_stripe_payment_intent_id: paymentIntent.id },
-        data: { payment_status: "paid" },
+        data: { payment_status: 'paid' },
       });
 
       break;
     }
 
-    case "payment_intent.payment_failed": {
+    case 'payment_intent.payment_failed': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
       await db.order.updateMany({
         where: { external_stripe_payment_intent_id: paymentIntent.id },
-        data: { payment_status: "failed" },
+        data: { payment_status: 'failed' },
       });
 
       await db.booking.updateMany({
         where: { external_stripe_payment_intent_id: paymentIntent.id },
-        data: { payment_status: "failed" },
+        data: { payment_status: 'failed' },
       });
 
       // Alert about payment failure
       await sendErrorLog({
-        event: "Payment Failed",
+        event: 'Payment Failed',
         payment_intent: paymentIntent.id,
-        reason: paymentIntent.last_payment_error?.message || "Unknown",
+        reason: paymentIntent.last_payment_error?.message || 'Unknown',
       });
 
       break;
