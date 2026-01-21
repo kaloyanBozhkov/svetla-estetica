@@ -35,6 +35,10 @@ You must return:
 <language>
 Keep the response language as italian
 </language>
+
+<important>
+Keep the description as conscise as possible, but still informative and selling the service well. Assume the reader wants to read as little as possible.
+</important>
 `;
 
 const resultSchema = z.object({
