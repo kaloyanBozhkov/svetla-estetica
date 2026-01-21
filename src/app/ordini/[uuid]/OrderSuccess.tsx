@@ -110,10 +110,11 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
 
           <div className="space-y-4">
             {order.items.map((item) => {
-              const hasDiscount =
+              const hasDiscount = Boolean(
                 item.discountPercent &&
                 item.discountPercent > 0 &&
-                item.originalPrice;
+                item.originalPrice
+              );
               return (
                 <div
                   key={item.id}
@@ -142,22 +143,21 @@ export function OrderSuccess({ order, isNewOrder }: OrderSuccessProps) {
                       <p className="text-sm text-gray-500">
                         Quantità: {item.quantity}
                       </p>
-                      {Boolean(hasDiscount) && (
+                      {hasDiscount && (
                         <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
                           -{item.discountPercent}%
                         </span>
                       )}
                     </div>
-                    {Boolean(hasDiscount) && item.originalPrice && (
+                    {hasDiscount && item.originalPrice && (
                       <p className="text-xs text-gray-400 line-through mt-0.5">
                         {formatPrice(item.originalPrice)} cad.
                       </p>
                     )}
                   </div>
                   <p
-                    className={`font-medium ${
-                      hasDiscount ? "text-red-600" : "text-gray-900"
-                    }`}
+                    className={`font-medium ${hasDiscount ? "text-red-600" : "text-gray-900"
+                      }`}
                   >
                     {formatPrice(item.price * item.quantity)}
                   </p>

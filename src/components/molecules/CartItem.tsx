@@ -36,7 +36,7 @@ export function CartItem({
 }: CartItemProps) {
   const isAtMax = stock > 0 && quantity >= stock;
   const isOutOfStock = outOfStock || stock <= 0;
-  const hasDiscount = discountPercent && discountPercent > 0 && originalPrice;
+  const hasDiscount = Boolean(discountPercent && discountPercent > 0 && originalPrice);
   
   return (
     <div className={`py-4 border-b border-gray-100 last:border-0 ${isOutOfStock ? "bg-red-50" : ""}`}>
@@ -72,7 +72,7 @@ export function CartItem({
             {hasDiscount && (
               <>
                 <span className="text-xs text-gray-400 line-through">
-                  {formatPrice(originalPrice)}
+                  {formatPrice(originalPrice ?? price)}
                 </span>
                 <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">
                   -{discountPercent}%

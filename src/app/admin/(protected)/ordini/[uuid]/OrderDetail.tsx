@@ -160,7 +160,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
             </h2>
             <div className="divide-y divide-gray-200">
               {order.items.map((item) => {
-                const hasDiscount = item.discountPercent && item.discountPercent > 0 && item.originalPrice;
+                const hasDiscount = Boolean(item.discountPercent && item.discountPercent > 0 && item.originalPrice);
                 return (
                   <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex gap-4">
                     <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
