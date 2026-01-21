@@ -8,6 +8,7 @@ import { Card, Badge, Button, Select } from '@/components/atoms';
 import { formatPrice, formatDateTime } from '@/lib/utils';
 import { type order_status, type payment_status } from '@prisma/client';
 import { ArrowLeftIcon, MailIcon } from '@/components/atoms/icons';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/constants';
 
 interface OrderDetailProps {
   order: {
@@ -44,27 +45,15 @@ interface OrderDetailProps {
 }
 
 const statusOptions = [
-  { value: 'pending', label: 'In Attesa' },
-  { value: 'confirmed', label: 'Confermato' },
-  { value: 'shipped', label: 'Spedito' },
-  { value: 'delivered', label: 'Consegnato' },
-  { value: 'cancelled', label: 'Annullato' },
+  { value: 'pending', label: ORDER_STATUS_LABELS.pending },
+  { value: 'confirmed', label: ORDER_STATUS_LABELS.confirmed },
+  { value: 'shipped', label: ORDER_STATUS_LABELS.shipped },
+  { value: 'delivered', label: ORDER_STATUS_LABELS.delivered },
+  { value: 'cancelled', label: ORDER_STATUS_LABELS.cancelled },
 ];
 
-const statusLabels: Record<order_status, string> = {
-  pending: 'In Attesa',
-  confirmed: 'Confermato',
-  shipped: 'Spedito',
-  delivered: 'Consegnato',
-  cancelled: 'Annullato',
-};
-
-const paymentLabels: Record<payment_status, string> = {
-  pending: 'In Attesa',
-  paid: 'Pagato',
-  failed: 'Fallito',
-  refunded: 'Rimborsato',
-};
+const statusLabels = ORDER_STATUS_LABELS as Record<order_status, string>;
+const paymentLabels = PAYMENT_STATUS_LABELS as Record<payment_status, string>;
 
 export function OrderDetail({ order }: OrderDetailProps) {
   const router = useRouter();

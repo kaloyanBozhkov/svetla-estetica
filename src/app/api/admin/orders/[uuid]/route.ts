@@ -5,17 +5,18 @@ import { requireAdmin } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { resend } from '@/lib/email';
 import OrderStatusEmail from '@/components/emails/OrderStatusEmail';
+import { ORDER_STATUS_LABELS } from '@/lib/constants';
 
 const updateOrderSchema = z.object({
   status: z.enum(['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']),
 });
 
 const statusMessages: Record<string, string> = {
-  pending: 'In Attesa',
-  confirmed: 'Ordine Confermato',
-  shipped: 'Ordine Spedito',
-  delivered: 'Ordine Consegnato',
-  cancelled: 'Ordine Annullato',
+  pending: ORDER_STATUS_LABELS.pending,
+  confirmed: `Ordine ${ORDER_STATUS_LABELS.confirmed}`,
+  shipped: `Ordine ${ORDER_STATUS_LABELS.shipped}`,
+  delivered: `Ordine ${ORDER_STATUS_LABELS.delivered}`,
+  cancelled: `Ordine ${ORDER_STATUS_LABELS.cancelled}`,
 };
 
 function formatPrice(cents: number): string {

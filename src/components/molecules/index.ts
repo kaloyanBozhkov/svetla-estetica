@@ -3,3 +3,4 @@ export { ProductCard } from './ProductCard';
 export { ServiceCard } from './ServiceCard';
 export { CartItem } from './CartItem';
 export { ImageUpload } from './ImageUpload';
+export { SearchInput } from './SearchInput';

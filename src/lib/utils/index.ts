@@ -1,5 +1,6 @@
 export { formatPrice, formatDate, formatDateTime, formatTime } from './format';
 export { toSnakeCase, toCamelCase } from './transform';
+import { ORDER_STATUS_LABELS, BOOKING_STATUS_LABELS } from '@/lib/constants';
 
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -18,30 +19,13 @@ export function sleep(ms: number): Promise<void> {
 }
 
 // Order status translations
-const orderStatusMap: Record<string, string> = {
-  pending: 'In attesa',
-  confirmed: 'Confermato',
-  processing: 'In elaborazione',
-  shipped: 'Spedito',
-  delivered: 'Consegnato',
-  cancelled: 'Annullato',
-};
-
 export function translateOrderStatus(status: string): string {
-  return orderStatusMap[status] || status;
+  return ORDER_STATUS_LABELS[status] || status;
 }
 
 // Booking status translations
-const bookingStatusMap: Record<string, string> = {
-  pending: 'In attesa',
-  approved: 'Approvato',
-  rejected: 'Rifiutato',
-  completed: 'Completato',
-  cancelled: 'Annullato',
-};
-
 export function translateBookingStatus(status: string): string {
-  return bookingStatusMap[status] || status;
+  return BOOKING_STATUS_LABELS[status] || status;
 }
 
 // Calculate discounted price in cents

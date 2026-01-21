@@ -278,18 +278,21 @@ export default function AboutPage() {
                 {['Viso', 'Corpo', 'Solari', 'Profumi'].map((cat, i) => (
                   <div
                     key={cat}
-                    className={`rounded-2xl p-6 ${i % 2 === 0 ? 'bg-white' : 'bg-primary-600 text-white'
-                      } shadow-lg`}
+                    className={`rounded-2xl p-6 ${
+                      i % 2 === 0 ? 'bg-white' : 'bg-primary-600 text-white'
+                    } shadow-lg`}
                   >
                     <p
-                      className={`font-display text-lg font-bold ${i % 2 === 0 ? 'text-gray-900' : ''
-                        }`}
+                      className={`font-display text-lg font-bold ${
+                        i % 2 === 0 ? 'text-gray-900' : ''
+                      }`}
                     >
                       {cat}
                     </p>
                     <p
-                      className={`mt-1 text-sm ${i % 2 === 0 ? 'text-gray-500' : 'text-primary-100'
-                        }`}
+                      className={`mt-1 text-sm ${
+                        i % 2 === 0 ? 'text-gray-500' : 'text-primary-100'
+                      }`}
                     >
                       Prodotti selezionati
                     </p>

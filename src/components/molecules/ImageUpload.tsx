@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useRef, useCallback, type ChangeEvent, type DragEvent, type SyntheticEvent } from 'react';
+import {
+  useState,
+  useRef,
+  useCallback,
+  type ChangeEvent,
+  type DragEvent,
+  type SyntheticEvent,
+} from 'react';
 import Image from 'next/image';
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -358,11 +365,12 @@ export function ImageUpload({
           className={`
             relative flex flex-col items-center justify-center w-full max-w-sm aspect-video
             border-2 border-dashed rounded-lg cursor-pointer transition-colors
-            ${uploading
-              ? 'border-primary-400 bg-primary-50'
-              : isDragging
-                ? 'border-primary-500 bg-primary-50'
-                : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+            ${
+              uploading
+                ? 'border-primary-400 bg-primary-50'
+                : isDragging
+                  ? 'border-primary-500 bg-primary-50'
+                  : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
             }
           `}
         >

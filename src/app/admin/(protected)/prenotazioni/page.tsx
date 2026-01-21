@@ -2,16 +2,11 @@ import { db } from '@/lib/db';
 import { BookingsTable } from './BookingsTable';
 import { type booking_status } from '@prisma/client';
 import { Pagination } from '@/components/atoms/Pagination';
+import { BOOKING_STATUS_LABELS } from '@/lib/constants';
 
 const ITEMS_PER_PAGE = 30;
 
-const statusLabels: Record<booking_status, string> = {
-  pending: 'In Attesa',
-  approved: 'Approvato',
-  rejected: 'Rifiutato',
-  completed: 'Completato',
-  cancelled: 'Annullato',
-};
+const statusLabels = BOOKING_STATUS_LABELS as Record<booking_status, string>;
 
 export default async function AdminBookingsPage({
   searchParams,

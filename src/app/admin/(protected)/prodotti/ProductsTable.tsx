@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Card, Badge, Button, Input } from '@/components/atoms';
+import { Card, Badge, Button } from '@/components/atoms';
+import { SearchInput } from '@/components/molecules';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { type product_category } from '@prisma/client';
@@ -41,27 +42,19 @@ function SortIcon({ active, order }: { active: boolean; order: SortOrder }) {
 export function ProductsTable({ products, initialSearch = '' }: ProductsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [search, setSearch] = useState(initialSearch);
   const [sortBy, setSortBy] = useState<SortKey>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
-  // Debounced search - update URL after typing stops
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (search !== initialSearch) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (search) {
-          params.set('q', search);
-          params.delete('page'); // Reset to page 1 on new search
-        } else {
-          params.delete('q');
-        }
-        router.push(`/admin/prodotti?${params.toString()}`);
-      }
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [search, initialSearch, router, searchParams]);
+  const handleSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set('q', value);
+      params.delete('page'); // Reset to page 1 on new search
+    } else {
+      params.delete('q');
+    }
+    router.push(`/admin/prodotti?${params.toString()}`);
+  };
 
   const handleSort = (key: SortKey) => {
     if (sortBy === key) {
@@ -107,11 +100,11 @@ export function ProductsTable({ products, initialSearch = '' }: ProductsTablePro
 
   return (
     <div className="space-y-4">
-      <Input
+      <SearchInput
         placeholder="Cerca prodotti..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="max-w-sm"
+        initialValue={initialSearch}
+        onSearch={handleSearch}
+        className="max-w-md"
       />
 
       {sorted.length === 0 ? (

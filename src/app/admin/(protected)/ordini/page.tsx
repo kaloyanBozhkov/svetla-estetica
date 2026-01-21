@@ -2,23 +2,12 @@ import { db } from '@/lib/db';
 import { OrdersTable } from './OrdersTable';
 import { type order_status, type payment_status } from '@prisma/client';
 import { Pagination } from '@/components/atoms/Pagination';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/constants';
 
 const ITEMS_PER_PAGE = 30;
 
-const statusLabels: Record<order_status, string> = {
-  pending: 'In Attesa',
-  confirmed: 'Confermato',
-  shipped: 'Spedito',
-  delivered: 'Consegnato',
-  cancelled: 'Annullato',
-};
-
-const paymentLabels: Record<payment_status, string> = {
-  pending: 'In Attesa',
-  paid: 'Pagato',
-  failed: 'Fallito',
-  refunded: 'Rimborsato',
-};
+const statusLabels = ORDER_STATUS_LABELS as Record<order_status, string>;
+const paymentLabels = PAYMENT_STATUS_LABELS as Record<payment_status, string>;
 
 export default async function AdminOrdersPage({
   searchParams,

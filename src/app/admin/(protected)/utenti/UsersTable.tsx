@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Card, Badge, Input } from '@/components/atoms';
+import { Card, Badge } from '@/components/atoms';
+import { SearchInput } from '@/components/molecules';
 import Link from 'next/link';
 import { type user_role } from '@prisma/client';
 
@@ -46,10 +47,11 @@ export function UsersTable({ users }: UsersTableProps) {
 
   return (
     <div className="space-y-4">
-      <Input
+      <SearchInput
         placeholder="Cerca per email, nome o telefono..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        initialValue=""
+        onSearch={setSearch}
+        debounceMs={300}
         className="max-w-md"
       />
 

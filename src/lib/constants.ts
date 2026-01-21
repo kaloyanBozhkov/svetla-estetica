@@ -46,3 +46,29 @@ export const SERVICE_CATEGORY_LABELS: Record<string, string> = {
   appuntamento: 'Appuntamento',
   grotta_di_sale: 'Grotta di Sale',
 };
+
+// Status labels for orders
+export const ORDER_STATUS_LABELS: Record<string, string> = {
+  pending: 'In Attesa',
+  confirmed: 'Confermato',
+  shipped: 'Spedito',
+  delivered: 'Consegnato',
+  cancelled: 'Annullato',
+};
+
+// Status labels for bookings
+export const BOOKING_STATUS_LABELS: Record<string, string> = {
+  pending: 'In Attesa',
+  approved: 'Approvato',
+  rejected: 'Rifiutato',
+  completed: 'Completato',
+  cancelled: 'Annullato',
+};
+
+// Status labels for payments
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  pending: 'In Attesa',
+  paid: 'Pagato',
+  failed: 'Fallito',
+  refunded: 'Rimborsato',
+};
