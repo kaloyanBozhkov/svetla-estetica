@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { Input } from '@/components/atoms';
 import { ActionButton } from '@/components/atoms/ActionButton';
 
@@ -18,7 +18,7 @@ export function ProfileForm({ initialPhone, initialName }: ProfileFormProps) {
     text: string;
   } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);

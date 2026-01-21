@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Card, CardFooter, Button, Badge } from '@/components/atoms';
 import { formatPrice, stripHtml } from '@/lib/utils';
 import Image from 'next/image';
+import type { MouseEvent } from 'react';
 
 interface ServiceCardProps {
   uuid: string;
@@ -28,7 +29,7 @@ export function ServiceCard({
   isAuthenticated = false,
   onBook,
 }: ServiceCardProps) {
-  const handleBook = (e: React.MouseEvent) => {
+  const handleBook = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onBook) {

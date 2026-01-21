@@ -39,7 +39,7 @@ interface CartState {
 }
 
 // Debounced save to database
-let saveTimeout: NodeJS.Timeout | null = null;
+let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 const debouncedSaveToDb = (items: CartItem[]) => {
   if (saveTimeout) clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { Button, Input, Card } from '@/components/atoms';
 import { z } from 'zod';
@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, type ChangeEvent, type DragEvent, type SyntheticEvent } from 'react';
 import Image from 'next/image';
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -175,7 +175,7 @@ export function ImageUpload({
     [imageType, onChange]
   );
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       openCropModal(file);
@@ -241,24 +241,24 @@ export function ImageUpload({
     }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDragEnter = (e: React.DragEvent) => {
+  const handleDragEnter = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  const handleDragLeave = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -300,7 +300,7 @@ export function ImageUpload({
     onPendingFileChange?.(null);
   };
 
-  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const onImageLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget;
     // Default to center crop with 80% of smallest dimension
     const minDim = Math.min(width, height);
@@ -358,12 +358,11 @@ export function ImageUpload({
           className={`
             relative flex flex-col items-center justify-center w-full max-w-sm aspect-video
             border-2 border-dashed rounded-lg cursor-pointer transition-colors
-            ${
-              uploading
-                ? 'border-primary-400 bg-primary-50'
-                : isDragging
-                  ? 'border-primary-500 bg-primary-50'
-                  : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+            ${uploading
+              ? 'border-primary-400 bg-primary-50'
+              : isDragging
+                ? 'border-primary-500 bg-primary-50'
+                : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
             }
           `}
         >

@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from './providers';
 import { Header, Footer } from '@/components/organisms';
 import { BASE_URL } from '@/lib/constants';
+import type { ReactNode } from 'react';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -189,7 +190,7 @@ Piedi,mani,pedicure,manicure,gel,semipermanente,stezzano,bergamo,provincia,low c
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="it" className={`${cormorant.variable} ${lora.variable}`}>
       <head>

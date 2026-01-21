@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 import { Card, CardFooter, Button, Badge } from '@/components/atoms';
 import { formatPrice, cn, stripHtml, calculateDiscountedPrice } from '@/lib/utils';
@@ -35,7 +35,7 @@ export function ProductCard({
   const hasDiscount = discountPercent > 0;
   const finalPrice = hasDiscount ? calculateDiscountedPrice(price, discountPercent) : price;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onAddToCart) {

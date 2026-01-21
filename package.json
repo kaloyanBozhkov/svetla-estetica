@@ -15,7 +15,7 @@
     "format:rollback": "pnpm tsx scripts/rollback-format.ts",
     "llms:update": "pnpm tsx scripts/update-llms-txt.ts",
     "postinstall": "prisma generate",
-    "lint": "next lint",
+    "lint": "eslint .",
     "start": "next start",
     "stripe:webhook": "stripe listen --forward-to http://localhost:3000/api/stripe/webhook",
     "format": "prettier --write ."
@@ -44,7 +44,8 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
     "@react-email/preview-server": "5.2.5",
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.2",
@@ -56,6 +57,7 @@
     "dotenv": "^17.2.3",
     "eslint": "^9.17.0",
     "eslint-config-next": "^15.1.4",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "postcss": "^8.4.49",

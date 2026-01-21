@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardTitle, Button, Input } from '@/components/atoms';
 import { CheckIcon } from '@/components/atoms/icons';
@@ -41,7 +41,7 @@ export function BookingForm({ service, user }: BookingFormProps) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);

@@ -77,8 +77,8 @@ async function seed() {
   await db.product.deleteMany();
   await db.brand.deleteMany();
 
-  let withoutImageServices = [];
-  let withoutImageProducts = [];
+  const withoutImageServices: typeof oldTreatments = [];
+  const withoutImageProducts: typeof oldProducts = [];
 
   for (const service of oldTreatments) {
     const imgUrl = generateImageUrl(service.name);
