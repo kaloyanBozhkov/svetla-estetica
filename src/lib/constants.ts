@@ -3,7 +3,7 @@ import { env } from '@/env';
 export const BASE_URL = env.NEXT_PUBLIC_BASE_URL;
 
 // Shipping cost in cents
-export const SHIPPING_COST = 1500; // 15.00 EUR
+export const SHIPPING_COST = 100; // 15.00 EUR
 
 export const OPENING_HOUR = '09:00';
 export const CLOSING_HOUR_WEEKDAY = '20:00';
