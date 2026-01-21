@@ -75,9 +75,6 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.3.3
         version: 3.3.3
-      '@eslint/js':
-        specifier: ^9.39.2
-        version: 9.39.2
       '@react-email/preview-server':
         specifier: 5.2.5
         version: 5.2.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -93,12 +90,6 @@ importers:
       '@types/sharp':
         specifier: ^0.32.0
         version: 0.32.0
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.19.1
-        version: 8.53.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.2(jiti@1.21.7))(typescript@5.9.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.19.1
-        version: 8.53.0(eslint@9.39.2(jiti@1.21.7))(typescript@5.9.3)
       autoprefixer:
         specifier: ^10.4.23
         version: 10.4.23(postcss@8.5.6)
@@ -114,12 +105,6 @@ importers:
       eslint-config-prettier:
         specifier: ^10.1.8
         version: 10.1.8(eslint@9.39.2(jiti@1.21.7))
-      eslint-plugin-react:
-        specifier: ^7.37.3
-        version: 7.37.5(eslint@9.39.2(jiti@1.21.7))
-      eslint-plugin-react-hooks:
-        specifier: ^5.1.0
-        version: 5.2.0(eslint@9.39.2(jiti@1.21.7))
       postcss:
         specifier: ^8.4.49
         version: 8.5.6
