@@ -10,6 +10,7 @@ import {
 } from '@/components/atoms/icons';
 import { formatPrice } from '@/lib/utils';
 import { type ComponentType } from 'react';
+import { ORDER_STATUS_LABELS } from '@/lib/constants';
 
 export default async function AdminDashboardPage() {
   const today = new Date();
@@ -169,7 +170,7 @@ async function RecentOrders() {
                     : 'bg-gray-100 text-gray-800'
             }`}
           >
-            {order.status}
+            {ORDER_STATUS_LABELS[order.status] ?? order.status}
           </span>
         </li>
       ))}

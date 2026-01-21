@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Card, Badge } from '@/components/atoms';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
+import { BOOKING_STATUS_LABELS } from '@/lib/constants';
 
 interface Props {
   params: Promise<{ uuid: string }>;
@@ -174,7 +175,7 @@ export default async function UserDetailPage({ params }: Props) {
                             statusColors[booking.status] || 'bg-gray-100 text-gray-800'
                           }`}
                         >
-                          {booking.status}
+                          {BOOKING_STATUS_LABELS[booking.status] ?? booking.status}
                         </span>
                       </div>
                     </div>
