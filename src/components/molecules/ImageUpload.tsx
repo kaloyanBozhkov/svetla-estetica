@@ -15,6 +15,10 @@ interface ImageUploadProps {
   onChange: (url: string | null) => void;
   imageType: ImageType;
   label?: string;
+  /** Defer upload until parent triggers it - exposes pending file via onPendingFileChange */
+  deferUpload?: boolean;
+  /** Called when a file is ready for deferred upload */
+  onPendingFileChange?: (file: File | null) => void;
 }
 
 // Compress image to target size
@@ -119,6 +123,8 @@ export function ImageUpload({
   onChange,
   imageType,
   label = "Immagine",
+  deferUpload = false,
+  onPendingFileChange,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -219,7 +225,15 @@ export function ImageUpload({
       setCrop(undefined);
       setCompletedCrop(undefined);
       setOriginalFile(null);
-      await uploadFile(croppedFile);
+
+      if (deferUpload) {
+        // Create object URL for preview and expose file to parent
+        const previewUrl = URL.createObjectURL(croppedFile);
+        onChange(previewUrl);
+        onPendingFileChange?.(croppedFile);
+      } else {
+        await uploadFile(croppedFile);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Errore nel ritaglio");
     }
@@ -275,17 +289,24 @@ export function ImageUpload({
   const handleRemove = async () => {
     if (!value) return;
 
-    try {
-      await fetch("/api/s3/delete", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl: value }),
-      });
-    } catch {
-      // Ignore delete errors, still remove from form
+    // Only delete from S3 if it's an actual S3 URL (not a blob URL)
+    if (!value.startsWith("blob:")) {
+      try {
+        await fetch("/api/s3/delete", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl: value }),
+        });
+      } catch {
+        // Ignore delete errors, still remove from form
+      }
+    } else {
+      // Revoke the object URL to free memory
+      URL.revokeObjectURL(value);
     }
 
     onChange(null);
+    onPendingFileChange?.(null);
   };
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -458,11 +479,11 @@ export function ImageUpload({
         )}
 
         <div className="flex justify-end gap-3">
-          <Button variant="ghost" onClick={handleCropCancel}>
+          <Button type="button" variant="ghost" onClick={handleCropCancel}>
             Annulla
           </Button>
-          <Button onClick={handleCropComplete} disabled={!completedCrop}>
-            Conferma e Carica
+          <Button type="button" onClick={handleCropComplete} disabled={!completedCrop}>
+            Conferma
           </Button>
         </div>
       </Modal>

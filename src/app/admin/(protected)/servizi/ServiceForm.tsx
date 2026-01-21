@@ -6,6 +6,7 @@ import { Button, Input, Select, Card, Modal, RichTextEditor, ActionButton } from
 import { ImageUpload } from "@/components/molecules";
 import { SparkleIcon } from "@/components/atoms/icons";
 import { type service_category } from "@prisma/client";
+import { S3Service } from "@/lib/s3/service";
 
 const categoryOptions: { value: service_category; label: string }[] = [
   { value: "viso", label: "Viso" },
@@ -46,6 +47,8 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
   const [aiLoading, setAiLoading] = useState(false);
   const [formatLoading, setFormatLoading] = useState(false);
   const [rewordModal, setRewordModal] = useState(false);
+  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const [form, setForm] = useState<ServiceFormData>(
     initialData || {
@@ -64,8 +67,24 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
     e.preventDefault();
     setError("");
     setLoading(true);
+    setUploadProgress(0);
 
     try {
+      let imageUrl = form.imageUrl;
+
+      // Upload pending image first if exists
+      if (pendingImageFile) {
+        imageUrl = await S3Service.uploadFile(
+          pendingImageFile,
+          "trattamenti",
+          setUploadProgress
+        );
+        // Revoke the blob URL
+        if (form.imageUrl?.startsWith("blob:")) {
+          URL.revokeObjectURL(form.imageUrl);
+        }
+      }
+
       const url = isEdit
         ? `/api/admin/services/${initialData?.uuid}`
         : "/api/admin/services";
@@ -81,7 +100,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
           duration_min: form.durationMin,
           priority: form.priority,
           category: form.category,
-          image_url: form.imageUrl || null,
+          image_url: imageUrl || null,
           active: form.active,
         }),
       });
@@ -97,6 +116,7 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
       setError(err instanceof Error ? err.message : "Errore");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -285,6 +305,8 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
             value={form.imageUrl || undefined}
             onChange={(url) => setForm({ ...form, imageUrl: url || "" })}
             imageType="trattamenti"
+            deferUpload
+            onPendingFileChange={setPendingImageFile}
           />
 
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -336,7 +358,11 @@ export function ServiceForm({ initialData, isEdit }: ServiceFormProps) {
                 Annulla
               </Button>
               <Button type="submit" loading={loading} className="w-full sm:w-auto">
-                {isEdit ? "Salva" : "Crea"}
+                {loading && uploadProgress > 0 && uploadProgress < 100
+                  ? `Caricamento... ${uploadProgress}%`
+                  : isEdit
+                    ? "Salva"
+                    : "Crea"}
               </Button>
             </div>
           </div>

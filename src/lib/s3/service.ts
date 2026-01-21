@@ -103,4 +103,36 @@ export class S3Service {
     const match = url.match(/images\/(prodotti|trattamenti)\//);
     return match ? (match[1] as ImageType) : null;
   }
+
+  /**
+   * Upload a file to S3 and return the public URL
+   */
+  static async uploadFile(
+    file: File,
+    imageType: ImageType,
+    onProgress?: (progress: number) => void
+  ): Promise<string> {
+    const response = await fetch(
+      `/api/s3/upload-url?${new URLSearchParams({
+        fileName: file.name,
+        fileType: file.type,
+        imageType,
+      })}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Errore nel caricamento");
+    }
+
+    const { uploadUrl, publicUrl } = await response.json();
+
+    await S3Service.uploadFileToS3({
+      uploadUrl,
+      file,
+      fileType: file.type,
+      onUploadProgress: onProgress,
+    });
+
+    return publicUrl;
+  }
 }
