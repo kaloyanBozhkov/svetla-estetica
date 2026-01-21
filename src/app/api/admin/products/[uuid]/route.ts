@@ -77,33 +77,44 @@ export async function DELETE(_req: Request, { params }: Params) {
 
     const { uuid } = await params;
 
-    // Get product to retrieve image URL before deleting
+    // Get product to check if it has order references
     const product = await db.product.findUnique({
       where: { uuid },
-      select: { image_url: true },
+      select: { image_url: true, order_items: { take: 1 } },
     });
 
-    // Delete product from database
-    await db.product.delete({ where: { uuid } });
+    if (!product) {
+      return NextResponse.json({ error: 'Prodotto non trovato' }, { status: 404 });
+    }
 
-    // Delete image from S3 if exists
-    if (product?.image_url) {
-      try {
-        const fileName = S3Service.extractFileName(product.image_url);
-        const imageType = S3Service.extractImageType(product.image_url);
+    // If product has order references, soft delete instead
+    if (product.order_items.length > 0) {
+      await db.product.update({
+        where: { uuid },
+        data: { deleted_at: new Date(), active: false },
+      });
+    } else {
+      // No order references, safe to hard delete
+      await db.product.delete({ where: { uuid } });
 
-        if (fileName && imageType) {
-          const key = S3Service.getImageKey(imageType, fileName);
-          await s3Client.send(
-            new DeleteObjectCommand({
-              Bucket: BUCKET_NAME,
-              Key: key,
-            })
-          );
+      // Delete image from S3 if exists (only on hard delete)
+      if (product.image_url) {
+        try {
+          const fileName = S3Service.extractFileName(product.image_url);
+          const imageType = S3Service.extractImageType(product.image_url);
+
+          if (fileName && imageType) {
+            const key = S3Service.getImageKey(imageType, fileName);
+            await s3Client.send(
+              new DeleteObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: key,
+              })
+            );
+          }
+        } catch (s3Error) {
+          console.error('Failed to delete product image from S3:', s3Error);
         }
-      } catch (s3Error) {
-        console.error('Failed to delete product image from S3:', s3Error);
-        // Continue even if S3 delete fails
       }
     }
 

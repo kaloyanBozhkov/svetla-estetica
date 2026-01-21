@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
     const productIds = items.map((i) => i.productId);
     const products = await db.product.findMany({
-      where: { id: { in: productIds }, active: true },
+      where: { id: { in: productIds }, active: true, deleted_at: null },
     });
 
     if (products.length !== items.length) {

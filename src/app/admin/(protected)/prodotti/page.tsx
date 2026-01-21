@@ -19,14 +19,17 @@ export default async function AdminProductsPage({
   const page = parseInt(pageParam || '1');
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
-  const whereClause = searchQuery
-    ? {
-        OR: [
-          { name: { contains: searchQuery, mode: 'insensitive' as const } },
-          { brand: { name: { contains: searchQuery, mode: 'insensitive' as const } } },
-        ],
-      }
-    : {};
+  const whereClause = {
+    deleted_at: null,
+    ...(searchQuery
+      ? {
+          OR: [
+            { name: { contains: searchQuery, mode: 'insensitive' as const } },
+            { brand: { name: { contains: searchQuery, mode: 'insensitive' as const } } },
+          ],
+        }
+      : {}),
+  };
 
   const [products, totalCount] = await Promise.all([
     db.product.findMany({

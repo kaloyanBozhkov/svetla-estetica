@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default async function ProductsPage() {
   const products = await db.product.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     orderBy: [{ priority: 'desc' }, { name: 'asc' }],
   });
 

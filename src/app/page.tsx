@@ -84,7 +84,7 @@ const services = [
 
 async function getFeaturedProducts() {
   return db.product.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     orderBy: [{ priority: 'desc' }, { created_at: 'asc' }],
     take: 4,
   });
@@ -102,6 +102,7 @@ async function getOffersProducts() {
   return db.product.findMany({
     where: {
       active: true,
+      deleted_at: null,
       discount_percent: { gt: 0 },
     },
     orderBy: [{ discount_percent: 'desc' }],

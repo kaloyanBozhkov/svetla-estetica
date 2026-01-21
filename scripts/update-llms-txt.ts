@@ -19,7 +19,7 @@ async function main() {
 
   const [products, services] = await Promise.all([
     db.product.findMany({
-      where: { active: true },
+      where: { active: true, deleted_at: null },
       include: { brand: true },
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
     }),

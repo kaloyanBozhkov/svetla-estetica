@@ -11,7 +11,7 @@ interface Props {
 
 async function getProduct(uuid: string) {
   return db.product.findUnique({
-    where: { uuid },
+    where: { uuid, deleted_at: null },
     include: { brand: true },
   });
 }
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   const products = await db.product.findMany({
-    where: { active: true },
+    where: { active: true, deleted_at: null },
     select: { uuid: true },
   });
   return products.map((p) => ({ uuid: p.uuid }));
