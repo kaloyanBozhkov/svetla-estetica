@@ -129,7 +129,7 @@ export async function POST(request: Request) {
             await resend.emails.send({
               from: 'Svetla Estetica <noreply@svetlaestetica.com>',
               to: CONTACTS_EMAIL,
-              subject: 'Ordine | SvetlaEstetica',
+              subject: (env.IS_DEV ? '[TEST] ' : '') + 'Ordine | SvetlaEstetica',
               html: `
                 <h2>Nuovo Ordine Ricevuto!</h2>
                 <p><strong>Ordine #${order.id}</strong></p>
