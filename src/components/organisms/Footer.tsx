@@ -181,6 +181,11 @@ export function Footer() {
                   Contatti
                 </Link>
               </li>
+              <li>
+                <Link href="/return-policy" className="hover:text-primary-400">
+                  Politica di Reso
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

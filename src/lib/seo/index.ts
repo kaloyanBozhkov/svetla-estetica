@@ -97,7 +97,7 @@ export function generateProductSchema(product: {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      price: product.price,
+      price: (product.price / 100).toFixed(2),
       availability:
         product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       seller: {
@@ -136,7 +136,7 @@ export function generateServiceSchema(service: {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      price: service.price,
+      price: (service.price / 100).toFixed(2),
     },
   };
 }
@@ -176,7 +176,7 @@ export function generateProductListSchema(
         offers: {
           '@type': 'Offer',
           priceCurrency: 'EUR',
-          price: product.price,
+          price: (product.price / 100).toFixed(2),
         },
       },
     })),
@@ -205,7 +205,7 @@ export function generateServiceListSchema(
         offers: {
           '@type': 'Offer',
           priceCurrency: 'EUR',
-          price: service.price,
+          price: (service.price / 100).toFixed(2),
         },
       },
     })),
