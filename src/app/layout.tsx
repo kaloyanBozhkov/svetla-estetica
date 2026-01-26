@@ -5,6 +5,8 @@ import { Providers } from './providers';
 import { Header, Footer } from '@/components/organisms';
 import { BASE_URL } from '@/lib/constants';
 import type { ReactNode } from 'react';
+import { Analytics } from "@vercel/analytics/next"
+
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -202,6 +204,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className="flex-1">{children}</main>
           <Footer />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
