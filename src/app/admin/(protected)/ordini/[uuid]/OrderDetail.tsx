@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Card, Badge, Button, Select } from '@/components/atoms';
 import { formatPrice, formatDateTime } from '@/lib/utils';
 import { type order_status, type payment_status } from '@prisma/client';
-import { ArrowLeftIcon, MailIcon } from '@/components/atoms/icons';
+import { ArrowLeftIcon, MailIcon, CheckIcon } from '@/components/atoms/icons';
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/constants';
 
 interface OrderDetailProps {
@@ -20,6 +20,7 @@ interface OrderDetailProps {
     status: order_status;
     paymentStatus: payment_status;
     shippingAddress: string | null;
+    shareUrl: string | null;
     notes: string | null;
     createdAt: string;
     updatedAt: string;
@@ -59,6 +60,46 @@ export function OrderDetail({ order }: OrderDetailProps) {
   const router = useRouter();
   const [status, setStatus] = useState<order_status>(order.status);
   const [updating, setUpdating] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+
+  const handleCopyAddress = async () => {
+    if (!order.shippingAddress) return;
+
+    await navigator.clipboard.writeText(order.shippingAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Mints the link on first click, then reuses it — the URL stays stable until revoked.
+  const handleShare = async () => {
+    setSharing(true);
+    try {
+      const res = await fetch(`/api/admin/orders/${order.uuid}/share`, { method: 'POST' });
+      if (!res.ok) return;
+
+      const { url } = await res.json();
+      await navigator.clipboard.writeText(url);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2500);
+      router.refresh();
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const handleRevokeShare = async () => {
+    if (!confirm('Revocare il link? Chi lo possiede non potrà più aprirlo.')) return;
+
+    setSharing(true);
+    try {
+      const res = await fetch(`/api/admin/orders/${order.uuid}/share`, { method: 'DELETE' });
+      if (res.ok) router.refresh();
+    } finally {
+      setSharing(false);
+    }
+  };
 
   const handleStatusUpdate = async () => {
     if (status === order.status) return;
@@ -225,14 +266,25 @@ export function OrderDetail({ order }: OrderDetailProps) {
           </Card>
 
           {/* Shipping Address */}
-          {order.shippingAddress && (
-            <Card>
-              <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
+          <Card>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl font-semibold text-gray-900">
                 Indirizzo di Spedizione
               </h2>
+              {order.shippingAddress && (
+                <Button variant="ghost" size="sm" onClick={handleCopyAddress}>
+                  {copied ? 'Copiato!' : 'Copia'}
+                </Button>
+              )}
+            </div>
+            {order.shippingAddress ? (
               <p className="text-gray-600 whitespace-pre-line">{order.shippingAddress}</p>
-            </Card>
-          )}
+            ) : (
+              <p className="text-gray-500 italic">
+                Nessun indirizzo registrato — viene salvato al completamento del pagamento.
+              </p>
+            )}
+          </Card>
 
           {/* Notes */}
           {order.notes && (
@@ -318,6 +370,53 @@ export function OrderDetail({ order }: OrderDetailProps) {
                 <MailIcon className="w-3 h-3" />
                 Email inviata automaticamente al cliente
               </p>
+            </div>
+          </Card>
+
+          {/* Public share link */}
+          <Card>
+            <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
+              Condividi Ordine
+            </h2>
+            <div className="space-y-3">
+              <Button
+                variant="primary"
+                onClick={handleShare}
+                loading={sharing}
+                disabled={sharing}
+                className="w-full"
+              >
+                {shareCopied ? (
+                  <span className="flex items-center gap-1">
+                    <CheckIcon className="w-4 h-4" />
+                    Copiato!
+                  </span>
+                ) : order.shareUrl ? (
+                  'Copia link'
+                ) : (
+                  'Crea link e copia'
+                )}
+              </Button>
+
+              {order.shareUrl ? (
+                <>
+                  <p className="text-xs text-gray-500 break-all">{order.shareUrl}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRevokeShare}
+                    disabled={sharing}
+                    className="w-full"
+                  >
+                    Revoca link
+                  </Button>
+                </>
+              ) : (
+                <p className="text-xs text-gray-500">
+                  Genera un link pubblico con prodotti, quantità e indirizzo. Chiunque abbia il
+                  link può aprirlo senza accedere.
+                </p>
+              )}
             </div>
           </Card>
         </div>

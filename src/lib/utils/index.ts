@@ -1,4 +1,10 @@
-export { formatPrice, formatDate, formatDateTime, formatTime } from './format';
+export {
+  formatPrice,
+  formatDate,
+  formatDateTime,
+  formatTime,
+  formatShippingAddress,
+} from './format';
 export { toSnakeCase, toCamelCase } from './transform';
 import { ORDER_STATUS_LABELS, BOOKING_STATUS_LABELS } from '@/lib/constants';
 

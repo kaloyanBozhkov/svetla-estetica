@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { env } from '@/env';
 import { resend } from '@/lib/email';
 import { sendCelebration, sendErrorLog } from '@/lib/alerts';
+import { formatShippingAddress } from '@/lib/utils';
 import type Stripe from 'stripe';
 
 export async function POST(request: Request) {
@@ -79,6 +80,18 @@ export async function POST(request: Request) {
         }
       }
 
+      // Shipping details are collected by Stripe Checkout, not at order creation time
+      const shippingAddress = formatShippingAddress({
+        name: session.shipping_details?.name || session.customer_details?.name,
+        phone: session.shipping_details?.phone || session.customer_details?.phone,
+        line1: session.shipping_details?.address?.line1,
+        line2: session.shipping_details?.address?.line2,
+        postalCode: session.shipping_details?.address?.postal_code,
+        city: session.shipping_details?.address?.city,
+        state: session.shipping_details?.address?.state,
+        country: session.shipping_details?.address?.country,
+      });
+
       // Update order with payment intent ID, user_id (if guest), and mark as paid
       if (orderUuid && session.payment_intent) {
         const order = await db.order.findUnique({
@@ -93,6 +106,7 @@ export async function POST(request: Request) {
             payment_status: 'paid',
             status: 'confirmed',
             ...(userId && !order?.user_id ? { user_id: userId } : {}),
+            ...(shippingAddress ? { shipping_address: shippingAddress } : {}),
           },
         });
 
