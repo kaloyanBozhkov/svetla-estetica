@@ -15,9 +15,18 @@ import Stripe from 'stripe';
 import { formatShippingAddress } from '../src/lib/utils/format';
 
 const db = new PrismaClient();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-02-24.acacia',
-});
+
+// Live orders can only be read with a live key, but the app's STRIPE_SECRET_KEY
+// is usually the test one. STRIPE_BACKFILL_SECRET_KEY lets this script use a
+// (preferably read-only, restricted) live key without disturbing local dev.
+const stripeKey = process.env.STRIPE_BACKFILL_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+
+if (!stripeKey) {
+  console.error('Nessuna chiave Stripe: imposta STRIPE_BACKFILL_SECRET_KEY o STRIPE_SECRET_KEY.');
+  process.exit(1);
+}
+
+const stripe = new Stripe(stripeKey, { apiVersion: '2025-02-24.acacia' });
 
 const APPLY = process.argv.includes('--apply');
 
@@ -77,6 +86,21 @@ async function main() {
   console.log(
     `${orders.length} ordini senza indirizzo${APPLY ? '' : ' (dry run — usa --apply per scrivere)'}\n`
   );
+
+  // A test key cannot read live objects (and vice versa): fail fast instead of
+  // 404-ing on every order and reporting "nessun indirizzo".
+  const keyIsLive = stripeKey!.startsWith('sk_live') || stripeKey!.startsWith('rk_live');
+  const liveOrders = orders.filter((o) =>
+    o.external_stripe_payment_intent_id?.includes('_live_')
+  ).length;
+
+  if (liveOrders > 0 && !keyIsLive) {
+    console.error(
+      `${liveOrders} ordini sono in modalità live ma la chiave Stripe è di test.\n` +
+        'Imposta STRIPE_BACKFILL_SECRET_KEY con una chiave live (anche ristretta in sola lettura).'
+    );
+    process.exit(1);
+  }
 
   let filled = 0;
   for (const order of orders) {
