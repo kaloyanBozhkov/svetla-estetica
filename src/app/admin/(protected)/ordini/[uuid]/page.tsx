@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { env } from '@/env';
 import { notFound } from 'next/navigation';
 import { OrderDetail } from './OrderDetail';
 
@@ -38,6 +39,9 @@ export default async function AdminOrderDetailPage({
         status: order.status,
         paymentStatus: order.payment_status,
         shippingAddress: order.shipping_address,
+        shareUrl: order.share_token
+          ? `${env.NEXT_PUBLIC_BASE_URL}/ordini/condivisi/${order.share_token}`
+          : null,
         notes: order.notes,
         createdAt: order.created_at.toISOString(),
         updatedAt: order.updated_at.toISOString(),

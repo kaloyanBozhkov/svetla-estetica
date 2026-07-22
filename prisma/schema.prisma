@@ -200,6 +200,8 @@ model order {
   external_stripe_payment_intent_id String?        @unique
   notes                             String?
   payment_status                    payment_status @default(pending)
+  share_token                       String?        @unique
+  share_token_created_at            DateTime?
   shipping_address                  String?
   shipping_cost                     Int            @default(0)
   status                            order_status   @default(pending)
