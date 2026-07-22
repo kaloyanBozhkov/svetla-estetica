@@ -3,7 +3,6 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { verifyAdminCredentials, createSessionToken, setSessionCookie } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { env } from '@/env';
 
 const adminLoginSchema = z.object({
   email: z.string().email(),
@@ -24,10 +23,17 @@ export async function POST(request: Request) {
     if (!admin) {
       admin = await db.user.create({
         data: {
-          email: env.ADMIN_EMAIL,
+          email,
           role: 'admin',
           email_verified: true,
         },
+      });
+      revalidatePath('/admin/utenti');
+    } else if (admin.role !== 'admin') {
+      // The address may already exist as a customer from an earlier order
+      admin = await db.user.update({
+        where: { id: admin.id },
+        data: { role: 'admin', email_verified: true },
       });
       revalidatePath('/admin/utenti');
     }

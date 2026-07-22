@@ -104,5 +104,17 @@ export async function requireAdmin(): Promise<user> {
 }
 
 export function verifyAdminCredentials(email: string, password: string): boolean {
-  return email === env.ADMIN_EMAIL && password === env.ADMIN_PASSWORD;
+  const admins = [
+    { email: env.ADMIN_EMAIL, password: env.ADMIN_PASSWORD },
+    { email: env.ADMIN2_EMAIL, password: env.ADMIN2_PASSWORD },
+  ];
+
+  // A half-configured pair (email without password) must never authenticate
+  return admins.some(
+    (admin) =>
+      Boolean(admin.email) &&
+      Boolean(admin.password) &&
+      email === admin.email &&
+      password === admin.password
+  );
 }

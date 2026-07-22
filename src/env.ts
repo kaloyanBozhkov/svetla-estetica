@@ -9,6 +9,9 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().min(1),
     ADMIN_EMAIL: z.string().email(),
     ADMIN_PASSWORD: z.string().min(1),
+    // Optional second admin: both must be set for the account to work
+    ADMIN2_EMAIL: z.string().email().optional(),
+    ADMIN2_PASSWORD: z.string().min(1).optional(),
     AUTH_SECRET: z.string().min(32),
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
@@ -29,6 +32,8 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    ADMIN2_EMAIL: process.env.ADMIN2_EMAIL,
+    ADMIN2_PASSWORD: process.env.ADMIN2_PASSWORD,
     AUTH_SECRET: process.env.AUTH_SECRET,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
